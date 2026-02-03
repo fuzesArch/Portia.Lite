@@ -79,6 +79,8 @@
     <Compile Include="Components\ConditionDropDown.cs" />
     <Compile Include="Components\GraphIdentityDropDown.cs" />
     <Compile Include="Components\ValueLists.cs" />
+    <Compile Include="Core\Primitives\Enums.cs" />
+    <Compile Include="DocStrings.cs" />
     <Compile Include="InfrastructurePriority.cs" />
     <Compile Include="LiteAssemblyInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

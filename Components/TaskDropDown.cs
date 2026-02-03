@@ -6,7 +6,7 @@ using Portia.Infrastructure.Core.Portia.Main;
 using Portia.Infrastructure.Core.Portia.Primitives;
 using Portia.Infrastructure.Core.Portia.Strategies;
 using Portia.Infrastructure.Core.Portia.Tasks;
-using Portia.Infrastructure.Core.Primitives;
+using Portia.Lite.Core.Primitives;
 using Rhino.Geometry;
 using System;
 using System.Collections.Generic;

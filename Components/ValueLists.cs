@@ -10,6 +10,7 @@ namespace Portia.Lite.Components
         public DoubleRelationValueList()
             : base(
                 nameof(DoubleRelation),
+                DocStrings.DoubleRelation,
                 Naming.Tab,
                 Naming.Tab)
         {
@@ -27,6 +28,7 @@ namespace Portia.Lite.Components
         public StringRelationValueList()
             : base(
                 nameof(StringRelation),
+                DocStrings.StringRelation,
                 Naming.Tab,
                 Naming.Tab)
         {
@@ -44,6 +46,7 @@ namespace Portia.Lite.Components
         public LogicGateValueList()
             : base(
                 nameof(LogicGate),
+                DocStrings.LogicGate,
                 Naming.Tab,
                 Naming.Tab)
         {
@@ -60,6 +63,7 @@ namespace Portia.Lite.Components
         public SeverityValueList()
             : base(
                 nameof(Severity),
+                DocStrings.Severity,
                 Naming.Tab,
                 Naming.Tab)
         {
