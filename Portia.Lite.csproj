@@ -56,6 +56,10 @@
       <HintPath>..\packages\RhinoCommon.8.27.26019.16021\lib\net48\RhinoCommon.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Annotations, Version=4.2.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ComponentModel.Annotations.5.0.0\lib\net461\System.ComponentModel.Annotations.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
@@ -67,8 +71,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Components\LogicDropDown.cs" />
+    <Compile Include="Components\PortiaComponent.cs" />
+    <Compile Include="Components\SelectionDropDown.cs" />
+    <Compile Include="Components\TaskDropDown.cs" />
     <Compile Include="Components\Naming.cs" />
-    <Compile Include="Components\Primitives\ValueLists.cs" />
+    <Compile Include="Components\ConditionDropDown.cs" />
+    <Compile Include="Components\GraphIdentityDropDown.cs" />
+    <Compile Include="Components\ValueLists.cs" />
     <Compile Include="InfrastructurePriority.cs" />
     <Compile Include="LiteAssemblyInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -80,6 +90,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup />

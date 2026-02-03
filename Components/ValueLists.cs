@@ -1,9 +1,9 @@
-﻿using Portia.Infrastructure.ComponentBases;
-using Portia.Infrastructure.Core;
+﻿using Portia.Infrastructure.Components;
+using Portia.Infrastructure.Core.Primitives;
 using System;
 using static Rhino.Runtime.Notifications.Notification;
 
-namespace Portia.Lite.Components.Primitives
+namespace Portia.Lite.Components
 {
     public class DoubleRelationValueList : AbsValueList<DoubleRelation>
     {
@@ -11,7 +11,7 @@ namespace Portia.Lite.Components.Primitives
             : base(
                 nameof(DoubleRelation),
                 Naming.Tab,
-                Naming.Primitives)
+                Naming.Tab)
         {
         }
 
@@ -28,7 +28,7 @@ namespace Portia.Lite.Components.Primitives
             : base(
                 nameof(StringRelation),
                 Naming.Tab,
-                Naming.Primitives)
+                Naming.Tab)
         {
         }
 
@@ -45,7 +45,7 @@ namespace Portia.Lite.Components.Primitives
             : base(
                 nameof(LogicGate),
                 Naming.Tab,
-                Naming.Primitives)
+                Naming.Tab)
         {
         }
 
@@ -61,7 +61,7 @@ namespace Portia.Lite.Components.Primitives
             : base(
                 nameof(Severity),
                 Naming.Tab,
-                Naming.Primitives)
+                Naming.Tab)
         {
         }
 
