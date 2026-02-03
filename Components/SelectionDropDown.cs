@@ -2,10 +2,10 @@
 using Grasshopper.Kernel.Parameters;
 using Portia.Infrastructure.Components;
 using Portia.Infrastructure.Core.Helps;
+using Portia.Infrastructure.Core.Portia.Main;
+using Portia.Infrastructure.Core.Portia.Primitives;
+using Portia.Infrastructure.Core.Portia.Strategies;
 using Portia.Infrastructure.Core.Primitives;
-using Portia.Infrastructure.Core.Projects.Portia.Main;
-using Portia.Infrastructure.Core.Projects.Portia.Primitives;
-using Portia.Infrastructure.Core.Projects.Portia.Strategies;
 using Rhino.Geometry;
 using System;
 using System.Collections.Generic;
@@ -13,7 +13,7 @@ using System.Linq;
 
 namespace Portia.Lite.Components
 {
-    public class SelectionDropDown : DropDownComponent<SelectionType>
+    public class SelectionDropDown : AbsDropDownComponent<SelectionType>
     {
         public SelectionDropDown()
             : base(

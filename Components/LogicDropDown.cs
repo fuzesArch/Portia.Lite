@@ -2,9 +2,9 @@
 using Grasshopper.Kernel.Parameters;
 using Portia.Infrastructure.Components;
 using Portia.Infrastructure.Core.Helps;
+using Portia.Infrastructure.Core.Portia.Primitives;
+using Portia.Infrastructure.Core.Portia.Strategies;
 using Portia.Infrastructure.Core.Primitives;
-using Portia.Infrastructure.Core.Projects.Portia.Primitives;
-using Portia.Infrastructure.Core.Projects.Portia.Strategies;
 using Portia.Infrastructure.Core.Validators;
 using System;
 using System.Collections.Generic;
@@ -12,7 +12,7 @@ using System.Linq;
 
 namespace Portia.Lite.Components
 {
-    public abstract class AbsLogicDropDown<TMode> : DropDownComponent<TMode>
+    public abstract class AbsLogicDropDown<TMode> : AbsDropDownComponent<TMode>
         where TMode : Enum
     {
         protected AbsLogicDropDown(

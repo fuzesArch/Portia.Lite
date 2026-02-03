@@ -5,9 +5,9 @@ using Grasshopper.Kernel;
 using Grasshopper.Kernel.Parameters;
 using Portia.Infrastructure.Components;
 using Portia.Infrastructure.Core.Helps;
-using Portia.Infrastructure.Core.Projects.Portia.Helps;
-using Portia.Infrastructure.Core.Projects.Portia.Main;
-using Portia.Infrastructure.Core.Projects.Portia.Tasks;
+using Portia.Infrastructure.Core.Portia.Helps;
+using Portia.Infrastructure.Core.Portia.Main;
+using Portia.Infrastructure.Core.Portia.Tasks;
 
 namespace Portia.Lite.Components
 {

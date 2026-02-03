@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 namespace Portia.Lite.Components
 {
-    public class ConditionDropDown : DropDownComponent<ConditionMode>
+    public class ConditionDropDown : AbsDropDownComponent<ConditionMode>
     {
         public ConditionDropDown()
             : base(

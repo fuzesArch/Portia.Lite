@@ -2,8 +2,8 @@
 using Grasshopper.Kernel.Parameters;
 using Portia.Infrastructure.Components;
 using Portia.Infrastructure.Core.Helps;
+using Portia.Infrastructure.Core.Portia.Main;
 using Portia.Infrastructure.Core.Primitives;
-using Portia.Infrastructure.Core.Projects.Portia.Main;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +11,7 @@ using System.Linq;
 namespace Portia.Lite.Components
 {
     public class GraphIdentityDropDown
-        : DropDownComponent<GraphIdentityCreationMode>
+        : AbsDropDownComponent<GraphIdentityCreationMode>
     {
         public GraphIdentityDropDown()
             : base(
