@@ -12,7 +12,7 @@
     public enum GraphIdentityCreationMode
     {
         Index,
-        Tag
+        Type
     }
 
     public enum ConditionMode
@@ -23,20 +23,20 @@
 
     public enum NodeLogicType
     {
-        NodeAdjacencyRule,
-        NodeProximityRule,
-        NodeVectorSumRule,
-        IsLeafNodeRule,
-        JointConstellation,
+        NodeAdjacencyLogic,
+        NodeProximityLogic,
+        NodeVectorSumLogic,
+        IsLeafNodeLogic,
+        JointConstellationLogic,
     }
 
     public enum EdgeLogicType
     {
-        EdgeLengthRule,
-        SourceAdjacencyRule,
-        TargetAdjacencyRule,
-        IsBridgeEdgeRule,
-        LinkConstellation
+        EdgeLengthLogic,
+        SourceAdjacencyLogic,
+        TargetAdjacencyLogic,
+        IsBridgeEdgeLogic,
+        LinkConstellationLogic
     }
 
     public enum TaskType

@@ -16,6 +16,7 @@ namespace Portia.Lite.Components
         public PortiaComponent()
             : base(
                 Naming.Tab.ToUpper(),
+                Docs.PortiaComponent,
                 Naming.Tab,
                 Naming.Tab)
         {

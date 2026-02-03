@@ -23,6 +23,7 @@ namespace Portia.Lite.Components
                         0,
                         4)
                     .AddDropDownMark(),
+                Docs.Task.AddDropDownNote(),
                 Naming.Tab,
                 Naming.Tab)
         {
@@ -38,10 +39,10 @@ namespace Portia.Lite.Components
         {
             InGeometries(
                     nameof(SetCurves.Curves),
-                    "")
+                    Docs.Curves)
                 .InStrings(
                     nameof(SetCurves.InitialEdgeTypes),
-                    "");
+                    Docs.InitialEdgeTypes);
 
             SetInputParameterOptionality(1);
         }
@@ -50,7 +51,7 @@ namespace Portia.Lite.Components
         {
             OutString(
                 nameof(AbsTask).Substring(3),
-                "");
+                Docs.Task);
         }
 
         protected override void CommonOutputSetting(
@@ -193,8 +194,8 @@ namespace Portia.Lite.Components
         protected static ParameterConfig SelectionsParameter() =>
             new(
                 () => new Param_String(),
-                nameof(selections).ToUpperFirst(),
-                "",
+                nameof(Docs.Selections),
+                Docs.Selections,
                 GH_ParamAccess.list);
 
         protected override Dictionary<TaskType, ParameterStrategy>
@@ -209,15 +210,16 @@ namespace Portia.Lite.Components
                             new(
                                 () => new Param_Curve(),
                                 nameof(SetCurves.Curves),
-                                "",
+                                Docs.Curves,
                                 GH_ParamAccess.list),
                             new(
                                 () => new Param_String(),
                                 nameof(SetCurves.InitialEdgeTypes),
-                                "",
+                                Docs.InitialEdgeTypes,
                                 GH_ParamAccess.list)
                         },
-                        SolveBySetCurves)
+                        SolveBySetCurves,
+                        Docs.SetCurves)
                 },
                 {
                     TaskType.SetNodeTypes, new ParameterStrategy(
@@ -226,11 +228,12 @@ namespace Portia.Lite.Components
                             SelectionsParameter(),
                             new(
                                 () => new Param_String(),
-                                nameof(SetNodeTypes.Tags),
-                                "",
+                                nameof(SetNodeTypes.Types),
+                                Docs.Types,
                                 GH_ParamAccess.list)
                         },
-                        SolveBySetNodeTypes)
+                        SolveBySetNodeTypes,
+                        Docs.SetNodeTypes)
                 },
                 {
                     TaskType.SetEdgeTypes, new ParameterStrategy(
@@ -239,21 +242,24 @@ namespace Portia.Lite.Components
                             SelectionsParameter(),
                             new(
                                 () => new Param_String(),
-                                nameof(SetEdgeTypes.Tags),
-                                "",
+                                nameof(SetEdgeTypes.Types),
+                                Docs.Types,
                                 GH_ParamAccess.list)
                         },
-                        SolveBySetEdgeTypes)
+                        SolveBySetEdgeTypes,
+                        Docs.SetEdgeTypes)
                 },
                 {
                     TaskType.GetNodes, new ParameterStrategy(
                         new List<ParameterConfig> { SelectionsParameter(), },
-                        SolveByGetNodes)
+                        SolveByGetNodes,
+                        Docs.GetNodes)
                 },
                 {
                     TaskType.GetEdges, new ParameterStrategy(
                         new List<ParameterConfig> { SelectionsParameter(), },
-                        SolveByGetEdges)
+                        SolveByGetEdges,
+                        Docs.GetEdges)
                 },
                 {
                     TaskType.VerifyNodes, new ParameterStrategy(
@@ -263,10 +269,11 @@ namespace Portia.Lite.Components
                             new(
                                 () => new Param_String(),
                                 nameof(VerifyNodes.Logics),
-                                "",
+                                Docs.Logics,
                                 GH_ParamAccess.list)
                         },
-                        SolveByVerifyNodes)
+                        SolveByVerifyNodes,
+                        Docs.VerifyNodes)
                 },
                 {
                     TaskType.VerifyEdges, new ParameterStrategy(
@@ -276,10 +283,11 @@ namespace Portia.Lite.Components
                             new(
                                 () => new Param_String(),
                                 nameof(VerifyEdges.Logics),
-                                "",
+                                Docs.Logics,
                                 GH_ParamAccess.list)
                         },
-                        SolveByVerifyEdges)
+                        SolveByVerifyEdges,
+                        Docs.VerifyEdges)
                 }
             };
         }

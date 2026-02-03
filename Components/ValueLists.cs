@@ -1,7 +1,6 @@
 ﻿using Portia.Infrastructure.Components;
 using Portia.Infrastructure.Core.Primitives;
 using System;
-using static Rhino.Runtime.Notifications.Notification;
 
 namespace Portia.Lite.Components
 {
@@ -10,7 +9,7 @@ namespace Portia.Lite.Components
         public DoubleRelationValueList()
             : base(
                 nameof(DoubleRelation),
-                DocStrings.DoubleRelation,
+                Docs.DoubleRelation,
                 Naming.Tab,
                 Naming.Tab)
         {
@@ -28,7 +27,7 @@ namespace Portia.Lite.Components
         public StringRelationValueList()
             : base(
                 nameof(StringRelation),
-                DocStrings.StringRelation,
+                Docs.StringRelation,
                 Naming.Tab,
                 Naming.Tab)
         {
@@ -41,12 +40,12 @@ namespace Portia.Lite.Components
             new StringRelationValueList();
     }
 
-    public class LogicGateValueList : AbsValueList<LogicGate>
+    public class GateValueList : AbsValueList<Gate>
     {
-        public LogicGateValueList()
+        public GateValueList()
             : base(
-                nameof(LogicGate),
-                DocStrings.LogicGate,
+                nameof(Gate),
+                Docs.Gate,
                 Naming.Tab,
                 Naming.Tab)
         {
@@ -55,21 +54,6 @@ namespace Portia.Lite.Components
         public override Guid ComponentGuid =>
             new Guid("825ca3c1-851c-4e8a-a566-38f9e082c1ba");
 
-        public static LogicGateValueList Create() => new LogicGateValueList();
-    }
-
-    public class SeverityValueList : AbsValueList<Severity>
-    {
-        public SeverityValueList()
-            : base(
-                nameof(Severity),
-                DocStrings.Severity,
-                Naming.Tab,
-                Naming.Tab)
-        {
-        }
-
-        public override Guid ComponentGuid =>
-            new Guid("be3e5253-b902-4c2b-be91-21211a77d443");
+        public static GateValueList Create() => new GateValueList();
     }
 }

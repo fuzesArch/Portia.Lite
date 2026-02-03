@@ -16,6 +16,7 @@ namespace Portia.Lite.Components
         public GraphIdentityDropDown()
             : base(
                 nameof(GraphIdentities).AddDropDownMark(),
+                Docs.GraphIdentity.AddDropDownNote(),
                 Naming.Tab,
                 Naming.Tab)
         {
@@ -30,14 +31,14 @@ namespace Portia.Lite.Components
         {
             InIntegers(
                 nameof(GraphIdentity.Index) + "es",
-                "");
+                Docs.Index);
         }
 
         protected override void AddOutputFields()
         {
-            OutStrings(
+            OutJsons(
                 nameof(GraphIdentities),
-                "");
+                Docs.GraphIdentity);
         }
 
         protected override void CommonOutputSetting(
@@ -73,26 +74,28 @@ namespace Portia.Lite.Components
                             new(
                                 () => new Param_Integer(),
                                 nameof(GraphIdentity.Index) + "es",
-                                "",
+                                Docs.Index,
                                 GH_ParamAccess.list)
                         },
                         da => SolveBy<int>(
                             da,
-                            indexes => indexes.Select(GraphIdentity.ByIndex)))
+                            indexes => indexes.Select(GraphIdentity.ByIndex)),
+                        Docs.GraphIdentityByIndex)
                 },
                 {
-                    GraphIdentityCreationMode.Tag, new ParameterStrategy(
+                    GraphIdentityCreationMode.Type, new ParameterStrategy(
                         new List<ParameterConfig>
                         {
                             new(
                                 () => new Param_String(),
                                 nameof(GraphIdentity.Type) + "s",
-                                "",
+                                Docs.Type,
                                 GH_ParamAccess.list)
                         },
                         da => SolveBy<string>(
                             da,
-                            tags => tags.Select(GraphIdentity.ByTag)))
+                            tags => tags.Select(GraphIdentity.ByTag)),
+                        Docs.GraphIdentityByTag)
                 }
             };
         }

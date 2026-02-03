@@ -14,13 +14,14 @@ namespace Portia.Lite.Components
         public ConditionDropDown()
             : base(
                 nameof(AbsCondition).Substring(3).AddDropDownMark(),
+                Docs.Condition.AddDropDownNote(),
                 Naming.Tab,
                 Naming.Tab)
         {
         }
 
         public override Guid ComponentGuid =>
-            new Guid("b5e22506-0e6f-4987-9600-bd21e962ab52");
+            new("b5e22506-0e6f-4987-9600-bd21e962ab52");
 
         private AbsCondition condition;
 
@@ -28,11 +29,12 @@ namespace Portia.Lite.Components
         {
             InEnum(
                     nameof(DoubleRelation),
+                    Docs.DoubleRelation + Environment.NewLine +
                     typeof(DoubleRelation).ToEnumString(),
                     DoubleCondition.DefRelation.ToString())
                 .InDouble(
                     nameof(DoubleCondition.Value),
-                    "");
+                    Docs.DoubleValue);
 
             SetInputParameterOptionality(0);
             SetEnumDropDown<DoubleRelation>(0);
@@ -40,9 +42,9 @@ namespace Portia.Lite.Components
 
         protected override void AddOutputFields()
         {
-            OutString(
-                nameof(AbsCondition).Substring(3),
-                "");
+            OutJson(
+                nameof(DoubleCondition),
+                Docs.Condition);
         }
 
         protected override void CommonOutputSetting(
@@ -107,16 +109,17 @@ namespace Portia.Lite.Components
                             new(
                                 () => new Param_Integer(),
                                 nameof(DoubleRelation),
-                                "",
+                                Docs.DoubleRelation,
                                 GH_ParamAccess.item,
                                 DoubleRelationValueList.Create),
                             new(
                                 () => new Param_Number(),
-                                nameof(DoubleCondition.Value),
-                                "",
+                                nameof(Docs.DoubleValue),
+                                Docs.DoubleValue,
                                 GH_ParamAccess.item)
                         },
-                        SolveByDouble)
+                        SolveByDouble,
+                        Docs.DoubleCondition)
                 },
                 {
                     ConditionMode.StringCondition, new ParameterStrategy(
@@ -125,16 +128,17 @@ namespace Portia.Lite.Components
                             new(
                                 () => new Param_Integer(),
                                 nameof(StringRelation),
-                                "",
+                                Docs.StringRelation,
                                 GH_ParamAccess.item,
                                 StringRelationValueList.Create),
                             new(
                                 () => new Param_String(),
-                                nameof(StringCondition.Value),
-                                "",
+                                nameof(Docs.StringValue),
+                                Docs.StringValue,
                                 GH_ParamAccess.item)
                         },
-                        SolveByString)
+                        SolveByString,
+                        Docs.StringCondition)
                 }
             };
         }
