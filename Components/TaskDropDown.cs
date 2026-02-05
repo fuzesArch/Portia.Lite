@@ -90,7 +90,7 @@ namespace Portia.Lite.Components
 
             var tags = da
                 .GetOptionalItems<string>(1)
-                .ByDefault(GraphIdentity.DefType)
+                .ByDefault(Identity.DefType)
                 .BoostTo(curves.Count);
 
             task = new SetCurves(
@@ -207,7 +207,7 @@ namespace Portia.Lite.Components
             return new Dictionary<TaskType, ParameterStrategy>
             {
                 {
-                    TaskType.SetCurves, new ParameterStrategy(
+                    TaskType.Task_SetCurves, new ParameterStrategy(
                         new List<ParameterConfig>
                         {
                             new(
@@ -225,7 +225,7 @@ namespace Portia.Lite.Components
                         Docs.SetCurves)
                 },
                 {
-                    TaskType.SetNodeTypes, new ParameterStrategy(
+                    TaskType.Task_SetNodeTypes, new ParameterStrategy(
                         new List<ParameterConfig>
                         {
                             SelectionsParameter(),
@@ -239,7 +239,7 @@ namespace Portia.Lite.Components
                         Docs.SetNodeTypes)
                 },
                 {
-                    TaskType.SetEdgeTypes, new ParameterStrategy(
+                    TaskType.Task_SetEdgeTypes, new ParameterStrategy(
                         new List<ParameterConfig>
                         {
                             SelectionsParameter(),
@@ -253,19 +253,19 @@ namespace Portia.Lite.Components
                         Docs.SetEdgeTypes)
                 },
                 {
-                    TaskType.GetNodes, new ParameterStrategy(
+                    TaskType.Task_GetNodes, new ParameterStrategy(
                         new List<ParameterConfig> { SelectionsParameter(), },
                         SolveByGetNodes,
                         Docs.GetNodes)
                 },
                 {
-                    TaskType.GetEdges, new ParameterStrategy(
+                    TaskType.Task_GetEdges, new ParameterStrategy(
                         new List<ParameterConfig> { SelectionsParameter(), },
                         SolveByGetEdges,
                         Docs.GetEdges)
                 },
                 {
-                    TaskType.VerifyNodes, new ParameterStrategy(
+                    TaskType.Task_VerifyNodes, new ParameterStrategy(
                         new List<ParameterConfig>
                         {
                             SelectionsParameter(),
@@ -279,7 +279,7 @@ namespace Portia.Lite.Components
                         Docs.VerifyNodes)
                 },
                 {
-                    TaskType.VerifyEdges, new ParameterStrategy(
+                    TaskType.Task_VerifyEdges, new ParameterStrategy(
                         new List<ParameterConfig>
                         {
                             SelectionsParameter(),

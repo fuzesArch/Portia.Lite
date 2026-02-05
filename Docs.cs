@@ -69,15 +69,15 @@ namespace Portia.Lite
             "Defines a logical filter rule based on the relationship " +
             "with a text-based relation type and a specific string target value.";
 
-        public static string GraphIdentity =>
+        public static string Identity =>
             "Defines the primary identification rule for graph elements " +
             "using either a numerical Index or a text-based Type.";
 
-        public static string GraphIdentityByIndex =>
+        public static string IdentityByIndex =>
             "Defines the primary identification rule for graph elements " +
             "using a numerical Index value.";
 
-        public static string GraphIdentityByTag =>
+        public static string IdentityByTag =>
             "Defines the primary identification rule for graph elements " +
             "using a text-based Type value.";
 
@@ -93,13 +93,13 @@ namespace Portia.Lite
             "Defines a localized graph process that evaluates " +
             "nodes or edges based on their geometric and topological behavior.";
 
-        public static string NodeLogic =>
-            "Defines a localized graph process that evaluates " +
-            "nodes based on their geometric and topological behavior.";
+        public static string IndexLogic =>
+            "Defines a localized graph process that evaluates both " +
+            "Nodes AND Edges based on their numerical Index.";
 
-        public static string EdgeLogic =>
-            "Defines a localized graph process that evaluates " +
-            "edges based on their geometric and topological behavior.";
+        public static string TypeLogic =>
+            "Defines a localized graph process that evaluates both " +
+            "Nodes AND Edges based on their text-based Type value.";
 
         public static string NodeAdjacency =>
             "A rule that evaluates a Node's direct neighbouring Edge count.";
@@ -217,23 +217,23 @@ namespace Portia.Lite
             "When enabled, the rule validates the connection regardless of edge direction, " +
             "checking both start-to-end and end-to-start orientations.";
 
-        public static string GraphIdentitySelection =>
+        public static string ByIdentitySelection =>
             "A selection rule that captures elements by matching their unique identity data, " +
             "such as specific Index numbers or text-based Types.";
 
-        public static string LogicSelection =>
+        public static string ByLogicSelection =>
             "A selection rule that identifies elements based on whether they satisfy " +
             "a specific topological or geometric Logic condition.";
 
-        public static string WrapSelection =>
+        public static string ByWrapSelection =>
             "A spatial selection rule that captures Nodes whose centroids are " +
             "contained within the volume of the specified input Breps.";
 
-        public static string IntersectionSelection =>
+        public static string ByIntersectionSelection =>
             "A spatial selection rule that identifies Edges based on their physical intersection " +
             "AND containment with(in) the volumes of specified Breps.";
 
-        public static string CompositeSelection =>
+        public static string ByCompositeSelection =>
             "A sophisticated selection rule that combines multiple criteria " +
             "using a boolean Gate logic to capture graph elements.";
 

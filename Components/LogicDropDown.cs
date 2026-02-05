@@ -1,6 +1,7 @@
 ﻿using Grasshopper.Kernel;
 using Grasshopper.Kernel.Parameters;
 using Portia.Infrastructure.Components;
+using Portia.Infrastructure.Core.DocStrings;
 using Portia.Infrastructure.Core.Helps;
 using Portia.Infrastructure.Core.Portia.Primitives;
 using Portia.Infrastructure.Core.Portia.Strategies;
@@ -13,19 +14,23 @@ using System.Linq;
 
 namespace Portia.Lite.Components
 {
-    public abstract class AbsLogicDropDown<TMode> : AbsDropDownComponent<TMode>
-        where TMode : Enum
+    public class LogicDropDown : AbsDropDownComponent<LogicType>
     {
-        protected AbsLogicDropDown(
-            string name,
-            string description)
+        public LogicDropDown()
             : base(
-                name.AddDropDownMark(),
-                description,
+                nameof(LogicDropDown)
+                    .Substring(
+                        0,
+                        5)
+                    .AddDropDownMark(),
+                Docs.Logic,
                 Naming.Tab,
                 Naming.Tab)
         {
         }
+
+        public override Guid ComponentGuid =>
+            new("3216fe43-7667-4b78-9c13-b5e550d9c28d");
 
         protected override System.Drawing.Bitmap Icon =>
             Properties.Resources.BaseLogo;
@@ -42,9 +47,9 @@ namespace Portia.Lite.Components
                 .InEnum(
                     nameof(Gate),
                     typeof(Gate).ToEnumString(),
-                    AbsRule.DefGate.ToString())
+                    nameof(Gate.And))
                 .InJsons(
-                    nameof(AbsRule.Conditions),
+                    nameof(AbsRule<double, DoubleCondition>.Conditions),
                     Docs.Condition);
 
             SetInputParameterOptionality(1);
@@ -142,7 +147,7 @@ namespace Portia.Lite.Components
                 Docs.Name,
                 GH_ParamAccess.item);
 
-        protected static ParameterStrategy ConditionalRuleStrategy(
+        protected static ParameterStrategy NumericRuleStrategy(
             Action<IGH_DataAccess> action,
             string description)
         {
@@ -157,7 +162,30 @@ namespace Portia.Lite.Components
                         GH_ParamAccess.item),
                     new(
                         () => new Param_String(),
-                        nameof(AbsCondition).Substring(3) + "s",
+                        nameof(DoubleCondition) + "s",
+                        Docs.Condition,
+                        GH_ParamAccess.list)
+                },
+                action,
+                description);
+        }
+
+        protected static ParameterStrategy StringRuleStrategy(
+            Action<IGH_DataAccess> action,
+            string description)
+        {
+            return new ParameterStrategy(
+                new List<ParameterConfig>
+                {
+                    NameParameter(),
+                    new(
+                        () => new Param_Integer(),
+                        nameof(Gate),
+                        Docs.Gate,
+                        GH_ParamAccess.item),
+                    new(
+                        () => new Param_String(),
+                        nameof(StringCondition) + "s",
                         Docs.Condition,
                         GH_ParamAccess.list)
                 },
@@ -179,16 +207,16 @@ namespace Portia.Lite.Components
                 description);
         }
 
-        protected ParameterStrategy GetConditionalStrategyFor<TRule>(
+        protected ParameterStrategy GetNumericStrategyFor<TRule>(
             string description)
-            where TRule : AbsRule, new()
+            where TRule : AbsRule<double, DoubleCondition>, new()
         {
-            return ConditionalRuleStrategy(
+            return NumericRuleStrategy(
                 da =>
                 {
                     int gateInt = da.GetOptionalItem(
                         1,
-                        (int)AbsRule.DefGate);
+                        (int)Gate.And);
 
                     gateInt.ValidateEnum<Gate>();
                     _gate = (Gate)gateInt;
@@ -200,65 +228,105 @@ namespace Portia.Lite.Components
                         return;
                     }
 
+                    var deserializedConditions = conditionJsons
+                        .Select(json => json.FromJson<IConditionAnchor>())
+                        .ToList();
+
+                    if (!deserializedConditions.All(c => c is DoubleCondition))
+                    {
+                        throw new Exception(DocStrings.TypeErrorNumbersOnly);
+                    }
+
                     Logic = new TRule
                     {
-                        Conditions =
-                            conditionJsons
-                                .FromJson<AbsCondition>()
-                                .ToList(),
-                        Gate = _gate,
                         Name = name,
+                        Gate = _gate,
+                        Conditions = conditionJsons
+                            .FromJson<DoubleCondition>()
+                            .ToList()
                     };
 
                     Logic.Guard();
                 },
                 description);
         }
-    }
 
-    public class NodeLogicDropDown : AbsLogicDropDown<NodeLogicType>
-    {
-        public NodeLogicDropDown()
-            : base(
-                nameof(NodeLogicDropDown)
-                    .Substring(
-                        0,
-                        9),
-                Docs.NodeLogic.AddDropDownNote())
+        protected ParameterStrategy GetStringStrategyFor<TRule>(
+            string description)
+            where TRule : AbsRule<string, StringCondition>, new()
         {
+            return StringRuleStrategy(
+                da =>
+                {
+                    int gateInt = da.GetOptionalItem(
+                        1,
+                        (int)Gate.And);
+
+                    gateInt.ValidateEnum<Gate>();
+                    _gate = (Gate)gateInt;
+
+                    if (!da.GetItems(
+                            2,
+                            out List<string> conditionJsons))
+                    {
+                        return;
+                    }
+
+                    var deserializedConditions = conditionJsons
+                        .Select(json => json.FromJson<IConditionAnchor>())
+                        .ToList();
+
+                    if (!deserializedConditions.All(c => c is StringCondition))
+                    {
+                        throw new Exception(DocStrings.TypeErrorNumbersOnly);
+                    }
+
+                    Logic = new TRule
+                    {
+                        Name = name,
+                        Gate = _gate,
+                        Conditions = conditionJsons
+                            .FromJson<StringCondition>()
+                            .ToList()
+                    };
+
+                    Logic.Guard();
+                },
+                description);
         }
 
-        public override Guid ComponentGuid =>
-            new("3216fe43-7667-4b78-9c13-b5e550d9c28d");
-
-        protected override Dictionary<NodeLogicType, ParameterStrategy>
+        protected override Dictionary<LogicType, ParameterStrategy>
             DefineParameterStrategy()
         {
-            return new Dictionary<NodeLogicType, ParameterStrategy>
+            return new Dictionary<LogicType, ParameterStrategy>
             {
                 {
-                    NodeLogicType.NodeAdjacencyLogic,
-                    GetConditionalStrategyFor<NodeAdjacencyRule>(
-                        Docs.NodeAdjacency)
+                    LogicType.IndexLogic,
+                    GetNumericStrategyFor<NodeAdjacencyRule>(Docs.IndexLogic)
                 },
                 {
-                    NodeLogicType.NodeProximityLogic,
-                    GetConditionalStrategyFor<NodeProximityRule>(
-                        Docs.NodeProximity)
+                    LogicType.TypeLogic,
+                    GetStringStrategyFor<TypeRule>(Docs.TypeLogic)
                 },
                 {
-                    NodeLogicType.NodeVectorSumLogic,
-                    GetConditionalStrategyFor<NodeVectorSumRule>(
-                        Docs.NodeVectorSum)
+                    LogicType.NodeAdjacencyLogic,
+                    GetNumericStrategyFor<NodeAdjacencyRule>(Docs.NodeAdjacency)
                 },
                 {
-                    NodeLogicType.IsLeafNodeLogic,
+                    LogicType.NodeProximityLogic,
+                    GetNumericStrategyFor<NodeProximityRule>(Docs.NodeProximity)
+                },
+                {
+                    LogicType.NodeVectorSumLogic,
+                    GetNumericStrategyFor<NodeVectorSumRule>(Docs.NodeVectorSum)
+                },
+                {
+                    LogicType.NodeIsLeafLogic,
                     GetNonConditionalStrategyFor<IsLeafNodeRule>(
                         Docs.IsLeafNode)
                 },
                 {
-                    NodeLogicType.JointConstellationLogic,
-                    new ParameterStrategy(
+                    LogicType.NodeConstellationLogic, new ParameterStrategy(
                         new List<ParameterConfig>
                         {
                             NameParameter(),
@@ -275,52 +343,28 @@ namespace Portia.Lite.Components
                         },
                         SolveByJointConstellation,
                         Docs.JointConstellation)
-                }
-            };
-        }
-    }
-
-    public class EdgeLogicDropDown : AbsLogicDropDown<EdgeLogicType>
-    {
-        public EdgeLogicDropDown()
-            : base(
-                nameof(EdgeLogicDropDown)
-                    .Substring(
-                        0,
-                        9),
-                Docs.EdgeLogic.AddDropDownNote())
-        {
-        }
-
-        public override Guid ComponentGuid =>
-            new("8a5199a3-1bd9-449a-894e-3b1588b5c439");
-
-        protected override Dictionary<EdgeLogicType, ParameterStrategy>
-            DefineParameterStrategy()
-        {
-            return new Dictionary<EdgeLogicType, ParameterStrategy>
-            {
-                {
-                    EdgeLogicType.EdgeLengthLogic,
-                    GetConditionalStrategyFor<EdgeLengthRule>(Docs.EdgeLength)
                 },
                 {
-                    EdgeLogicType.SourceAdjacencyLogic,
-                    GetConditionalStrategyFor<SourceAdjacencyRule>(
+                    LogicType.EdgeLengthLogic,
+                    GetNumericStrategyFor<EdgeLengthRule>(Docs.SourceAdjacency)
+                },
+                {
+                    LogicType.EdgeSourceAdjacencyLogic,
+                    GetNumericStrategyFor<SourceAdjacencyRule>(
                         Docs.SourceAdjacency)
                 },
                 {
-                    EdgeLogicType.TargetAdjacencyLogic,
-                    GetConditionalStrategyFor<TargetAdjacencyRule>(
+                    LogicType.EdgeTargetAdjacencyLogic,
+                    GetNumericStrategyFor<TargetAdjacencyRule>(
                         Docs.TargetAdjacency)
                 },
                 {
-                    EdgeLogicType.IsBridgeEdgeLogic,
+                    LogicType.EdgeIsBridgeLogic,
                     GetNonConditionalStrategyFor<IsBridgeEdgeRule>(
                         Docs.IsBridgeEdge)
                 },
                 {
-                    EdgeLogicType.LinkConstellationLogic, new ParameterStrategy(
+                    LogicType.EdgeLinkConstellationLogic, new ParameterStrategy(
                         new List<ParameterConfig>
                         {
                             NameParameter(),

@@ -13,7 +13,7 @@ namespace Portia.Lite.Components
     {
         public ConditionDropDown()
             : base(
-                nameof(AbsCondition).Substring(3).AddDropDownMark(),
+                nameof(DoubleCondition).Substring(6).AddDropDownMark(),
                 Docs.Condition.AddDropDownNote(),
                 Naming.Tab,
                 Naming.Tab)
@@ -26,7 +26,7 @@ namespace Portia.Lite.Components
         protected override System.Drawing.Bitmap Icon =>
             Properties.Resources.BaseLogo;
 
-        private AbsCondition condition;
+        private string conditionJson;
 
         protected override void AddInputFields()
         {
@@ -55,7 +55,7 @@ namespace Portia.Lite.Components
         {
             da.SetData(
                 0,
-                condition.ToJson());
+                conditionJson);
         }
 
         private void SolveByDouble(
@@ -74,9 +74,9 @@ namespace Portia.Lite.Components
                 return;
             }
 
-            condition = new DoubleCondition(
+            conditionJson = new DoubleCondition(
                 (DoubleRelation)relationInteger,
-                value);
+                value).ToJson();
         }
 
         private void SolveByString(
@@ -95,9 +95,9 @@ namespace Portia.Lite.Components
                 return;
             }
 
-            condition = new StringCondition(
+            conditionJson = new StringCondition(
                 (StringRelation)relationInteger,
-                value);
+                value).ToJson();
         }
 
         protected override Dictionary<ConditionMode, ParameterStrategy>

@@ -1,18 +1,11 @@
 ﻿namespace Portia.Lite.Core.Primitives
 {
-    public enum SelectionType
+    public enum SelectionMode
     {
-        GraphIdentitySelection,
-        LogicSelection,
-        WrapSelection,
-        IntersectionSelection,
-        CompositeSelection,
-    }
-
-    public enum GraphIdentityCreationMode
-    {
-        Index,
-        Type
+        ByLogicSelection,
+        ByWrapSelection,
+        ByIntersectionSelection,
+        ByCompositeSelection,
     }
 
     public enum ConditionMode
@@ -21,32 +14,30 @@
         StringCondition
     }
 
-    public enum NodeLogicType
+    public enum LogicType
     {
+        IndexLogic,
+        TypeLogic,
         NodeAdjacencyLogic,
         NodeProximityLogic,
         NodeVectorSumLogic,
-        IsLeafNodeLogic,
-        JointConstellationLogic,
-    }
-
-    public enum EdgeLogicType
-    {
+        NodeIsLeafLogic,
+        NodeConstellationLogic,
         EdgeLengthLogic,
-        SourceAdjacencyLogic,
-        TargetAdjacencyLogic,
-        IsBridgeEdgeLogic,
-        LinkConstellationLogic
+        EdgeSourceAdjacencyLogic,
+        EdgeTargetAdjacencyLogic,
+        EdgeIsBridgeLogic,
+        EdgeLinkConstellationLogic
     }
 
     public enum TaskType
     {
-        SetCurves,
-        SetNodeTypes,
-        SetEdgeTypes,
-        GetNodes,
-        GetEdges,
-        VerifyNodes,
-        VerifyEdges,
+        Task_SetCurves,
+        Task_SetNodeTypes,
+        Task_SetEdgeTypes,
+        Task_GetNodes,
+        Task_GetEdges,
+        Task_VerifyNodes,
+        Task_VerifyEdges,
     }
 }

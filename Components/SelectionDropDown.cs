@@ -2,7 +2,6 @@
 using Grasshopper.Kernel.Parameters;
 using Portia.Infrastructure.Components;
 using Portia.Infrastructure.Core.Helps;
-using Portia.Infrastructure.Core.Portia.Main;
 using Portia.Infrastructure.Core.Portia.Primitives;
 using Portia.Infrastructure.Core.Portia.Strategies;
 using Portia.Infrastructure.Core.Primitives;
@@ -14,7 +13,7 @@ using System.Linq;
 
 namespace Portia.Lite.Components
 {
-    public class SelectionDropDown : AbsDropDownComponent<SelectionType>
+    public class SelectionDropDown : AbsDropDownComponent<SelectionMode>
     {
         public SelectionDropDown()
             : base(
@@ -40,9 +39,13 @@ namespace Portia.Lite.Components
             InString(
                     nameof(AbsSelection.Name),
                     Docs.Name)
+                .InEnum(
+                    nameof(Gate),
+                    typeof(Gate).ToEnumString(),
+                    nameof(Gate.And))
                 .InStrings(
-                    nameof(GraphIdentity) + "s",
-                    Docs.GraphIdentity);
+                    nameof(LogicSelection.Logics),
+                    Docs.Logics);
         }
 
         protected override void AddOutputFields()
@@ -72,38 +75,21 @@ namespace Portia.Lite.Components
                 Selection.ToJson());
         }
 
-        private void SolveByGraphIdentity(
-            IGH_DataAccess da)
-        {
-            if (!da.GetItems(
-                    1,
-                    out List<string> jsons))
-            {
-                return;
-            }
-
-            Selection = new GraphIdentitySelection
-            {
-                Name = name,
-                GraphIdentities = jsons.FromJson<GraphIdentity>().ToList()
-            };
-        }
-
         private void SolveByLogic(
             IGH_DataAccess da)
         {
+            int gateInt = da.GetOptionalItem(
+                1,
+                (int)LogicSelection.DefGate);
+
+            gateInt.ValidateEnum<Gate>();
+
             if (!da.GetItems(
-                    1,
+                    2,
                     out List<string> logicJsons))
             {
                 return;
             }
-
-            int gateInt = da.GetOptionalItem(
-                2,
-                (int)LogicSelection.DefGate);
-
-            gateInt.ValidateEnum<Gate>();
 
             Selection = new LogicSelection
             {
@@ -125,9 +111,9 @@ namespace Portia.Lite.Components
 
             bool strictlyIn = da.GetOptionalItem(
                 2,
-                WrapSelection.DefStrictlyIn);
+                ByWrapSelection.DefStrictlyIn);
 
-            Selection = new WrapSelection
+            Selection = new ByWrapSelection
             {
                 Name = name, Wrappers = breps, StrictlyIn = strictlyIn
             };
@@ -144,26 +130,26 @@ namespace Portia.Lite.Components
             }
 
             Selection =
-                new IntersectionSelection { Name = name, Breps = breps, };
+                new ByIntersectionSelection { Name = name, Breps = breps, };
         }
 
         private void SolveByComposite(
             IGH_DataAccess da)
         {
+            int gateInt = da.GetOptionalItem(
+                1,
+                (int)ByCompositeSelection.DefGate);
+
+            gateInt.ValidateEnum<Gate>();
+
             if (!da.GetItems(
-                    1,
+                    2,
                     out List<string> selectionJsons))
             {
                 return;
             }
 
-            int gateInt = da.GetOptionalItem(
-                2,
-                (int)CompositeSelection.DefGate);
-
-            gateInt.ValidateEnum<Gate>();
-
-            Selection = new CompositeSelection
+            Selection = new ByCompositeSelection
             {
                 Name = name,
                 Selections = selectionJsons
@@ -180,97 +166,84 @@ namespace Portia.Lite.Components
                 Docs.Name,
                 GH_ParamAccess.item);
 
-        protected override Dictionary<SelectionType, ParameterStrategy>
+        protected override Dictionary<SelectionMode, ParameterStrategy>
             DefineParameterStrategy()
         {
-            return new Dictionary<SelectionType, ParameterStrategy>
+            return new Dictionary<SelectionMode, ParameterStrategy>
             {
                 {
-                    SelectionType.GraphIdentitySelection, new ParameterStrategy(
+                    SelectionMode.ByLogicSelection, new ParameterStrategy(
                         new List<ParameterConfig>
                         {
                             NameParameter(),
-                            new(
-                                () => new Param_String(),
-                                nameof(GraphIdentity) + "s",
-                                Docs.GraphIdentity,
-                                GH_ParamAccess.list)
-                        },
-                        SolveByGraphIdentity,
-                        Docs.GraphIdentitySelection)
-                },
-                {
-                    SelectionType.LogicSelection, new ParameterStrategy(
-                        new List<ParameterConfig>
-                        {
-                            NameParameter(),
-                            new(
-                                () => new Param_String(),
-                                nameof(LogicSelection.Logics),
-                                Docs.Logics,
-                                GH_ParamAccess.list),
                             new(
                                 () => new Param_Integer(),
                                 nameof(LogicSelection.Gate),
                                 Docs.Gate,
                                 GH_ParamAccess.item,
-                                GateValueList.Create)
+                                GateValueList.Create),
+                            new(
+                                () => new Param_String(),
+                                nameof(LogicSelection.Logics),
+                                Docs.Logics,
+                                GH_ParamAccess.list),
                         },
                         SolveByLogic,
-                        Docs.LogicSelection)
+                        Docs.ByLogicSelection)
                 },
                 {
-                    SelectionType.WrapSelection, new ParameterStrategy(
+                    SelectionMode.ByWrapSelection, new ParameterStrategy(
                         new List<ParameterConfig>
                         {
                             NameParameter(),
                             new(
                                 () => new Param_Geometry(),
-                                nameof(WrapSelection.Wrappers),
+                                nameof(ByWrapSelection.Wrappers),
                                 Docs.Wrappers,
                                 GH_ParamAccess.list),
                             new(
                                 () => new Param_Boolean(),
-                                nameof(WrapSelection.StrictlyIn),
+                                nameof(ByWrapSelection.StrictlyIn),
                                 Docs.StrictlyIn,
                                 GH_ParamAccess.item)
                         },
                         SolveByWrap,
-                        Docs.WrapSelection)
+                        Docs.ByWrapSelection)
                 },
                 {
-                    SelectionType.IntersectionSelection, new ParameterStrategy(
+                    SelectionMode.ByIntersectionSelection,
+                    new ParameterStrategy(
                         new List<ParameterConfig>
                         {
                             NameParameter(),
                             new(
                                 () => new Param_Geometry(),
-                                nameof(IntersectionSelection.Breps),
+                                nameof(ByIntersectionSelection.Breps),
                                 Docs.Breps,
                                 GH_ParamAccess.list)
                         },
                         SolveByIntersection,
-                        Docs.IntersectionSelection)
+                        Docs.ByIntersectionSelection)
                 },
                 {
-                    SelectionType.CompositeSelection, new ParameterStrategy(
+                    SelectionMode.ByCompositeSelection, new ParameterStrategy(
                         new List<ParameterConfig>
                         {
                             NameParameter(),
                             new(
-                                () => new Param_String(),
-                                nameof(CompositeSelection.Selections),
-                                Docs.Selections,
-                                GH_ParamAccess.list),
-                            new(
                                 () => new Param_Integer(),
-                                nameof(CompositeSelection.Gate),
+                                nameof(ByCompositeSelection.Gate),
                                 Docs.Gate,
                                 GH_ParamAccess.item,
-                                GateValueList.Create)
+                                GateValueList.Create),
+                            new(
+                                () => new Param_String(),
+                                nameof(ByCompositeSelection.Selections),
+                                Docs.Selections,
+                                GH_ParamAccess.list),
                         },
                         SolveByComposite,
-                        Docs.CompositeSelection)
+                        Docs.ByCompositeSelection)
                 },
             };
         }
