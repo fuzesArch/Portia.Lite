@@ -25,6 +25,9 @@ namespace Portia.Lite.Components
         public override Guid ComponentGuid =>
             new("ee1888f9-45c2-4c58-9d9e-b5eece9f5e94");
 
+        protected override System.Drawing.Bitmap Icon =>
+            Properties.Resources.PortiaLogo;
+
         private const int FixedInputCount = 1;
         private static int LastFixedInputIndex => FixedInputCount - 1;
 

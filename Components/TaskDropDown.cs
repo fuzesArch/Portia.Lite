@@ -32,6 +32,9 @@ namespace Portia.Lite.Components
         public override Guid ComponentGuid =>
             new("700c752f-a51e-4a2e-944a-a8941d1fc518");
 
+        protected override System.Drawing.Bitmap Icon =>
+            Properties.Resources.BaseLogo;
+
         private AbsTask task;
         private List<AbsSelection> selections;
 

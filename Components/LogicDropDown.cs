@@ -27,6 +27,9 @@ namespace Portia.Lite.Components
         {
         }
 
+        protected override System.Drawing.Bitmap Icon =>
+            Properties.Resources.BaseLogo;
+
         private Gate _gate;
         private string name;
         protected IGraphLogic Logic;
@@ -35,7 +38,7 @@ namespace Portia.Lite.Components
         {
             InString(
                     nameof(IGraphLogic.Name),
-                    "")
+                    Docs.Name)
                 .InEnum(
                     nameof(Gate),
                     typeof(Gate).ToEnumString(),

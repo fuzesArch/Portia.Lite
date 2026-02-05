@@ -25,6 +25,9 @@ namespace Portia.Lite.Components
         public override Guid ComponentGuid =>
             new("fb60709c-48fb-43f9-85d2-f49dac289551");
 
+        protected override System.Drawing.Bitmap Icon =>
+            Properties.Resources.BaseLogo;
+
         protected List<GraphIdentity> GraphIdentities;
 
         protected override void AddInputFields()
