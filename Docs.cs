@@ -1,14 +1,4 @@
 ﻿using System;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
-using System.Data;
-using Grasshopper.Kernel.Types;
-using Rhino.Geometry;
-using System.Runtime.InteropServices;
-using Portia.Infrastructure.Core.Validators;
-using System.CodeDom.Compiler;
-using Portia.Infrastructure.Core.Portia.Main;
-using Grasshopper.Kernel.Geometry.Delaunay;
-using System.Text.RegularExpressions;
 
 namespace Portia.Lite
 {
@@ -36,6 +26,8 @@ namespace Portia.Lite
             return
                 $"{text}{Environment.NewLine}Right-click to change the input structure!";
         }
+
+        public static string TemporaryUnused => "TODO";
 
         public static string DoubleRelation =>
             "Numerical comparison logic (Equal, GreaterThan, ..) for filtering floating point numbers.";
@@ -129,6 +121,22 @@ namespace Portia.Lite
         public static string TargetAdjacency =>
             "A rule that evaluates the direct neighbouring Edge count of an Edge's end (Target) Node.";
 
+        public static string EdgeSourceIndex =>
+            "A rule that evaluates / captures an Edge based on the numerical Index " +
+            "of its starting (Source) Node.";
+
+        public static string EdgeSourceType =>
+            "A bridge rule that evaluates / captures an Edge based on the text-based Type " +
+            "of its starting (Source) Node.";
+
+        public static string EdgeTargetIndex =>
+            "A bridge rule that evaluates / captures an Edge based on the numerical Index " +
+            "of its ending (Target) Node.";
+
+        public static string EdgeTargetType =>
+            "A bridge rule that evaluates /captures an Edge based on the text-based Type " +
+            "of its ending (Target) Node.";
+
         public static string IsBridgeEdge =>
             "A topological rule that identifies critical 'bridge' edges whose removal " +
             "would split the graph into separate, disconnected parts.";
@@ -217,10 +225,6 @@ namespace Portia.Lite
             "When enabled, the rule validates the connection regardless of edge direction, " +
             "checking both start-to-end and end-to-start orientations.";
 
-        public static string ByIdentitySelection =>
-            "A selection rule that captures elements by matching their unique identity data, " +
-            "such as specific Index numbers or text-based Types.";
-
         public static string ByLogicSelection =>
             "A selection rule that identifies elements based on whether they satisfy " +
             "a specific topological or geometric Logic condition.";
@@ -248,5 +252,21 @@ namespace Portia.Lite
         public static string StrictlyIn =>
             "A boolean toggle that determines if elements lying exactly on the " +
             "Brep boundary surface are included in the selection or not.";
+
+        public static string DeconstructItem =>
+            "A helper component used to unlock the details of a graph element (both Node or Edge), " +
+            "extracting its identity, geometric content (Centroid or Curve), and its raw JSON format data. " +
+            "Connect to Portia Nodes and Edges outputs!";
+
+        public static string GraphItem =>
+            "The proprietary 'Sovereign Goo' wrapper that encapsulates a graph element (Node or Edge), " +
+            "carrying its full topological intelligence and metadata through the network.";
+
+        public static string Json =>
+            "The universal, transaction-ready string representation of a graph element (Node or Edge), " +
+            "allowing for seamless data exchange between Portia and external logic engines.";
+
+        public static string Geometries =>
+            "The projected geometric representation of an element: a Node's Centroid or Edge's Curve.";
     }
 }

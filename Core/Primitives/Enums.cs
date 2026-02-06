@@ -1,4 +1,6 @@
-﻿namespace Portia.Lite.Core.Primitives
+﻿using Portia.Infrastructure.Core.Primitives;
+
+namespace Portia.Lite.Core.Primitives
 {
     public enum SelectionMode
     {
@@ -16,17 +18,52 @@
 
     public enum LogicType
     {
-        IndexLogic,
-        TypeLogic,
-        NodeAdjacencyLogic,
-        NodeProximityLogic,
-        NodeVectorSumLogic,
-        NodeIsLeafLogic,
-        NodeConstellationLogic,
-        EdgeLengthLogic,
-        EdgeSourceAdjacencyLogic,
-        EdgeTargetAdjacencyLogic,
+        [Category("Nodes / Edges")]
+        Index,
+
+        [Category("Nodes / Edges")]
+        Type,
+
+        [Category("Nodes")]
+        NodeAdjacency,
+
+        [Category("Nodes")]
+        NodeProximity,
+
+        [Category("Nodes")]
+        NodeVectorSum,
+
+        [Category("Nodes")]
+        NodeIsLeaf,
+
+        [Category("Nodes")]
+        NodeConstellation,
+
+        [Category("Edges")]
+        EdgeLength,
+
+        [Category("Edges")]
+        EdgeSourceAdjacency,
+
+        [Category("Edges")]
+        EdgeTargetAdjacency,
+
+        [Category("Edges")]
+        EdgeSourceIndex,
+
+        [Category("Edges")]
+        EdgeSourceType,
+
+        [Category("Edges")]
+        EdgeTargetIndex,
+
+        [Category("Edges")]
+        EdgeTargetType,
+
+        [Category("Edges")]
         EdgeIsBridgeLogic,
+
+        [Category("Edges")]
         EdgeLinkConstellationLogic
     }
 

@@ -25,7 +25,7 @@ namespace Portia.Lite.Components
         }
 
         protected override System.Drawing.Bitmap Icon =>
-            Properties.Resources.BaseLogo;
+            Properties.Resources.ColoredLogo;
 
         public override Guid ComponentGuid =>
             new("ac2c40f6-c85b-4400-ada2-a0f630590589");

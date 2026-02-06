@@ -33,7 +33,7 @@ namespace Portia.Lite.Components
             new("3216fe43-7667-4b78-9c13-b5e550d9c28d");
 
         protected override System.Drawing.Bitmap Icon =>
-            Properties.Resources.BaseLogo;
+            Properties.Resources.ColoredLogo;
 
         private Gate _gate;
         private string name;
@@ -301,32 +301,32 @@ namespace Portia.Lite.Components
             return new Dictionary<LogicType, ParameterStrategy>
             {
                 {
-                    LogicType.IndexLogic,
+                    LogicType.Index,
                     GetNumericStrategyFor<NodeAdjacencyRule>(Docs.IndexLogic)
                 },
                 {
-                    LogicType.TypeLogic,
+                    LogicType.Type,
                     GetStringStrategyFor<TypeRule>(Docs.TypeLogic)
                 },
                 {
-                    LogicType.NodeAdjacencyLogic,
+                    LogicType.NodeAdjacency,
                     GetNumericStrategyFor<NodeAdjacencyRule>(Docs.NodeAdjacency)
                 },
                 {
-                    LogicType.NodeProximityLogic,
+                    LogicType.NodeProximity,
                     GetNumericStrategyFor<NodeProximityRule>(Docs.NodeProximity)
                 },
                 {
-                    LogicType.NodeVectorSumLogic,
+                    LogicType.NodeVectorSum,
                     GetNumericStrategyFor<NodeVectorSumRule>(Docs.NodeVectorSum)
                 },
                 {
-                    LogicType.NodeIsLeafLogic,
+                    LogicType.NodeIsLeaf,
                     GetNonConditionalStrategyFor<IsLeafNodeRule>(
                         Docs.IsLeafNode)
                 },
                 {
-                    LogicType.NodeConstellationLogic, new ParameterStrategy(
+                    LogicType.NodeConstellation, new ParameterStrategy(
                         new List<ParameterConfig>
                         {
                             NameParameter(),
@@ -345,18 +345,38 @@ namespace Portia.Lite.Components
                         Docs.JointConstellation)
                 },
                 {
-                    LogicType.EdgeLengthLogic,
-                    GetNumericStrategyFor<EdgeLengthRule>(Docs.SourceAdjacency)
+                    LogicType.EdgeLength,
+                    GetNumericStrategyFor<EdgeLengthRule>(Docs.EdgeLength)
                 },
                 {
-                    LogicType.EdgeSourceAdjacencyLogic,
+                    LogicType.EdgeSourceAdjacency,
                     GetNumericStrategyFor<SourceAdjacencyRule>(
                         Docs.SourceAdjacency)
                 },
                 {
-                    LogicType.EdgeTargetAdjacencyLogic,
+                    LogicType.EdgeTargetAdjacency,
                     GetNumericStrategyFor<TargetAdjacencyRule>(
                         Docs.TargetAdjacency)
+                },
+                {
+                    LogicType.EdgeSourceIndex,
+                    GetNumericStrategyFor<EdgeSourceIndexRule>(
+                        Docs.EdgeSourceIndex)
+                },
+                {
+                    LogicType.EdgeSourceType,
+                    GetStringStrategyFor<EdgeSourceTypeRule>(
+                        Docs.EdgeSourceType)
+                },
+                {
+                    LogicType.EdgeTargetIndex,
+                    GetNumericStrategyFor<EdgeTargetIndexRule>(
+                        Docs.EdgeTargetIndex)
+                },
+                {
+                    LogicType.EdgeTargetType,
+                    GetStringStrategyFor<EdgeTargetTypeRule>(
+                        Docs.EdgeTargetType)
                 },
                 {
                     LogicType.EdgeIsBridgeLogic,

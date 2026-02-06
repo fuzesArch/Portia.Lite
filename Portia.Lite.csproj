@@ -71,6 +71,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Components\DeconstructItemComponent.cs" />
+    <Compile Include="Components\GraphItemParameter.cs" />
     <Compile Include="Components\LogicDropDown.cs" />
     <Compile Include="Components\PortiaComponent.cs" />
     <Compile Include="Components\SelectionDropDown.cs" />
@@ -106,14 +108,12 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\test.png" />
+    <None Include="Resources\ColoredLogo.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\BaseLogo.png" />
+    <None Include="Resources\ColoredPortiaLogo.png" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\PortiaLogo.png" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\RhinoCommon.8.27.26019.16021\build\net48\RhinoCommon.targets" Condition="Exists('..\packages\RhinoCommon.8.27.26019.16021\build\net48\RhinoCommon.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
