@@ -131,11 +131,47 @@ namespace Portia.Lite.Components
             return false;
         }
 
+        //private void UpdateOutputsCallback(
+        //    GH_Document doc)
+        //{
+        //    Params.ClearOutputs();
+        //    queries.RegisterOutputs(Params);
+        //    Params.OnParametersChanged();
+        //    ExpireSolution(true);
+        //}
+
         private void UpdateOutputsCallback(
             GH_Document doc)
         {
-            Params.ClearOutputs();
-            queries.RegisterOutputs(Params);
+            while (queries.Count < Params.Output.Count)
+            {
+                Params.UnregisterOutputParameter(
+                    Params.Output[Params.Output.Count - 1]);
+            }
+
+            for (int i = 0; i < queries.Count; i++)
+            {
+                var query = queries[i];
+
+                if (i < Params.Output.Count)
+                {
+                    var existingParam = Params.Output[i];
+
+                    if (existingParam.Name != query.Name)
+                    {
+                        existingParam.Name = query.Name;
+                        existingParam.NickName = query.Name;
+                        existingParam.Description = "Portia Query Output";
+                    }
+                }
+                else
+                {
+                    query.RegisterOutput(
+                        Params,
+                        i);
+                }
+            }
+
             Params.OnParametersChanged();
             ExpireSolution(true);
         }

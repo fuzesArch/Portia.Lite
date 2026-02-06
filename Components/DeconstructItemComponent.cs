@@ -17,7 +17,7 @@ namespace Portia.Lite.Components
                     .Substring(
                         0,
                         11),
-                Docs.TemporaryUnused,
+                Docs.DeconstructItem,
                 Naming.Tab,
                 Naming.Tab)
         {

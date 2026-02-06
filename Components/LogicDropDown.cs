@@ -147,6 +147,13 @@ namespace Portia.Lite.Components
                 Docs.Name,
                 GH_ParamAccess.item);
 
+        protected static ParameterConfig BooleanParameter() =>
+            new(
+                () => new Param_Boolean(),
+                nameof(Docs.BooleanCondition),
+                Docs.BooleanCondition,
+                GH_ParamAccess.item);
+
         protected static ParameterStrategy NumericRuleStrategy(
             Action<IGH_DataAccess> action,
             string description)
@@ -193,21 +200,34 @@ namespace Portia.Lite.Components
                 description);
         }
 
-        protected ParameterStrategy GetNonConditionalStrategyFor<TRule>(
+        protected ParameterStrategy BooleanStrategyFor<TRule>(
             string description)
-            where TRule : IGraphLogic, new()
+            where TRule : IGraphLogic, IBooleanLogic, new()
         {
             return new ParameterStrategy(
-                new List<ParameterConfig> { NameParameter() },
+                new List<ParameterConfig>
+                {
+                    NameParameter(), BooleanParameter()
+                },
                 da =>
                 {
-                    Logic = new TRule { Name = name };
+                    if (!da.GetItem(
+                            1,
+                            out bool boolCondition))
+                    {
+                        return;
+                    }
+
+                    var rule = new TRule { Name = name };
+                    rule.SetNegatableBaseCondition(boolCondition);
+
+                    Logic = rule;
                     Logic.Guard();
                 },
                 description);
         }
 
-        protected ParameterStrategy GetNumericStrategyFor<TRule>(
+        protected ParameterStrategy NumericStrategyFor<TRule>(
             string description)
             where TRule : AbsRule<double, DoubleCondition>, new()
         {
@@ -251,7 +271,7 @@ namespace Portia.Lite.Components
                 description);
         }
 
-        protected ParameterStrategy GetStringStrategyFor<TRule>(
+        protected ParameterStrategy StringStrategyFor<TRule>(
             string description)
             where TRule : AbsRule<string, StringCondition>, new()
         {
@@ -302,28 +322,24 @@ namespace Portia.Lite.Components
             {
                 {
                     LogicType.Index,
-                    GetNumericStrategyFor<NodeAdjacencyRule>(Docs.IndexLogic)
+                    NumericStrategyFor<NodeAdjacencyRule>(Docs.IndexLogic)
                 },
-                {
-                    LogicType.Type,
-                    GetStringStrategyFor<TypeRule>(Docs.TypeLogic)
-                },
+                { LogicType.Type, StringStrategyFor<TypeRule>(Docs.TypeLogic) },
                 {
                     LogicType.NodeAdjacency,
-                    GetNumericStrategyFor<NodeAdjacencyRule>(Docs.NodeAdjacency)
+                    NumericStrategyFor<NodeAdjacencyRule>(Docs.NodeAdjacency)
                 },
                 {
                     LogicType.NodeProximity,
-                    GetNumericStrategyFor<NodeProximityRule>(Docs.NodeProximity)
+                    NumericStrategyFor<NodeProximityRule>(Docs.NodeProximity)
                 },
                 {
                     LogicType.NodeVectorSum,
-                    GetNumericStrategyFor<NodeVectorSumRule>(Docs.NodeVectorSum)
+                    NumericStrategyFor<NodeVectorSumRule>(Docs.NodeVectorSum)
                 },
                 {
                     LogicType.NodeIsLeaf,
-                    GetNonConditionalStrategyFor<IsLeafNodeRule>(
-                        Docs.IsLeafNode)
+                    BooleanStrategyFor<IsLeafNodeRule>(Docs.IsLeafNode)
                 },
                 {
                     LogicType.NodeConstellation, new ParameterStrategy(
@@ -346,42 +362,43 @@ namespace Portia.Lite.Components
                 },
                 {
                     LogicType.EdgeLength,
-                    GetNumericStrategyFor<EdgeLengthRule>(Docs.EdgeLength)
+                    NumericStrategyFor<EdgeLengthRule>(Docs.EdgeLength)
                 },
                 {
                     LogicType.EdgeSourceAdjacency,
-                    GetNumericStrategyFor<SourceAdjacencyRule>(
+                    NumericStrategyFor<SourceAdjacencyRule>(
                         Docs.SourceAdjacency)
                 },
                 {
                     LogicType.EdgeTargetAdjacency,
-                    GetNumericStrategyFor<TargetAdjacencyRule>(
+                    NumericStrategyFor<TargetAdjacencyRule>(
                         Docs.TargetAdjacency)
                 },
                 {
                     LogicType.EdgeSourceIndex,
-                    GetNumericStrategyFor<EdgeSourceIndexRule>(
+                    NumericStrategyFor<EdgeSourceIndexRule>(
                         Docs.EdgeSourceIndex)
                 },
                 {
                     LogicType.EdgeSourceType,
-                    GetStringStrategyFor<EdgeSourceTypeRule>(
-                        Docs.EdgeSourceType)
+                    StringStrategyFor<EdgeSourceTypeRule>(Docs.EdgeSourceType)
                 },
                 {
                     LogicType.EdgeTargetIndex,
-                    GetNumericStrategyFor<EdgeTargetIndexRule>(
+                    NumericStrategyFor<EdgeTargetIndexRule>(
                         Docs.EdgeTargetIndex)
                 },
                 {
                     LogicType.EdgeTargetType,
-                    GetStringStrategyFor<EdgeTargetTypeRule>(
-                        Docs.EdgeTargetType)
+                    StringStrategyFor<EdgeTargetTypeRule>(Docs.EdgeTargetType)
                 },
                 {
-                    LogicType.EdgeIsBridgeLogic,
-                    GetNonConditionalStrategyFor<IsBridgeEdgeRule>(
-                        Docs.IsBridgeEdge)
+                    LogicType.EdgeIsLinear,
+                    BooleanStrategyFor<IsLinearEdgeRule>(Docs.IsLinearRule)
+                },
+                {
+                    LogicType.EdgeIsBridge,
+                    BooleanStrategyFor<IsBridgeEdgeRule>(Docs.IsBridgeEdge)
                 },
                 {
                     LogicType.EdgeLinkConstellationLogic, new ParameterStrategy(

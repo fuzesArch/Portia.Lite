@@ -1,6 +1,7 @@
 ﻿using Grasshopper.Kernel;
 using Grasshopper.Kernel.Parameters;
 using Portia.Infrastructure.Components;
+using Portia.Infrastructure.Core.DocStrings;
 using Portia.Infrastructure.Core.Helps;
 using Portia.Infrastructure.Core.Portia.Main;
 using Portia.Infrastructure.Core.Portia.Primitives;
@@ -218,7 +219,9 @@ namespace Portia.Lite.Components
                             new(
                                 () => new Param_String(),
                                 nameof(SetCurves.InitialEdgeTypes),
-                                Docs.InitialEdgeTypes,
+                                Docs.InitialEdgeTypes.ExtendBy(
+                                    DocStrings.InputBoost(
+                                        nameof(SetCurves.Curves))),
                                 GH_ParamAccess.list)
                         },
                         SolveBySetCurves,

@@ -35,6 +35,10 @@ namespace Portia.Lite
         public static string StringRelation =>
             "Text-based filter (Contains, StartsWith, ..) used mostly for node / edge Type processes.";
 
+        public static string BooleanCondition =>
+            "Logical Boolean Toggle: If True, the rule captures elements that satisfy the condition. " +
+            "If False, the rule is inverted to capture elements that do not.";
+
         public static string Gate =>
             "Boolean operator (AND, OR) to combine multiple conditions into one filter.";
 
@@ -136,6 +140,10 @@ namespace Portia.Lite
         public static string EdgeTargetType =>
             "A bridge rule that evaluates /captures an Edge based on the text-based Type " +
             "of its ending (Target) Node.";
+
+        public static string IsLinearRule =>
+            "A binary validation rule that determines if an Edge is perfectly straight " +
+            "within document tolerance, distinguishing between linear members and curved geometry.";
 
         public static string IsBridgeEdge =>
             "A topological rule that identifies critical 'bridge' edges whose removal " +

@@ -61,7 +61,10 @@ namespace Portia.Lite.Core.Primitives
         EdgeTargetType,
 
         [Category("Edges")]
-        EdgeIsBridgeLogic,
+        EdgeIsLinear,
+
+        [Category("Edges")]
+        EdgeIsBridge,
 
         [Category("Edges")]
         EdgeLinkConstellationLogic
