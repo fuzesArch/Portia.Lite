@@ -1,6 +1,7 @@
 ﻿using Grasshopper.Kernel;
 using Grasshopper.Kernel.Parameters;
 using Portia.Infrastructure.Components;
+using Portia.Infrastructure.Core.DocStrings;
 using Portia.Infrastructure.Core.Helps;
 using Portia.Infrastructure.Core.Portia.Primitives;
 using Portia.Infrastructure.Core.Portia.Strategies;
@@ -163,7 +164,7 @@ namespace Portia.Lite.Components
             new(
                 () => new Param_String(),
                 nameof(AbsSelection.Name),
-                Docs.Name,
+                Docs.Name.Add(Prefix.String),
                 GH_ParamAccess.item);
 
         protected override Dictionary<SelectionMode, ParameterStrategy>
@@ -179,13 +180,13 @@ namespace Portia.Lite.Components
                             new(
                                 () => new Param_Integer(),
                                 nameof(LogicSelection.Gate),
-                                Docs.Gate,
+                                Docs.Gate.Add(Prefix.Integer),
                                 GH_ParamAccess.item,
-                                GateValueList.Create),
+                                listFactory: GateValueList.Create),
                             new(
                                 () => new Param_String(),
                                 nameof(LogicSelection.Logics),
-                                Docs.Logics,
+                                Docs.Logics.Add(Prefix.StringList),
                                 GH_ParamAccess.list),
                         },
                         SolveByLogic,
@@ -199,12 +200,12 @@ namespace Portia.Lite.Components
                             new(
                                 () => new Param_Geometry(),
                                 nameof(ByWrapSelection.Wrappers),
-                                Docs.Wrappers,
+                                Docs.Wrappers.Add(Prefix.GeometryList),
                                 GH_ParamAccess.list),
                             new(
                                 () => new Param_Boolean(),
                                 nameof(ByWrapSelection.StrictlyIn),
-                                Docs.StrictlyIn,
+                                Docs.StrictlyIn.Add(Prefix.Boolean),
                                 GH_ParamAccess.item)
                         },
                         SolveByWrap,
@@ -219,7 +220,7 @@ namespace Portia.Lite.Components
                             new(
                                 () => new Param_Geometry(),
                                 nameof(ByIntersectionSelection.Breps),
-                                Docs.Breps,
+                                Docs.Breps.Add(Prefix.GeometryList),
                                 GH_ParamAccess.list)
                         },
                         SolveByIntersection,
@@ -233,13 +234,13 @@ namespace Portia.Lite.Components
                             new(
                                 () => new Param_Integer(),
                                 nameof(ByCompositeSelection.Gate),
-                                Docs.Gate,
+                                Docs.Gate.Add(Prefix.Integer),
                                 GH_ParamAccess.item,
-                                GateValueList.Create),
+                                listFactory: GateValueList.Create),
                             new(
                                 () => new Param_String(),
                                 nameof(ByCompositeSelection.Selections),
-                                Docs.Selections,
+                                Docs.Selections.Add(Prefix.JsonList),
                                 GH_ParamAccess.list),
                         },
                         SolveByComposite,

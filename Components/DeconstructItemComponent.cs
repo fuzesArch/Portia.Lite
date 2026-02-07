@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Grasshopper.Kernel;
 using Portia.Infrastructure.Components;
+using Portia.Infrastructure.Core.DocStrings;
 using Portia.Infrastructure.Core.Helps;
 using Portia.Infrastructure.Core.Portia.Main;
 using Portia.Infrastructure.Core.Portia.Natives;

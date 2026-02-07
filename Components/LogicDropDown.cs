@@ -8,6 +8,7 @@ using Portia.Infrastructure.Core.Portia.Strategies;
 using Portia.Infrastructure.Core.Primitives;
 using Portia.Infrastructure.Core.Validators;
 using Portia.Lite.Core.Primitives;
+using Rhino.Geometry;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -92,23 +93,29 @@ namespace Portia.Lite.Components
                 Logic.ToJson());
         }
 
-        protected void SolveByJointConstellation(
+        protected void SolveByNodeSimilarity(
             IGH_DataAccess da)
         {
             if (!da.GetItems(
                     1,
-                    out List<string> jsons))
+                    out List<Line> directionLines))
             {
                 return;
             }
 
             bool strictMatch = da.GetOptionalItem(
                 2,
-                JointConstellation.DefStrictMatch);
+                NodeSimilarity.DefStrictMatch);
 
-            Logic = new JointConstellation(
-                jsons.FromJson<NodeVector>().ToList(),
+
+            double tolerance = da.GetOptionalItem(
+                3,
+                NodeSimilarity.DefAngleTolerance);
+
+            Logic = new NodeSimilarity(
+                directionLines,
                 strictMatch,
+                tolerance,
                 name);
         }
 
@@ -144,14 +151,14 @@ namespace Portia.Lite.Components
             new(
                 () => new Param_String(),
                 nameof(AbsSelection.Name),
-                Docs.Name,
+                Docs.Name.Add(Prefix.String),
                 GH_ParamAccess.item);
 
         protected static ParameterConfig BooleanParameter() =>
             new(
                 () => new Param_Boolean(),
                 nameof(Docs.BooleanCondition),
-                Docs.BooleanCondition,
+                Docs.BooleanCondition.Add(Prefix.Boolean),
                 GH_ParamAccess.item);
 
         protected static ParameterStrategy NumericRuleStrategy(
@@ -165,12 +172,12 @@ namespace Portia.Lite.Components
                     new(
                         () => new Param_Integer(),
                         nameof(Gate),
-                        Docs.Gate,
+                        Docs.Gate.Add(Prefix.Integer),
                         GH_ParamAccess.item),
                     new(
                         () => new Param_String(),
                         nameof(DoubleCondition) + "s",
-                        Docs.Condition,
+                        Docs.Condition.Add(Prefix.JsonList),
                         GH_ParamAccess.list)
                 },
                 action,
@@ -188,12 +195,12 @@ namespace Portia.Lite.Components
                     new(
                         () => new Param_Integer(),
                         nameof(Gate),
-                        Docs.Gate,
+                        Docs.Gate.Add(Prefix.Integer),
                         GH_ParamAccess.item),
                     new(
                         () => new Param_String(),
                         nameof(StringCondition) + "s",
-                        Docs.Condition,
+                        Docs.Condition.Add(Prefix.StringList),
                         GH_ParamAccess.list)
                 },
                 action,
@@ -342,22 +349,29 @@ namespace Portia.Lite.Components
                     BooleanStrategyFor<IsLeafNodeRule>(Docs.IsLeafNode)
                 },
                 {
-                    LogicType.NodeConstellation, new ParameterStrategy(
+                    LogicType.NodeSimilarity, new ParameterStrategy(
                         new List<ParameterConfig>
                         {
                             NameParameter(),
                             new(
-                                () => new Param_String(),
-                                nameof(NodeVector) + "s",
-                                Docs.NodeVector,
+                                () => new Param_Line(),
+                                nameof(NodeSimilarity.DirectionLines),
+                                Docs.DirectionLines.Add(Prefix.LineList),
                                 GH_ParamAccess.list),
                             new(
                                 () => new Param_Boolean(),
-                                nameof(JointConstellation.StrictMatch),
-                                Docs.StrictMatch,
-                                GH_ParamAccess.item)
+                                nameof(NodeSimilarity.StrictMatch),
+                                Docs.StrictMatch.Add(Prefix.Boolean),
+                                GH_ParamAccess.item,
+                                isOptional: true),
+                            new(
+                                () => new Param_Number(),
+                                nameof(NodeSimilarity.AngleTolerance),
+                                Docs.AngleTolerance.Add(Prefix.Double),
+                                GH_ParamAccess.item,
+                                isOptional: true)
                         },
-                        SolveByJointConstellation,
+                        SolveByNodeSimilarity,
                         Docs.JointConstellation)
                 },
                 {
@@ -408,17 +422,17 @@ namespace Portia.Lite.Components
                             new(
                                 () => new Param_String(),
                                 nameof(LinkConstellation.AllowedSourceTypes),
-                                Docs.AllowedSourceTypes,
+                                Docs.AllowedSourceTypes.Add(Prefix.StringList),
                                 GH_ParamAccess.list),
                             new(
                                 () => new Param_String(),
                                 nameof(LinkConstellation.AllowedTargetTypes),
-                                Docs.AllowedTargetTypes,
+                                Docs.AllowedTargetTypes.Add(Prefix.StringList),
                                 GH_ParamAccess.list),
                             new(
                                 () => new Param_Boolean(),
                                 nameof(LinkConstellation.Bidirectional),
-                                Docs.Bidirectional,
+                                Docs.Bidirectional.Add(Prefix.Boolean),
                                 GH_ParamAccess.item)
                         },
                         SolveByLinkConstellation,

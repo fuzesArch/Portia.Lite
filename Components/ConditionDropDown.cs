@@ -1,6 +1,7 @@
 ﻿using Grasshopper.Kernel;
 using Grasshopper.Kernel.Parameters;
 using Portia.Infrastructure.Components;
+using Portia.Infrastructure.Core.DocStrings;
 using Portia.Infrastructure.Core.Helps;
 using Portia.Infrastructure.Core.Primitives;
 using Portia.Lite.Core.Primitives;
@@ -112,13 +113,13 @@ namespace Portia.Lite.Components
                             new(
                                 () => new Param_Integer(),
                                 nameof(DoubleRelation),
-                                Docs.DoubleRelation,
+                                Docs.DoubleRelation.Add(Prefix.Integer),
                                 GH_ParamAccess.item,
-                                DoubleRelationValueList.Create),
+                                listFactory: DoubleRelationValueList.Create),
                             new(
                                 () => new Param_Number(),
                                 nameof(Docs.DoubleValue),
-                                Docs.DoubleValue,
+                                Docs.DoubleValue.Add(Prefix.Double),
                                 GH_ParamAccess.item)
                         },
                         SolveByDouble,
@@ -131,12 +132,12 @@ namespace Portia.Lite.Components
                             new(
                                 () => new Param_Integer(),
                                 nameof(StringRelation),
-                                Docs.StringRelation,
+                                Docs.StringRelation.Add(Prefix.Integer),
                                 GH_ParamAccess.item,
-                                StringRelationValueList.Create),
+                                listFactory: StringRelationValueList.Create),
                             new(
                                 () => new Param_String(),
-                                nameof(Docs.StringValue),
+                                nameof(Docs.StringValue).Add(Prefix.String),
                                 Docs.StringValue,
                                 GH_ParamAccess.item)
                         },

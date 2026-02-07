@@ -213,13 +213,18 @@ namespace Portia.Lite
             "A unique identifier used to label logic results and " +
             "dynamically name the corresponding Portia output fields for easy tracking.";
 
-        public static string NodeVector =>
-            "Defines a required Edge direction and " +
-            "type mapping that must be present at a Node for a successful constellation match.";
+        public static string DirectionLines =>
+            "Edge directions (as a Lines) that will be checked against every Node's adjacent Edges for " +
+            "a successful constellation match. Only one intersection point is allowed between the Lines' start points since a " +
+            "constellation must radiate outwards.";
 
         public static string StrictMatch =>
             "When enabled, the node must have an exact count of connected edges " +
             "matching the number of defined NodeVectors to pass the rule.";
+
+        public static string AngleTolerance =>
+            "Allowed angle deviation between vectors IN DEGREES. Used during similarity comparison between " +
+            "outgoing Node vectors (constellations).";
 
         public static string AllowedSourceTypes =>
             "A list of valid identity Type strings for the start Node of an Edge " +

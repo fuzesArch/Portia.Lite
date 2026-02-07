@@ -37,7 +37,7 @@ namespace Portia.Lite.Core.Primitives
         NodeIsLeaf,
 
         [Category("Nodes")]
-        NodeConstellation,
+        NodeSimilarity,
 
         [Category("Edges")]
         EdgeLength,
