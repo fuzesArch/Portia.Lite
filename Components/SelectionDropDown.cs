@@ -76,7 +76,7 @@ namespace Portia.Lite.Components
                 Selection.ToJson());
         }
 
-        private void SolveByLogic(
+        private void ByLogic(
             IGH_DataAccess da)
         {
             int gateInt = da.GetOptionalItem(
@@ -100,7 +100,7 @@ namespace Portia.Lite.Components
             };
         }
 
-        private void SolveByWrap(
+        private void ByWrap(
             IGH_DataAccess da)
         {
             if (!da.GetItems(
@@ -120,7 +120,7 @@ namespace Portia.Lite.Components
             };
         }
 
-        private void SolveByIntersection(
+        private void ByIntersection(
             IGH_DataAccess da)
         {
             if (!da.GetItems(
@@ -134,7 +134,7 @@ namespace Portia.Lite.Components
                 new ByIntersectionSelection { Name = name, Breps = breps, };
         }
 
-        private void SolveByComposite(
+        private void ByComposite(
             IGH_DataAccess da)
         {
             int gateInt = da.GetOptionalItem(
@@ -173,27 +173,30 @@ namespace Portia.Lite.Components
             return new Dictionary<SelectionMode, ParameterStrategy>
             {
                 {
-                    SelectionMode.ByLogicSelection, new ParameterStrategy(
+                    SelectionMode.ByLogic, new ParameterStrategy(
                         new List<ParameterConfig>
                         {
                             NameParameter(),
                             new(
                                 () => new Param_Integer(),
                                 nameof(LogicSelection.Gate),
-                                Docs.Gate.Add(Prefix.Integer),
+                                Docs
+                                    .Gate.ByDefault(AbsSelection.DefGate)
+                                    .Add(Prefix.Integer),
                                 GH_ParamAccess.item,
-                                listFactory: GateValueList.Create),
+                                listFactory: GateValueList.Create,
+                                isOptional: true),
                             new(
                                 () => new Param_String(),
                                 nameof(LogicSelection.Logics),
                                 Docs.Logics.Add(Prefix.StringList),
                                 GH_ParamAccess.list),
                         },
-                        SolveByLogic,
+                        ByLogic,
                         Docs.ByLogicSelection)
                 },
                 {
-                    SelectionMode.ByWrapSelection, new ParameterStrategy(
+                    SelectionMode.ByWrap, new ParameterStrategy(
                         new List<ParameterConfig>
                         {
                             NameParameter(),
@@ -208,12 +211,11 @@ namespace Portia.Lite.Components
                                 Docs.StrictlyIn.Add(Prefix.Boolean),
                                 GH_ParamAccess.item)
                         },
-                        SolveByWrap,
+                        ByWrap,
                         Docs.ByWrapSelection)
                 },
                 {
-                    SelectionMode.ByIntersectionSelection,
-                    new ParameterStrategy(
+                    SelectionMode.ByIntersection, new ParameterStrategy(
                         new List<ParameterConfig>
                         {
                             NameParameter(),
@@ -223,27 +225,30 @@ namespace Portia.Lite.Components
                                 Docs.Breps.Add(Prefix.GeometryList),
                                 GH_ParamAccess.list)
                         },
-                        SolveByIntersection,
+                        ByIntersection,
                         Docs.ByIntersectionSelection)
                 },
                 {
-                    SelectionMode.ByCompositeSelection, new ParameterStrategy(
+                    SelectionMode.ByComposite, new ParameterStrategy(
                         new List<ParameterConfig>
                         {
                             NameParameter(),
                             new(
                                 () => new Param_Integer(),
                                 nameof(ByCompositeSelection.Gate),
-                                Docs.Gate.Add(Prefix.Integer),
+                                Docs
+                                    .Gate.ByDefault(AbsSelection.DefGate)
+                                    .Add(Prefix.Integer),
                                 GH_ParamAccess.item,
-                                listFactory: GateValueList.Create),
+                                listFactory: GateValueList.Create,
+                                isOptional: true),
                             new(
                                 () => new Param_String(),
                                 nameof(ByCompositeSelection.Selections),
                                 Docs.Selections.Add(Prefix.JsonList),
                                 GH_ParamAccess.list),
                         },
-                        SolveByComposite,
+                        ByComposite,
                         Docs.ByCompositeSelection)
                 },
             };

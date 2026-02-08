@@ -39,8 +39,13 @@ namespace Portia.Lite
             "Logical Boolean Toggle: If True, the rule captures elements that satisfy the condition. " +
             "If False, the rule is inverted to capture elements that do not.";
 
+        public static string MatchAll =>
+            "Similarly to the Gate component, this Boolean operator only returns with True, if the given condition(s) is true " +
+            "for ALL elements that are evaluated. If its False, it is enough that ANY of the evaluated elements match the condition(s)";
+
         public static string Gate =>
-            "Boolean operator (AND, OR) to combine multiple conditions into one filter.";
+            "Boolean operator (AND, OR) to combine multiple conditions into one filter. " +
+            "AND means that all conditions must be True, OR means that any of the conditions is enough to be True.";
 
         public static string DoubleValue =>
             "The target numerical value for mathematical filtering.";
@@ -97,6 +102,11 @@ namespace Portia.Lite
             "Defines a localized graph process that evaluates both " +
             "Nodes AND Edges based on their text-based Type value.";
 
+        public static string NodeAdjacentEdgeType =>
+            "A topological query that validates a Node based on the Type " +
+            "of its connected Edges. Useful for identifying hybrid structural junctions, or " +
+            "setting the Type of a Node based on its neighbour.";
+
         public static string NodeAdjacency =>
             "A rule that evaluates a Node's direct neighbouring Edge count.";
 
@@ -112,7 +122,7 @@ namespace Portia.Lite
             "A binary validation rule that identifies 'leaf' nodes—elements " +
             "with only one connection—at the termination of a graph branch.";
 
-        public static string JointConstellation =>
+        public static string LinkSimilarity =>
             "A complex topological rule that identifies specific junction patterns and " +
             "branching arrangements within the wider network.";
 

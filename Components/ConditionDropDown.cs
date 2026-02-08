@@ -137,8 +137,8 @@ namespace Portia.Lite.Components
                                 listFactory: StringRelationValueList.Create),
                             new(
                                 () => new Param_String(),
-                                nameof(Docs.StringValue).Add(Prefix.String),
-                                Docs.StringValue,
+                                nameof(Docs.StringValue),
+                                Docs.StringValue.Add(Prefix.String),
                                 GH_ParamAccess.item)
                         },
                         SolveByString,

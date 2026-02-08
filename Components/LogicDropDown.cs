@@ -93,7 +93,7 @@ namespace Portia.Lite.Components
                 Logic.ToJson());
         }
 
-        protected void SolveByNodeSimilarity(
+        protected void ByNodeSimilarity(
             IGH_DataAccess da)
         {
             if (!da.GetItems(
@@ -119,7 +119,7 @@ namespace Portia.Lite.Components
                 name);
         }
 
-        protected void SolveByLinkConstellation(
+        protected void ByLinkSimilarity(
             IGH_DataAccess da)
         {
             if (!da.GetItems(
@@ -138,9 +138,9 @@ namespace Portia.Lite.Components
 
             bool bidirectional = da.GetOptionalItem(
                 3,
-                LinkConstellation.DefBidirectional);
+                LinkSimilarity.DefBidirectional);
 
-            Logic = new LinkConstellation(
+            Logic = new LinkSimilarity(
                 allowedSourceTags,
                 allowedTargetTags,
                 bidirectional,
@@ -161,6 +161,42 @@ namespace Portia.Lite.Components
                 Docs.BooleanCondition.Add(Prefix.Boolean),
                 GH_ParamAccess.item);
 
+
+        protected static ParameterConfig GateParameter() =>
+            new(
+                () => new Param_Integer(),
+                nameof(Gate),
+                Docs.Gate.ByDefault(AbsSelection.DefGate).Add(Prefix.Integer),
+                GH_ParamAccess.item,
+                isOptional: true,
+                listFactory: GateValueList.Create);
+
+        protected static ParameterConfig MatchAllParameter() =>
+            new(
+                () => new Param_Boolean(),
+                nameof(Docs.MatchAll),
+                Docs
+                    .MatchAll
+                    .ByDefault(
+                        AbsCollectionRule<string, StringCondition>.DefMatchAll)
+                    .Add(Prefix.Boolean),
+                GH_ParamAccess.item,
+                isOptional: true);
+
+        protected static ParameterConfig DoubleConditionsParameter() =>
+            new(
+                () => new Param_String(),
+                nameof(DoubleCondition) + "s",
+                Docs.Condition.Add(Prefix.JsonList),
+                GH_ParamAccess.list);
+
+        protected static ParameterConfig StringConditionsParameter() =>
+            new(
+                () => new Param_String(),
+                nameof(StringCondition) + "s",
+                Docs.Condition.Add(Prefix.StringList),
+                GH_ParamAccess.list);
+
         protected static ParameterStrategy NumericRuleStrategy(
             Action<IGH_DataAccess> action,
             string description)
@@ -169,16 +205,8 @@ namespace Portia.Lite.Components
                 new List<ParameterConfig>
                 {
                     NameParameter(),
-                    new(
-                        () => new Param_Integer(),
-                        nameof(Gate),
-                        Docs.Gate.Add(Prefix.Integer),
-                        GH_ParamAccess.item),
-                    new(
-                        () => new Param_String(),
-                        nameof(DoubleCondition) + "s",
-                        Docs.Condition.Add(Prefix.JsonList),
-                        GH_ParamAccess.list)
+                    GateParameter(),
+                    DoubleConditionsParameter(),
                 },
                 action,
                 description);
@@ -192,16 +220,8 @@ namespace Portia.Lite.Components
                 new List<ParameterConfig>
                 {
                     NameParameter(),
-                    new(
-                        () => new Param_Integer(),
-                        nameof(Gate),
-                        Docs.Gate.Add(Prefix.Integer),
-                        GH_ParamAccess.item),
-                    new(
-                        () => new Param_String(),
-                        nameof(StringCondition) + "s",
-                        Docs.Condition.Add(Prefix.StringList),
-                        GH_ParamAccess.list)
+                    GateParameter(),
+                    StringConditionsParameter()
                 },
                 action,
                 description);
@@ -220,13 +240,13 @@ namespace Portia.Lite.Components
                 {
                     if (!da.GetItem(
                             1,
-                            out bool boolCondition))
+                            out bool condition))
                     {
                         return;
                     }
 
                     var rule = new TRule { Name = name };
-                    rule.SetNegatableBaseCondition(boolCondition);
+                    rule.SetNegatableBaseCondition(condition);
 
                     Logic = rule;
                     Logic.Guard();
@@ -250,27 +270,17 @@ namespace Portia.Lite.Components
 
                     if (!da.GetItems(
                             2,
-                            out List<string> conditionJsons))
+                            out List<string> jsons))
                     {
                         return;
-                    }
-
-                    var deserializedConditions = conditionJsons
-                        .Select(json => json.FromJson<IConditionAnchor>())
-                        .ToList();
-
-                    if (!deserializedConditions.All(c => c is DoubleCondition))
-                    {
-                        throw new Exception(DocStrings.TypeErrorNumbersOnly);
                     }
 
                     Logic = new TRule
                     {
                         Name = name,
                         Gate = _gate,
-                        Conditions = conditionJsons
-                            .FromJson<DoubleCondition>()
-                            .ToList()
+                        Conditions = jsons
+                            .FromJsonByTypeCheck<DoubleCondition>()
                     };
 
                     Logic.Guard();
@@ -294,31 +304,73 @@ namespace Portia.Lite.Components
 
                     if (!da.GetItems(
                             2,
-                            out List<string> conditionJsons))
+                            out List<string> jsons))
                     {
                         return;
-                    }
-
-                    var deserializedConditions = conditionJsons
-                        .Select(json => json.FromJson<IConditionAnchor>())
-                        .ToList();
-
-                    if (!deserializedConditions.All(c => c is StringCondition))
-                    {
-                        throw new Exception(DocStrings.TypeErrorNumbersOnly);
                     }
 
                     Logic = new TRule
                     {
                         Name = name,
                         Gate = _gate,
-                        Conditions = conditionJsons
-                            .FromJson<StringCondition>()
-                            .ToList()
+                        Conditions = jsons
+                            .FromJsonByTypeCheck<StringCondition>()
                     };
 
                     Logic.Guard();
                 },
+                description);
+        }
+
+        protected ParameterStrategy CollectionStrategyFor<TRule, TValue,
+            TCondition>(
+            string description)
+            where TRule : AbsCollectionRule<TValue, TCondition>, new()
+            where TCondition : AbsCondition<TValue>
+        {
+            return new ParameterStrategy(
+                new List<ParameterConfig>
+                {
+                    NameParameter(),
+                    GateParameter(),
+                    MatchAllParameter(),
+                    StringConditionsParameter(),
+                },
+                da =>
+                {
+                    int gateInt = da.GetOptionalItem(
+                        1,
+                        (int)Gate.And);
+
+                    bool matchAll = da.GetOptionalItem(
+                        2,
+                        AbsCollectionRule<TValue, TCondition>.DefMatchAll);
+
+                    if (!da.GetItems(
+                            3,
+                            out List<string> jsons))
+                    {
+                        return;
+                    }
+
+                    Logic = new TRule
+                    {
+                        Name = name,
+                        Gate = (Gate)gateInt,
+                        MatchAll = matchAll,
+                        Conditions = jsons.FromJsonByTypeCheck<TCondition>()
+                    };
+
+                    Logic.Guard();
+                },
+                description);
+        }
+
+        protected ParameterStrategy StringCollectionStrategyFor<TRule>(
+            string description)
+            where TRule : AbsCollectionRule<string, StringCondition>, new()
+        {
+            return CollectionStrategyFor<TRule, string, StringCondition>(
                 description);
         }
 
@@ -335,6 +387,11 @@ namespace Portia.Lite.Components
                 {
                     LogicType.NodeAdjacency,
                     NumericStrategyFor<NodeAdjacencyRule>(Docs.NodeAdjacency)
+                },
+                {
+                    LogicType.NodeAdjacentEdgeType,
+                    StringCollectionStrategyFor<NodeAdjacentEdgeTypeRule>(
+                        Docs.NodeAdjacentEdgeType)
                 },
                 {
                     LogicType.NodeProximity,
@@ -361,18 +418,24 @@ namespace Portia.Lite.Components
                             new(
                                 () => new Param_Boolean(),
                                 nameof(NodeSimilarity.StrictMatch),
-                                Docs.StrictMatch.Add(Prefix.Boolean),
+                                Docs
+                                    .StrictMatch
+                                    .ByDefault(NodeSimilarity.DefStrictMatch)
+                                    .Add(Prefix.Boolean),
                                 GH_ParamAccess.item,
                                 isOptional: true),
                             new(
                                 () => new Param_Number(),
                                 nameof(NodeSimilarity.AngleTolerance),
-                                Docs.AngleTolerance.Add(Prefix.Double),
+                                Docs
+                                    .AngleTolerance
+                                    .ByDefault(NodeSimilarity.DefAngleTolerance)
+                                    .Add(Prefix.Double),
                                 GH_ParamAccess.item,
                                 isOptional: true)
                         },
-                        SolveByNodeSimilarity,
-                        Docs.JointConstellation)
+                        ByNodeSimilarity,
+                        Docs.LinkSimilarity)
                 },
                 {
                     LogicType.EdgeLength,
@@ -421,21 +484,21 @@ namespace Portia.Lite.Components
                             NameParameter(),
                             new(
                                 () => new Param_String(),
-                                nameof(LinkConstellation.AllowedSourceTypes),
+                                nameof(LinkSimilarity.AllowedSourceTypes),
                                 Docs.AllowedSourceTypes.Add(Prefix.StringList),
                                 GH_ParamAccess.list),
                             new(
                                 () => new Param_String(),
-                                nameof(LinkConstellation.AllowedTargetTypes),
+                                nameof(LinkSimilarity.AllowedTargetTypes),
                                 Docs.AllowedTargetTypes.Add(Prefix.StringList),
                                 GH_ParamAccess.list),
                             new(
                                 () => new Param_Boolean(),
-                                nameof(LinkConstellation.Bidirectional),
+                                nameof(LinkSimilarity.Bidirectional),
                                 Docs.Bidirectional.Add(Prefix.Boolean),
                                 GH_ParamAccess.item)
                         },
-                        SolveByLinkConstellation,
+                        ByLinkSimilarity,
                         Docs.LinkConstellation)
                 }
             };

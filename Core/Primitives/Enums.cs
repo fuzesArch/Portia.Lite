@@ -4,10 +4,10 @@ namespace Portia.Lite.Core.Primitives
 {
     public enum SelectionMode
     {
-        ByLogicSelection,
-        ByWrapSelection,
-        ByIntersectionSelection,
-        ByCompositeSelection,
+        ByLogic,
+        ByWrap,
+        ByIntersection,
+        ByComposite,
     }
 
     public enum ConditionMode
@@ -26,6 +26,9 @@ namespace Portia.Lite.Core.Primitives
 
         [Category("Nodes")]
         NodeAdjacency,
+
+        [Category("Nodes")]
+        NodeAdjacentEdgeType,
 
         [Category("Nodes")]
         NodeProximity,
@@ -72,12 +75,12 @@ namespace Portia.Lite.Core.Primitives
 
     public enum TaskType
     {
-        Task_SetCurves,
-        Task_SetNodeTypes,
-        Task_SetEdgeTypes,
-        Task_GetNodes,
-        Task_GetEdges,
-        Task_VerifyNodes,
-        Task_VerifyEdges,
+        SetCurves,
+        SetNodeTypes,
+        SetEdgeTypes,
+        GetNodes,
+        GetEdges,
+        VerifyNodes,
+        VerifyEdges,
     }
 }
