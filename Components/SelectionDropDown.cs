@@ -6,6 +6,7 @@ using Portia.Infrastructure.Core.Helps;
 using Portia.Infrastructure.Core.Portia.Primitives;
 using Portia.Infrastructure.Core.Portia.Strategies;
 using Portia.Infrastructure.Core.Primitives;
+using Portia.Infrastructure.Core.Validators;
 using Portia.Lite.Core.Primitives;
 using Rhino.Geometry;
 using System;
@@ -81,7 +82,7 @@ namespace Portia.Lite.Components
         {
             int gateInt = da.GetOptionalItem(
                 1,
-                (int)LogicSelection.DefGate);
+                (int)AbsSelection.DefGate);
 
             gateInt.ValidateEnum<Gate>();
 
@@ -118,6 +119,8 @@ namespace Portia.Lite.Components
             {
                 Name = name, Wrappers = breps, StrictlyIn = strictlyIn
             };
+
+            Selection.Guard();
         }
 
         private void ByIntersection(
