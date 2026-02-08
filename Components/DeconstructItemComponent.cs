@@ -43,7 +43,10 @@ namespace Portia.Lite.Components
 
         protected override void AddOutputFields()
         {
-            OutIntegers(
+            OutGenerics(
+                    nameof(Docs.Geometries),
+                    Docs.Geometries)
+                .OutIntegers(
                     nameof(Docs.Index) + "es",
                     Docs.Identity)
                 .OutStrings(
@@ -51,10 +54,7 @@ namespace Portia.Lite.Components
                     Docs.Type)
                 .OutJsons(
                     nameof(Docs.Json),
-                    Docs.Json)
-                .OutGenerics(
-                    nameof(Docs.Geometries),
-                    Docs.Geometries);
+                    Docs.Json);
         }
 
         protected override void SolveInstance(
@@ -69,19 +69,19 @@ namespace Portia.Lite.Components
 
             da.SetDataList(
                 0,
-                goos.Select(x => x.Value.Identity.Index));
+                goos.Select(x => x.GetGeometries()));
 
             da.SetDataList(
                 1,
-                goos.Select(x => x.Value.Identity.Type));
+                goos.Select(x => x.Value.Identity.Index));
 
             da.SetDataList(
                 2,
-                goos.Select(x => x.Value.ToJson()));
+                goos.Select(x => x.Value.Identity.Type));
 
             da.SetDataList(
                 3,
-                goos.Select(x => x.GetTypedValue()));
+                goos.Select(x => x.Value.ToJson()));
         }
     }
 }

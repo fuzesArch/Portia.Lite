@@ -13,7 +13,8 @@ namespace Portia.Lite.Core.Primitives
     public enum ConditionMode
     {
         DoubleCondition,
-        StringCondition
+        StringCondition,
+        VectorCondition
     }
 
     public enum LogicType
@@ -40,7 +41,7 @@ namespace Portia.Lite.Core.Primitives
         NodeIsLeaf,
 
         [Category("Nodes")]
-        NodeSimilarity,
+        NodeAdjacentVectors,
 
         [Category("Edges")]
         EdgeLength,
@@ -67,10 +68,7 @@ namespace Portia.Lite.Core.Primitives
         EdgeIsLinear,
 
         [Category("Edges")]
-        EdgeIsBridge,
-
-        [Category("Edges")]
-        EdgeLinkConstellationLogic
+        EdgeVectorSimilarity
     }
 
     public enum TaskType

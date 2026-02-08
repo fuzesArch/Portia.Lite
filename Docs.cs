@@ -66,6 +66,10 @@ namespace Portia.Lite
             "Defines a logical filter rule based on the relationship " +
             "with a double-based selection relation type and a specific double target value.";
 
+        public static string VectorCondition =>
+            "Defines a logical filter rule based on the geometric relationship " +
+            "between two vectors.";
+
         public static string StringCondition =>
             "Defines a logical filter rule based on the relationship " +
             "with a text-based relation type and a specific string target value.";
@@ -73,14 +77,6 @@ namespace Portia.Lite
         public static string Identity =>
             "Defines the primary identification rule for graph elements " +
             "using either a numerical Index or a text-based Type.";
-
-        public static string IdentityByIndex =>
-            "Defines the primary identification rule for graph elements " +
-            "using a numerical Index value.";
-
-        public static string IdentityByTag =>
-            "Defines the primary identification rule for graph elements " +
-            "using a text-based Type value.";
 
         public static string Index =>
             "The specific numerical index used to identify and map " +
@@ -107,6 +103,11 @@ namespace Portia.Lite
             "of its connected Edges. Useful for identifying hybrid structural junctions, or " +
             "setting the Type of a Node based on its neighbour.";
 
+        public static string NodeAdjacentVectors =>
+            "A topological query that validates a Node based on the Vectors " +
+            "of its connected Edges. Useful for identifying hybrid structural junctions, or " +
+            "setting the Type of a Node based on its neighbouring Edge constellation.";
+
         public static string NodeAdjacency =>
             "A rule that evaluates a Node's direct neighbouring Edge count.";
 
@@ -122,9 +123,8 @@ namespace Portia.Lite
             "A binary validation rule that identifies 'leaf' nodes—elements " +
             "with only one connection—at the termination of a graph branch.";
 
-        public static string LinkSimilarity =>
-            "A complex topological rule that identifies specific junction patterns and " +
-            "branching arrangements within the wider network.";
+        public static string EdgeSimilarity =>
+            "A geometric rule that compares an Edge's start tangent vector to the input vectors by the input conditions.";
 
         public static string EdgeLength =>
             "A rule that evaluates the physical length of an Edge curve.";
@@ -158,9 +158,6 @@ namespace Portia.Lite
         public static string IsBridgeEdge =>
             "A topological rule that identifies critical 'bridge' edges whose removal " +
             "would split the graph into separate, disconnected parts.";
-
-        public static string LinkConstellation =>
-            "A complex rule that identifies Edges with similar EdgeType-to-EdgeType pattern.";
 
         public static string Task =>
             "A specialized graph operation that executes " +
@@ -236,14 +233,6 @@ namespace Portia.Lite
             "Allowed angle deviation between vectors IN DEGREES. Used during similarity comparison between " +
             "outgoing Node vectors (constellations).";
 
-        public static string AllowedSourceTypes =>
-            "A list of valid identity Type strings for the start Node of an Edge " +
-            "to satisfy the connection rule.";
-
-        public static string AllowedTargetTypes =>
-            "A list of valid identity Type strings for the end Node of an Edge " +
-            "to satisfy the connection rule.";
-
         public static string Bidirectional =>
             "When enabled, the rule validates the connection regardless of edge direction, " +
             "checking both start-to-end and end-to-start orientations.";
@@ -291,5 +280,7 @@ namespace Portia.Lite
 
         public static string Geometries =>
             "The projected geometric representation of an element: a Node's Centroid or Edge's Curve.";
+
+        public static string Vector => "3D vector.";
     }
 }

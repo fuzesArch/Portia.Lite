@@ -5,6 +5,7 @@ using Portia.Infrastructure.Core.DocStrings;
 using Portia.Infrastructure.Core.Helps;
 using Portia.Infrastructure.Core.Primitives;
 using Portia.Lite.Core.Primitives;
+using Rhino.Geometry;
 using System;
 using System.Collections.Generic;
 
@@ -80,6 +81,30 @@ namespace Portia.Lite.Components
                 value).ToJson();
         }
 
+        private void SolveByVectorAngle(
+            IGH_DataAccess da)
+        {
+            if (!da.GetItem(
+                    0,
+                    out Vector3d vector))
+            {
+                return;
+            }
+
+            double tolerance = da.GetOptionalItem(
+                1,
+                VectorCondition.DefAngleTolerance);
+
+            bool bidirectional = da.GetOptionalItem(
+                2,
+                VectorCondition.DefBidirectional);
+
+            conditionJson = new VectorCondition(
+                vector,
+                tolerance,
+                bidirectional).ToJson();
+        }
+
         private void SolveByString(
             IGH_DataAccess da)
         {
@@ -143,7 +168,38 @@ namespace Portia.Lite.Components
                         },
                         SolveByString,
                         Docs.StringCondition)
-                }
+                },
+                {
+                    ConditionMode.VectorCondition, new ParameterStrategy(
+                        new List<ParameterConfig>
+                        {
+                            new(
+                                () => new Param_Vector(),
+                                nameof(VectorCondition.Vector),
+                                Docs.Vector.Add(Prefix.Vector),
+                                GH_ParamAccess.item),
+                            new(
+                                () => new Param_Number(),
+                                nameof(VectorCondition.AngleTolerance),
+                                Docs
+                                    .AngleTolerance.ByDefault(
+                                        VectorCondition.DefAngleTolerance)
+                                    .Add(Prefix.Double),
+                                GH_ParamAccess.item,
+                                isOptional: true),
+                            new(
+                                () => new Param_Boolean(),
+                                nameof(Docs.Bidirectional),
+                                Docs
+                                    .Bidirectional.ByDefault(
+                                        VectorCondition.DefBidirectional)
+                                    .Add(Prefix.Boolean),
+                                GH_ParamAccess.item,
+                                isOptional: true)
+                        },
+                        SolveByVectorAngle,
+                        Docs.VectorCondition)
+                },
             };
         }
     }

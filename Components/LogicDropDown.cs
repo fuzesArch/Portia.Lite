@@ -11,7 +11,6 @@ using Portia.Lite.Core.Primitives;
 using Rhino.Geometry;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Portia.Lite.Components
 {
@@ -93,60 +92,6 @@ namespace Portia.Lite.Components
                 Logic.ToJson());
         }
 
-        protected void ByNodeSimilarity(
-            IGH_DataAccess da)
-        {
-            if (!da.GetItems(
-                    1,
-                    out List<Line> directionLines))
-            {
-                return;
-            }
-
-            bool strictMatch = da.GetOptionalItem(
-                2,
-                NodeSimilarity.DefStrictMatch);
-
-
-            double tolerance = da.GetOptionalItem(
-                3,
-                NodeSimilarity.DefAngleTolerance);
-
-            Logic = new NodeSimilarity(
-                directionLines,
-                strictMatch,
-                tolerance,
-                name);
-        }
-
-        protected void ByLinkSimilarity(
-            IGH_DataAccess da)
-        {
-            if (!da.GetItems(
-                    1,
-                    out List<string> allowedSourceTags))
-            {
-                return;
-            }
-
-            if (!da.GetItems(
-                    2,
-                    out List<string> allowedTargetTags))
-            {
-                return;
-            }
-
-            bool bidirectional = da.GetOptionalItem(
-                3,
-                LinkSimilarity.DefBidirectional);
-
-            Logic = new LinkSimilarity(
-                allowedSourceTags,
-                allowedTargetTags,
-                bidirectional,
-                name);
-        }
-
         protected static ParameterConfig NameParameter() =>
             new(
                 () => new Param_String(),
@@ -187,14 +132,21 @@ namespace Portia.Lite.Components
             new(
                 () => new Param_String(),
                 nameof(DoubleCondition) + "s",
-                Docs.Condition.Add(Prefix.JsonList),
+                Docs.DoubleCondition.Add(Prefix.JsonList),
                 GH_ParamAccess.list);
 
         protected static ParameterConfig StringConditionsParameter() =>
             new(
                 () => new Param_String(),
                 nameof(StringCondition) + "s",
-                Docs.Condition.Add(Prefix.StringList),
+                Docs.StringCondition.Add(Prefix.JsonList),
+                GH_ParamAccess.list);
+
+        protected static ParameterConfig VectorConditionsParameter() =>
+            new(
+                () => new Param_String(),
+                nameof(VectorCondition) + "s",
+                Docs.VectorCondition.Add(Prefix.JsonList),
                 GH_ParamAccess.list);
 
         protected static ParameterStrategy NumericRuleStrategy(
@@ -256,7 +208,7 @@ namespace Portia.Lite.Components
 
         protected ParameterStrategy NumericStrategyFor<TRule>(
             string description)
-            where TRule : AbsRule<double, DoubleCondition>, new()
+            where TRule : AbsNumericRule, new()
         {
             return NumericRuleStrategy(
                 da =>
@@ -266,7 +218,6 @@ namespace Portia.Lite.Components
                         (int)Gate.And);
 
                     gateInt.ValidateEnum<Gate>();
-                    _gate = (Gate)gateInt;
 
                     if (!da.GetItems(
                             2,
@@ -278,7 +229,7 @@ namespace Portia.Lite.Components
                     Logic = new TRule
                     {
                         Name = name,
-                        Gate = _gate,
+                        Gate = (Gate)gateInt,
                         Conditions = jsons
                             .FromJsonByTypeCheck<DoubleCondition>()
                     };
@@ -290,7 +241,7 @@ namespace Portia.Lite.Components
 
         protected ParameterStrategy StringStrategyFor<TRule>(
             string description)
-            where TRule : AbsRule<string, StringCondition>, new()
+            where TRule : AbsStringRule, new()
         {
             return StringRuleStrategy(
                 da =>
@@ -300,7 +251,6 @@ namespace Portia.Lite.Components
                         (int)Gate.And);
 
                     gateInt.ValidateEnum<Gate>();
-                    _gate = (Gate)gateInt;
 
                     if (!da.GetItems(
                             2,
@@ -312,7 +262,7 @@ namespace Portia.Lite.Components
                     Logic = new TRule
                     {
                         Name = name,
-                        Gate = _gate,
+                        Gate = (Gate)gateInt,
                         Conditions = jsons
                             .FromJsonByTypeCheck<StringCondition>()
                     };
@@ -322,8 +272,51 @@ namespace Portia.Lite.Components
                 description);
         }
 
+        protected ParameterStrategy VectorStrategyFor<TRule>(
+            string description)
+            where TRule : AbsVectorRule, new()
+        {
+            return new ParameterStrategy(
+                new List<ParameterConfig>
+                {
+                    NameParameter(),
+                    GateParameter(),
+                    VectorConditionsParameter()
+                },
+                da =>
+                {
+                    int gateInt = da.GetOptionalItem(
+                        1,
+                        (int)Gate.And);
+
+                    gateInt.ValidateEnum<Gate>();
+
+                    if (!da.GetItems(
+                            2,
+                            out List<string> jsons))
+                    {
+                        return;
+                    }
+
+                    var conditions =
+                        jsons.FromJsonByTypeCheck<VectorCondition>();
+
+                    var rule = new TRule
+                    {
+                        Name = name,
+                        Gate = (Gate)gateInt,
+                        Conditions = conditions
+                    };
+
+                    Logic = rule;
+                    Logic.Guard();
+                },
+                description);
+        }
+
         protected ParameterStrategy CollectionStrategyFor<TRule, TValue,
             TCondition>(
+            ParameterConfig conditionsParameterConfig,
             string description)
             where TRule : AbsCollectionRule<TValue, TCondition>, new()
             where TCondition : AbsCondition<TValue>
@@ -334,13 +327,16 @@ namespace Portia.Lite.Components
                     NameParameter(),
                     GateParameter(),
                     MatchAllParameter(),
-                    StringConditionsParameter(),
+                    conditionsParameterConfig,
                 },
                 da =>
                 {
                     int gateInt = da.GetOptionalItem(
                         1,
                         (int)Gate.And);
+
+
+                    gateInt.ValidateEnum<Gate>();
 
                     bool matchAll = da.GetOptionalItem(
                         2,
@@ -368,9 +364,19 @@ namespace Portia.Lite.Components
 
         protected ParameterStrategy StringCollectionStrategyFor<TRule>(
             string description)
-            where TRule : AbsCollectionRule<string, StringCondition>, new()
+            where TRule : AbsStringCollectionRule, new()
         {
             return CollectionStrategyFor<TRule, string, StringCondition>(
+                StringConditionsParameter(),
+                description);
+        }
+
+        protected ParameterStrategy VectorCollectionStrategyFor<TRule>(
+            string description)
+            where TRule : AbsVectorCollectionRule, new()
+        {
+            return CollectionStrategyFor<TRule, Vector3d, VectorCondition>(
+                VectorConditionsParameter(),
                 description);
         }
 
@@ -406,36 +412,9 @@ namespace Portia.Lite.Components
                     BooleanStrategyFor<IsLeafNodeRule>(Docs.IsLeafNode)
                 },
                 {
-                    LogicType.NodeSimilarity, new ParameterStrategy(
-                        new List<ParameterConfig>
-                        {
-                            NameParameter(),
-                            new(
-                                () => new Param_Line(),
-                                nameof(NodeSimilarity.DirectionLines),
-                                Docs.DirectionLines.Add(Prefix.LineList),
-                                GH_ParamAccess.list),
-                            new(
-                                () => new Param_Boolean(),
-                                nameof(NodeSimilarity.StrictMatch),
-                                Docs
-                                    .StrictMatch
-                                    .ByDefault(NodeSimilarity.DefStrictMatch)
-                                    .Add(Prefix.Boolean),
-                                GH_ParamAccess.item,
-                                isOptional: true),
-                            new(
-                                () => new Param_Number(),
-                                nameof(NodeSimilarity.AngleTolerance),
-                                Docs
-                                    .AngleTolerance
-                                    .ByDefault(NodeSimilarity.DefAngleTolerance)
-                                    .Add(Prefix.Double),
-                                GH_ParamAccess.item,
-                                isOptional: true)
-                        },
-                        ByNodeSimilarity,
-                        Docs.LinkSimilarity)
+                    LogicType.NodeAdjacentVectors,
+                    VectorCollectionStrategyFor<NodeAdjacentVectorsRule>(
+                        Docs.NodeAdjacentVectors)
                 },
                 {
                     LogicType.EdgeLength,
@@ -474,33 +453,9 @@ namespace Portia.Lite.Components
                     BooleanStrategyFor<IsLinearEdgeRule>(Docs.IsLinearRule)
                 },
                 {
-                    LogicType.EdgeIsBridge,
-                    BooleanStrategyFor<IsBridgeEdgeRule>(Docs.IsBridgeEdge)
+                    LogicType.EdgeVectorSimilarity,
+                    VectorStrategyFor<EdgeVectorRule>(Docs.EdgeSimilarity)
                 },
-                {
-                    LogicType.EdgeLinkConstellationLogic, new ParameterStrategy(
-                        new List<ParameterConfig>
-                        {
-                            NameParameter(),
-                            new(
-                                () => new Param_String(),
-                                nameof(LinkSimilarity.AllowedSourceTypes),
-                                Docs.AllowedSourceTypes.Add(Prefix.StringList),
-                                GH_ParamAccess.list),
-                            new(
-                                () => new Param_String(),
-                                nameof(LinkSimilarity.AllowedTargetTypes),
-                                Docs.AllowedTargetTypes.Add(Prefix.StringList),
-                                GH_ParamAccess.list),
-                            new(
-                                () => new Param_Boolean(),
-                                nameof(LinkSimilarity.Bidirectional),
-                                Docs.Bidirectional.Add(Prefix.Boolean),
-                                GH_ParamAccess.item)
-                        },
-                        ByLinkSimilarity,
-                        Docs.LinkConstellation)
-                }
             };
         }
     }
