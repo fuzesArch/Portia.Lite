@@ -2,14 +2,6 @@
 
 namespace Portia.Lite.Core.Primitives
 {
-    public enum SelectionMode
-    {
-        ByLogic,
-        ByWrap,
-        ByIntersection,
-        ByComposite,
-    }
-
     public enum ConditionMode
     {
         DoubleCondition,
@@ -17,7 +9,7 @@ namespace Portia.Lite.Core.Primitives
         VectorCondition
     }
 
-    public enum LogicType
+    public enum ConstraintMode
     {
         [Category("Nodes / Edges")]
         Composite,

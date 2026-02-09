@@ -15,7 +15,7 @@ using System.Linq;
 
 namespace Portia.Lite.Components
 {
-    public class ConstraintDropDown : AbsDropDownComponent<LogicType>
+    public class ConstraintDropDown : AbsDropDownComponent<ConstraintMode>
     {
         public ConstraintDropDown()
             : base(
@@ -38,7 +38,7 @@ namespace Portia.Lite.Components
 
         private Gate _gate;
         private string _name;
-        protected IConstraint Constraint;
+        private IConstraint _constraint;
 
         protected override void AddInputFields()
         {
@@ -102,13 +102,13 @@ namespace Portia.Lite.Components
         {
             da.SetData(
                 0,
-                Constraint.ToJson());
+                _constraint.ToJson());
         }
 
         protected static ParameterConfig NameParameter() =>
             new(
                 () => new Param_String(),
-                nameof(AbsSelection.Name),
+                nameof(AbsNumericConstraint.Name),
                 Docs.Name.Add(Prefix.String),
                 GH_ParamAccess.item);
 
@@ -124,10 +124,11 @@ namespace Portia.Lite.Components
             new(
                 () => new Param_Integer(),
                 nameof(Gate),
-                Docs.Gate.ByDefault(AbsSelection.DefGate).Add(Prefix.Integer),
+                Docs
+                    .Gate.ByDefault(AbsNumericConstraint.DefGate)
+                    .Add(Prefix.Integer),
                 GH_ParamAccess.item,
-                isOptional: true,
-                listFactory: GateValueList.Create);
+                isOptional: true);
 
         protected static ParameterConfig MatchAllParameter() =>
             new(
@@ -198,8 +199,43 @@ namespace Portia.Lite.Components
                     var rule = new TRule { Name = _name };
                     rule.SetNegatableBaseCondition(condition);
 
-                    Constraint = rule;
-                    Constraint.Guard();
+                    _constraint = rule;
+                    _constraint.Guard();
+                },
+                description);
+        }
+
+        protected ParameterStrategy GenericStrategyFor<TRule, TValue,
+            TCondition>(
+            ParameterConfig conditionsConfig,
+            string description)
+            where TRule : AbsBaseConstraint<TValue, TCondition>, new()
+            where TCondition : AbsCondition<TValue>
+        {
+            return new ParameterStrategy(
+                new List<ParameterConfig>
+                {
+                    NameParameter(), GateParameter(), conditionsConfig
+                },
+                da =>
+                {
+                    SetGate(da);
+
+                    if (!da.GetItems(
+                            2,
+                            out List<string> jsons))
+                    {
+                        return;
+                    }
+
+                    _constraint = new TRule
+                    {
+                        Name = _name,
+                        Gate = _gate,
+                        Conditions = jsons.FromJsonByTypeCheck<TCondition>()
+                    };
+
+                    _constraint.Guard();
                 },
                 description);
         }
@@ -208,34 +244,8 @@ namespace Portia.Lite.Components
             string description)
             where TRule : AbsNumericConstraint, new()
         {
-            return new ParameterStrategy(
-                new List<ParameterConfig>
-                {
-                    NameParameter(),
-                    GateParameter(),
-                    DoubleConditionsParameter(),
-                },
-                da =>
-                {
-                    SetGate(da);
-
-                    if (!da.GetItems(
-                            2,
-                            out List<string> jsons))
-                    {
-                        return;
-                    }
-
-                    Constraint = new TRule
-                    {
-                        Name = _name,
-                        Gate = _gate,
-                        Conditions = jsons
-                            .FromJsonByTypeCheck<DoubleCondition>()
-                    };
-
-                    Constraint.Guard();
-                },
+            return GenericStrategyFor<TRule, double, DoubleCondition>(
+                DoubleConditionsParameter(),
                 description);
         }
 
@@ -243,34 +253,8 @@ namespace Portia.Lite.Components
             string description)
             where TRule : AbsStringConstraint, new()
         {
-            return new ParameterStrategy(
-                new List<ParameterConfig>
-                {
-                    NameParameter(),
-                    GateParameter(),
-                    StringConditionsParameter()
-                },
-                da =>
-                {
-                    SetGate(da);
-
-                    if (!da.GetItems(
-                            2,
-                            out List<string> jsons))
-                    {
-                        return;
-                    }
-
-                    Constraint = new TRule
-                    {
-                        Name = _name,
-                        Gate = _gate,
-                        Conditions = jsons
-                            .FromJsonByTypeCheck<StringCondition>()
-                    };
-
-                    Constraint.Guard();
-                },
+            return GenericStrategyFor<TRule, string, StringCondition>(
+                StringConditionsParameter(),
                 description);
         }
 
@@ -278,35 +262,8 @@ namespace Portia.Lite.Components
             string description)
             where TRule : AbsVectorConstraint, new()
         {
-            return new ParameterStrategy(
-                new List<ParameterConfig>
-                {
-                    NameParameter(),
-                    GateParameter(),
-                    VectorConditionsParameter()
-                },
-                da =>
-                {
-                    SetGate(da);
-
-                    if (!da.GetItems(
-                            2,
-                            out List<string> jsons))
-                    {
-                        return;
-                    }
-
-                    var conditions =
-                        jsons.FromJsonByTypeCheck<VectorCondition>();
-
-                    var rule = new TRule
-                    {
-                        Name = _name, Gate = _gate, Conditions = conditions
-                    };
-
-                    Constraint = rule;
-                    Constraint.Guard();
-                },
+            return GenericStrategyFor<TRule, Vector3d, VectorCondition>(
+                VectorConditionsParameter(),
                 description);
         }
 
@@ -314,34 +271,8 @@ namespace Portia.Lite.Components
             string description)
             where TRule : AbsWrapConstraint, new()
         {
-            return new ParameterStrategy(
-                new List<ParameterConfig>
-                {
-                    NameParameter(),
-                    GateParameter(),
-                    WrapConditionsParameter()
-                },
-                da =>
-                {
-                    SetGate(da);
-
-                    if (!da.GetItems(
-                            2,
-                            out List<string> jsons))
-                    {
-                        return;
-                    }
-
-                    var conditions = jsons.FromJsonByTypeCheck<WrapCondition>();
-
-                    var rule = new TRule
-                    {
-                        Name = _name, Gate = _gate, Conditions = conditions
-                    };
-
-                    Constraint = rule;
-                    Constraint.Guard();
-                },
+            return GenericStrategyFor<TRule, Point3d, WrapCondition>(
+                VectorConditionsParameter(),
                 description);
         }
 
@@ -367,15 +298,16 @@ namespace Portia.Lite.Components
 
                     var nested = jsons.FromJson<IConstraint>().ToList();
 
-                    Constraint = new TRule
+                    _constraint = new TRule
                     {
                         Name = _name, Gate = _gate, Constraints = nested
                     };
 
-                    Constraint.Guard();
+                    _constraint.Guard();
                 },
                 description);
         }
+
 
         protected ParameterStrategy CollectionStrategyFor<TRule, TValue,
             TCondition>(
@@ -408,7 +340,7 @@ namespace Portia.Lite.Components
                         return;
                     }
 
-                    Constraint = new TRule
+                    _constraint = new TRule
                     {
                         Name = _name,
                         Gate = _gate,
@@ -416,7 +348,7 @@ namespace Portia.Lite.Components
                         Conditions = jsons.FromJsonByTypeCheck<TCondition>()
                     };
 
-                    Constraint.Guard();
+                    _constraint.Guard();
                 },
                 description);
         }
@@ -439,99 +371,99 @@ namespace Portia.Lite.Components
                 description);
         }
 
-        protected override Dictionary<LogicType, ParameterStrategy>
+        protected override Dictionary<ConstraintMode, ParameterStrategy>
             DefineParameterStrategy()
         {
-            return new Dictionary<LogicType, ParameterStrategy>
+            return new Dictionary<ConstraintMode, ParameterStrategy>
             {
                 {
-                    LogicType.Composite,
+                    ConstraintMode.Composite,
                     CompositeStrategyFor<CompositeConstraint>(
                         Docs.CompositeConstraint)
                 },
                 {
-                    LogicType.Index,
+                    ConstraintMode.Index,
                     NumericStrategyFor<NodeAdjacencyConstraint>(
                         Docs.IndexConstraint)
                 },
                 {
-                    LogicType.Type,
+                    ConstraintMode.Type,
                     StringStrategyFor<TypeConstraint>(Docs.TypeConstraint)
                 },
                 {
-                    LogicType.NodeAdjacency,
+                    ConstraintMode.NodeAdjacency,
                     NumericStrategyFor<NodeAdjacencyConstraint>(
                         Docs.NodeAdjacency)
                 },
                 {
-                    LogicType.NodeAdjacentEdgeType,
+                    ConstraintMode.NodeAdjacentEdgeType,
                     StringCollectionStrategyFor<NodeAdjacentEdgeTypeConstraint>(
                         Docs.NodeAdjacentEdgeType)
                 },
                 {
-                    LogicType.NodeProximity,
+                    ConstraintMode.NodeProximity,
                     NumericStrategyFor<NodeProximityConstraint>(
                         Docs.NodeProximity)
                 },
                 {
-                    LogicType.NodeVectorSum,
+                    ConstraintMode.NodeVectorSum,
                     NumericStrategyFor<NodeVectorSumConstraint>(
                         Docs.NodeVectorSum)
                 },
                 {
-                    LogicType.NodeIsLeaf,
+                    ConstraintMode.NodeIsLeaf,
                     BooleanStrategyFor<IsLeafNodeConstraint>(Docs.IsLeafNode)
                 },
                 {
-                    LogicType.NodeAdjacentVectors,
+                    ConstraintMode.NodeAdjacentVectors,
                     VectorCollectionStrategyFor<NodeAdjacentVectorsConstraint>(
                         Docs.NodeAdjacentVectors)
                 },
                 {
-                    LogicType.NodeInWrap,
+                    ConstraintMode.NodeInWrap,
                     WrapStrategyFor<NodeInWrapConstraint>(Docs.NodeInWrap)
                 },
                 {
-                    LogicType.EdgeLength,
+                    ConstraintMode.EdgeLength,
                     NumericStrategyFor<EdgeLengthConstraint>(Docs.EdgeLength)
                 },
                 {
-                    LogicType.EdgeSourceAdjacency,
+                    ConstraintMode.EdgeSourceAdjacency,
                     NumericStrategyFor<SourceAdjacencyConstraint>(
                         Docs.SourceAdjacency)
                 },
                 {
-                    LogicType.EdgeTargetAdjacency,
+                    ConstraintMode.EdgeTargetAdjacency,
                     NumericStrategyFor<TargetAdjacencyConstraint>(
                         Docs.TargetAdjacency)
                 },
                 {
-                    LogicType.EdgeSourceIndex,
+                    ConstraintMode.EdgeSourceIndex,
                     NumericStrategyFor<EdgeSourceIndexConstraint>(
                         Docs.EdgeSourceIndex)
                 },
                 {
-                    LogicType.EdgeSourceType,
+                    ConstraintMode.EdgeSourceType,
                     StringStrategyFor<EdgeSourceTypeConstraint>(
                         Docs.EdgeSourceType)
                 },
                 {
-                    LogicType.EdgeTargetIndex,
+                    ConstraintMode.EdgeTargetIndex,
                     NumericStrategyFor<EdgeTargetIndexConstraint>(
                         Docs.EdgeTargetIndex)
                 },
                 {
-                    LogicType.EdgeTargetType,
+                    ConstraintMode.EdgeTargetType,
                     StringStrategyFor<EdgeTargetTypeConstraint>(
                         Docs.EdgeTargetType)
                 },
                 {
-                    LogicType.EdgeIsLinear,
+                    ConstraintMode.EdgeIsLinear,
                     BooleanStrategyFor<IsLinearEdgeConstraint>(
                         Docs.IsLinearRule)
                 },
                 {
-                    LogicType.EdgeVectorSimilarity,
+                    ConstraintMode.EdgeVectorSimilarity,
                     VectorStrategyFor<EdgeVectorConstraint>(Docs.EdgeSimilarity)
                 },
             };

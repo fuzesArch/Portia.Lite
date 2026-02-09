@@ -5,8 +5,8 @@ using Portia.Infrastructure.Core.DocStrings;
 using Portia.Infrastructure.Core.Helps;
 using Portia.Infrastructure.Core.Portia.Main;
 using Portia.Infrastructure.Core.Portia.Primitives;
-using Portia.Infrastructure.Core.Portia.Strategies;
 using Portia.Infrastructure.Core.Portia.Tasks;
+using Portia.Infrastructure.Core.Validators;
 using Portia.Lite.Core.Primitives;
 using Rhino.Geometry;
 using System;
@@ -99,8 +99,9 @@ namespace Portia.Lite.Components
                 tags);
         }
 
-        protected void BySetNodeTypes(
+        protected void BySetTypes<T>(
             IGH_DataAccess da)
+            where T : AbsSetTypes, new()
         {
             SetConstraints(da);
 
@@ -108,57 +109,30 @@ namespace Portia.Lite.Components
 
             if (!da.GetItems(
                     1,
-                    out List<string> tags))
+                    out List<string> types))
             {
                 return;
             }
 
-            _task = new SetNodeTypes(
-                _constraints,
-                tags);
+            _task = new T { Constraints = _constraints, Types = types };
+            _task.Guard();
         }
 
-        protected void BySetEdgeTypes(
+        protected void ByGet<T>(
             IGH_DataAccess da)
+            where T : AbsGetTask, new()
         {
             SetConstraints(da);
 
             if (_constraints == null) { return; }
 
-            if (!da.GetItems(
-                    1,
-                    out List<string> tags))
-            {
-                return;
-            }
-
-            _task = new SetEdgeTypes(
-                _constraints,
-                tags);
+            _task = new T { Constraints = _constraints };
+            _task.Guard();
         }
 
-        protected void ByGetNodes(
+        protected void ByVerify<T>(
             IGH_DataAccess da)
-        {
-            SetConstraints(da);
-
-            if (_constraints == null) { return; }
-
-            _task = new GetNodes(_constraints);
-        }
-
-        protected void ByGetEdges(
-            IGH_DataAccess da)
-        {
-            SetConstraints(da);
-
-            if (_constraints == null) { return; }
-
-            _task = new GetEdges(_constraints);
-        }
-
-        protected void ByVerifyNodes(
-            IGH_DataAccess da)
+            where T : AbsVerifyTask, new()
         {
             SetConstraints(da);
 
@@ -171,28 +145,12 @@ namespace Portia.Lite.Components
                 return;
             }
 
-            _task = new VerifyNodes(
-                _constraints,
-                logicJsons.FromJson<IConstraint>().ToList());
-        }
-
-        protected void ByVerifyEdges(
-            IGH_DataAccess da)
-        {
-            SetConstraints(da);
-
-            if (_constraints == null) { return; }
-
-            if (!da.GetItems(
-                    1,
-                    out List<string> logicJsons))
+            _task = new T
             {
-                return;
-            }
-
-            _task = new VerifyEdges(
-                _constraints,
-                logicJsons.FromJson<IConstraint>().ToList());
+                Constraints = _constraints,
+                Logics = logicJsons.FromJson<IConstraint>().ToList()
+            };
+            _task.Guard();
         }
 
         protected static ParameterConfig ConstraintsParameter() =>
@@ -200,6 +158,20 @@ namespace Portia.Lite.Components
                 () => new Param_String(),
                 nameof(Docs.Constraint) + "s",
                 Docs.Constraint,
+                GH_ParamAccess.list);
+
+        protected static ParameterConfig LogicsParameter() =>
+            new(
+                () => new Param_String(),
+                nameof(AbsVerifyTask.Logics),
+                Docs.Logics.Add(Prefix.JsonList),
+                GH_ParamAccess.list);
+
+        protected static ParameterConfig TypesParameter() =>
+            new(
+                () => new Param_String(),
+                nameof(AbsSetTypes.Types),
+                Docs.Types.Add(Prefix.StringList),
                 GH_ParamAccess.list);
 
         protected override Dictionary<TaskType, ParameterStrategy>
@@ -236,68 +208,48 @@ namespace Portia.Lite.Components
                     TaskType.SetNodeTypes, new ParameterStrategy(
                         new List<ParameterConfig>
                         {
-                            ConstraintsParameter(),
-                            new(
-                                () => new Param_String(),
-                                nameof(SetNodeTypes.Types),
-                                Docs.Types.Add(Prefix.StringList),
-                                GH_ParamAccess.list)
+                            ConstraintsParameter(), TypesParameter()
                         },
-                        BySetNodeTypes,
+                        BySetTypes<SetNodeTypes>,
                         Docs.SetNodeTypes)
                 },
                 {
                     TaskType.SetEdgeTypes, new ParameterStrategy(
                         new List<ParameterConfig>
                         {
-                            ConstraintsParameter(),
-                            new(
-                                () => new Param_String(),
-                                nameof(SetEdgeTypes.Types),
-                                Docs.Types.Add(Prefix.StringList),
-                                GH_ParamAccess.list)
+                            ConstraintsParameter(), TypesParameter()
                         },
-                        BySetEdgeTypes,
+                        BySetTypes<SetEdgeTypes>,
                         Docs.SetEdgeTypes)
                 },
                 {
                     TaskType.GetNodes, new ParameterStrategy(
                         new List<ParameterConfig> { ConstraintsParameter(), },
-                        ByGetNodes,
+                        ByGet<GetNodes>,
                         Docs.GetNodes)
                 },
                 {
                     TaskType.GetEdges, new ParameterStrategy(
                         new List<ParameterConfig> { ConstraintsParameter(), },
-                        ByGetEdges,
+                        ByGet<GetEdges>,
                         Docs.GetEdges)
                 },
                 {
                     TaskType.VerifyNodes, new ParameterStrategy(
                         new List<ParameterConfig>
                         {
-                            ConstraintsParameter(),
-                            new(
-                                () => new Param_String(),
-                                nameof(VerifyNodes.Logics),
-                                Docs.Logics.Add(Prefix.JsonList),
-                                GH_ParamAccess.list)
+                            ConstraintsParameter(), LogicsParameter()
                         },
-                        ByVerifyNodes,
+                        ByVerify<VerifyNodes>,
                         Docs.VerifyNodes)
                 },
                 {
                     TaskType.VerifyEdges, new ParameterStrategy(
                         new List<ParameterConfig>
                         {
-                            ConstraintsParameter(),
-                            new(
-                                () => new Param_String(),
-                                nameof(VerifyEdges.Logics),
-                                Docs.Logics.Add(Prefix.JsonList),
-                                GH_ParamAccess.list)
+                            ConstraintsParameter(), LogicsParameter()
                         },
-                        ByVerifyEdges,
+                        ByVerify<VerifyEdges>,
                         Docs.VerifyEdges)
                 }
             };

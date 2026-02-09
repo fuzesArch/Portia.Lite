@@ -75,7 +75,6 @@
     <Compile Include="Components\GraphItemParameter.cs" />
     <Compile Include="Components\ConstraintDropDown.cs" />
     <Compile Include="Components\PortiaComponent.cs" />
-    <Compile Include="Components\SelectionDropDown.cs" />
     <Compile Include="Components\TaskDropDown.cs" />
     <Compile Include="Components\Naming.cs" />
     <Compile Include="Components\ConditionDropDown.cs" />
