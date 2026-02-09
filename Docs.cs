@@ -74,6 +74,10 @@ namespace Portia.Lite
             "Defines a logical filter rule based on the relationship " +
             "with a text-based relation type and a specific string target value.";
 
+        public static string WrapCondition =>
+            "Defines a logical filter rule based on the geometric relationship " +
+            "between points and boundaries, where a boundary is a closed Brep evaluated for point containment.";
+
         public static string Identity =>
             "Defines the primary identification rule for graph elements " +
             "using either a numerical Index or a text-based Type.";
@@ -86,15 +90,15 @@ namespace Portia.Lite
             "A user-defined text string used to categorize and map " +
             "specific elements (nodes or edges) within the graph structure.";
 
-        public static string Logic =>
+        public static string Constraint =>
             "Defines a localized graph process that evaluates " +
             "nodes or edges based on their geometric and topological behavior.";
 
-        public static string IndexLogic =>
+        public static string IndexConstraint =>
             "Defines a localized graph process that evaluates both " +
             "Nodes AND Edges based on their numerical Index.";
 
-        public static string TypeLogic =>
+        public static string TypeConstraint =>
             "Defines a localized graph process that evaluates both " +
             "Nodes AND Edges based on their text-based Type value.";
 
@@ -107,6 +111,10 @@ namespace Portia.Lite
             "A topological query that validates a Node based on the Vectors " +
             "of its connected Edges. Useful for identifying hybrid structural junctions, or " +
             "setting the Type of a Node based on its neighbouring Edge constellation.";
+
+        public static string NodeInWrap =>
+            "A topological query that validates a Node based on its centroid's containment by the input boundary Breps." +
+            "Useful to set initial Node Types or Indices as basic categorization.";
 
         public static string NodeAdjacency =>
             "A rule that evaluates a Node's direct neighbouring Edge count.";
@@ -249,9 +257,9 @@ namespace Portia.Lite
             "A spatial selection rule that identifies Edges based on their physical intersection " +
             "AND containment with(in) the volumes of specified Breps.";
 
-        public static string ByCompositeSelection =>
-            "A sophisticated selection rule that combines multiple criteria " +
-            "using a boolean Gate logic to capture graph elements.";
+        public static string CompositeConstraint =>
+            "A sophisticated constraint rule that combines multiple constraints criteria " +
+            "using a boolean Gate logic in order to capture graph elements.";
 
         public static string Wrappers =>
             "A list of boundary Breps used to define the spatial volumes " +

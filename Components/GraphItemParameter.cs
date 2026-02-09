@@ -11,7 +11,7 @@ namespace Portia.Lite.Components
             : base(
                 nameof(GraphItem),
                 nameof(GraphItem),
-                Docs.Logic,
+                Docs.Constraint,
                 Naming.Tab,
                 Naming.Tab,
                 GH_ParamAccess.item)

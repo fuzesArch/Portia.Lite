@@ -20,6 +20,9 @@ namespace Portia.Lite.Core.Primitives
     public enum LogicType
     {
         [Category("Nodes / Edges")]
+        Composite,
+
+        [Category("Nodes / Edges")]
         Index,
 
         [Category("Nodes / Edges")]
@@ -42,6 +45,9 @@ namespace Portia.Lite.Core.Primitives
 
         [Category("Nodes")]
         NodeAdjacentVectors,
+
+        [Category("Nodes")]
+        NodeInWrap,
 
         [Category("Edges")]
         EdgeLength,

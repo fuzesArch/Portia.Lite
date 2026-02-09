@@ -36,8 +36,8 @@ namespace Portia.Lite.Components
         protected override System.Drawing.Bitmap Icon =>
             Properties.Resources.ColoredLogo;
 
-        private AbsTask task;
-        private List<AbsSelection> selections;
+        private AbsTask _task;
+        private List<IConstraint> _constraints;
 
         protected override void AddInputFields()
         {
@@ -63,20 +63,20 @@ namespace Portia.Lite.Components
         {
             da.SetData(
                 0,
-                task.ToJson());
+                _task.ToJson());
         }
 
-        protected void SetSelections(
+        protected void SetConstraints(
             IGH_DataAccess da)
         {
             if (!da.GetItems(
                     0,
-                    out List<string> selectionStrings))
+                    out List<string> jsons))
             {
                 return;
             }
 
-            selections = selectionStrings.FromJson<AbsSelection>().ToList();
+            _constraints = jsons.FromJson<IConstraint>().ToList();
         }
 
         protected void BySetCurves(
@@ -94,7 +94,7 @@ namespace Portia.Lite.Components
                 .ByDefault(Identity.DefType)
                 .BoostTo(curves.Count);
 
-            task = new SetCurves(
+            _task = new SetCurves(
                 curves,
                 tags);
         }
@@ -102,9 +102,9 @@ namespace Portia.Lite.Components
         protected void BySetNodeTypes(
             IGH_DataAccess da)
         {
-            SetSelections(da);
+            SetConstraints(da);
 
-            if (selections == null) { return; }
+            if (_constraints == null) { return; }
 
             if (!da.GetItems(
                     1,
@@ -113,17 +113,17 @@ namespace Portia.Lite.Components
                 return;
             }
 
-            task = new SetNodeTypes(
-                selections,
+            _task = new SetNodeTypes(
+                _constraints,
                 tags);
         }
 
         protected void BySetEdgeTypes(
             IGH_DataAccess da)
         {
-            SetSelections(da);
+            SetConstraints(da);
 
-            if (selections == null) { return; }
+            if (_constraints == null) { return; }
 
             if (!da.GetItems(
                     1,
@@ -132,37 +132,37 @@ namespace Portia.Lite.Components
                 return;
             }
 
-            task = new SetEdgeTypes(
-                selections,
+            _task = new SetEdgeTypes(
+                _constraints,
                 tags);
         }
 
         protected void ByGetNodes(
             IGH_DataAccess da)
         {
-            SetSelections(da);
+            SetConstraints(da);
 
-            if (selections == null) { return; }
+            if (_constraints == null) { return; }
 
-            task = new GetNodes(selections);
+            _task = new GetNodes(_constraints);
         }
 
         protected void ByGetEdges(
             IGH_DataAccess da)
         {
-            SetSelections(da);
+            SetConstraints(da);
 
-            if (selections == null) { return; }
+            if (_constraints == null) { return; }
 
-            task = new GetEdges(selections);
+            _task = new GetEdges(_constraints);
         }
 
         protected void ByVerifyNodes(
             IGH_DataAccess da)
         {
-            SetSelections(da);
+            SetConstraints(da);
 
-            if (selections == null) { return; }
+            if (_constraints == null) { return; }
 
             if (!da.GetItems(
                     1,
@@ -171,17 +171,17 @@ namespace Portia.Lite.Components
                 return;
             }
 
-            task = new VerifyNodes(
-                selections,
-                logicJsons.FromJson<IGraphLogic>().ToList());
+            _task = new VerifyNodes(
+                _constraints,
+                logicJsons.FromJson<IConstraint>().ToList());
         }
 
         protected void ByVerifyEdges(
             IGH_DataAccess da)
         {
-            SetSelections(da);
+            SetConstraints(da);
 
-            if (selections == null) { return; }
+            if (_constraints == null) { return; }
 
             if (!da.GetItems(
                     1,
@@ -190,16 +190,16 @@ namespace Portia.Lite.Components
                 return;
             }
 
-            task = new VerifyEdges(
-                selections,
-                logicJsons.FromJson<IGraphLogic>().ToList());
+            _task = new VerifyEdges(
+                _constraints,
+                logicJsons.FromJson<IConstraint>().ToList());
         }
 
-        protected static ParameterConfig SelectionsParameter() =>
+        protected static ParameterConfig ConstraintsParameter() =>
             new(
                 () => new Param_String(),
-                nameof(Docs.Selections),
-                Docs.Selections,
+                nameof(Docs.Constraint) + "s",
+                Docs.Constraint,
                 GH_ParamAccess.list);
 
         protected override Dictionary<TaskType, ParameterStrategy>
@@ -236,7 +236,7 @@ namespace Portia.Lite.Components
                     TaskType.SetNodeTypes, new ParameterStrategy(
                         new List<ParameterConfig>
                         {
-                            SelectionsParameter(),
+                            ConstraintsParameter(),
                             new(
                                 () => new Param_String(),
                                 nameof(SetNodeTypes.Types),
@@ -250,7 +250,7 @@ namespace Portia.Lite.Components
                     TaskType.SetEdgeTypes, new ParameterStrategy(
                         new List<ParameterConfig>
                         {
-                            SelectionsParameter(),
+                            ConstraintsParameter(),
                             new(
                                 () => new Param_String(),
                                 nameof(SetEdgeTypes.Types),
@@ -262,13 +262,13 @@ namespace Portia.Lite.Components
                 },
                 {
                     TaskType.GetNodes, new ParameterStrategy(
-                        new List<ParameterConfig> { SelectionsParameter(), },
+                        new List<ParameterConfig> { ConstraintsParameter(), },
                         ByGetNodes,
                         Docs.GetNodes)
                 },
                 {
                     TaskType.GetEdges, new ParameterStrategy(
-                        new List<ParameterConfig> { SelectionsParameter(), },
+                        new List<ParameterConfig> { ConstraintsParameter(), },
                         ByGetEdges,
                         Docs.GetEdges)
                 },
@@ -276,7 +276,7 @@ namespace Portia.Lite.Components
                     TaskType.VerifyNodes, new ParameterStrategy(
                         new List<ParameterConfig>
                         {
-                            SelectionsParameter(),
+                            ConstraintsParameter(),
                             new(
                                 () => new Param_String(),
                                 nameof(VerifyNodes.Logics),
@@ -290,7 +290,7 @@ namespace Portia.Lite.Components
                     TaskType.VerifyEdges, new ParameterStrategy(
                         new List<ParameterConfig>
                         {
-                            SelectionsParameter(),
+                            ConstraintsParameter(),
                             new(
                                 () => new Param_String(),
                                 nameof(VerifyEdges.Logics),
