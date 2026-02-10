@@ -164,11 +164,11 @@ namespace Portia.Lite.Components
                 Docs.VectorCondition.Add(Prefix.JsonList),
                 GH_ParamAccess.list);
 
-        protected static ParameterConfig WrapConditionsParameter() =>
+        protected static ParameterConfig BoundaryConditionsParameter() =>
             new(
                 () => new Param_String(),
-                nameof(WrapCondition) + "s",
-                Docs.WrapCondition.Add(Prefix.JsonList),
+                nameof(BoundaryCondition) + "s",
+                Docs.BoundaryCondition.Add(Prefix.JsonList),
                 GH_ParamAccess.list);
 
         protected static ParameterConfig ConstraintsParameter() =>
@@ -267,12 +267,12 @@ namespace Portia.Lite.Components
                 description);
         }
 
-        protected ParameterStrategy WrapStrategyFor<TRule>(
+        protected ParameterStrategy BoundaryStrategyFor<TRule>(
             string description)
-            where TRule : AbsWrapConstraint, new()
+            where TRule : AbsBoundaryConstraint, new()
         {
-            return GenericStrategyFor<TRule, Point3d, WrapCondition>(
-                VectorConditionsParameter(),
+            return GenericStrategyFor<TRule, Point3d, BoundaryCondition>(
+                BoundaryConditionsParameter(),
                 description);
         }
 
@@ -382,88 +382,88 @@ namespace Portia.Lite.Components
                         Docs.CompositeConstraint)
                 },
                 {
-                    ConstraintMode.Index,
+                    ConstraintMode.IndexConstraint,
                     NumericStrategyFor<NodeAdjacencyConstraint>(
                         Docs.IndexConstraint)
                 },
                 {
-                    ConstraintMode.Type,
+                    ConstraintMode.TypeConstraint,
                     StringStrategyFor<TypeConstraint>(Docs.TypeConstraint)
                 },
                 {
-                    ConstraintMode.NodeAdjacency,
+                    ConstraintMode.Node_Adjacency,
                     NumericStrategyFor<NodeAdjacencyConstraint>(
                         Docs.NodeAdjacency)
                 },
                 {
-                    ConstraintMode.NodeAdjacentEdgeType,
+                    ConstraintMode.Node_AdjacentEdgeType,
                     StringCollectionStrategyFor<NodeAdjacentEdgeTypeConstraint>(
                         Docs.NodeAdjacentEdgeType)
                 },
                 {
-                    ConstraintMode.NodeProximity,
+                    ConstraintMode.Node_Proximity,
                     NumericStrategyFor<NodeProximityConstraint>(
                         Docs.NodeProximity)
                 },
                 {
-                    ConstraintMode.NodeVectorSum,
+                    ConstraintMode.Node_VectorSum,
                     NumericStrategyFor<NodeVectorSumConstraint>(
                         Docs.NodeVectorSum)
                 },
                 {
-                    ConstraintMode.NodeIsLeaf,
+                    ConstraintMode.Node_IsLeaf,
                     BooleanStrategyFor<IsLeafNodeConstraint>(Docs.IsLeafNode)
                 },
                 {
-                    ConstraintMode.NodeAdjacentVectors,
+                    ConstraintMode.Node_AdjacentVectors,
                     VectorCollectionStrategyFor<NodeAdjacentVectorsConstraint>(
                         Docs.NodeAdjacentVectors)
                 },
                 {
-                    ConstraintMode.NodeInWrap,
-                    WrapStrategyFor<NodeInWrapConstraint>(Docs.NodeInWrap)
+                    ConstraintMode.Node_InBoundary,
+                    BoundaryStrategyFor<NodeInBoundaryConstraint>(
+                        Docs.NodeInBoundary)
                 },
                 {
-                    ConstraintMode.EdgeLength,
+                    ConstraintMode.Edge_Length,
                     NumericStrategyFor<EdgeLengthConstraint>(Docs.EdgeLength)
                 },
                 {
-                    ConstraintMode.EdgeSourceAdjacency,
-                    NumericStrategyFor<SourceAdjacencyConstraint>(
-                        Docs.SourceAdjacency)
+                    ConstraintMode.Edge_StartAdjacency,
+                    NumericStrategyFor<EdgeStartAdjacencyConstraint>(
+                        Docs.StartAdjacency)
                 },
                 {
-                    ConstraintMode.EdgeTargetAdjacency,
-                    NumericStrategyFor<TargetAdjacencyConstraint>(
-                        Docs.TargetAdjacency)
+                    ConstraintMode.Edge_EndAdjacency,
+                    NumericStrategyFor<EndAdjacencyConstraint>(
+                        Docs.EndAdjacency)
                 },
                 {
-                    ConstraintMode.EdgeSourceIndex,
-                    NumericStrategyFor<EdgeSourceIndexConstraint>(
-                        Docs.EdgeSourceIndex)
+                    ConstraintMode.Edge_StartIndex,
+                    NumericStrategyFor<EdgeStartIndexConstraint>(
+                        Docs.EdgeStartIndex)
                 },
                 {
-                    ConstraintMode.EdgeSourceType,
-                    StringStrategyFor<EdgeSourceTypeConstraint>(
-                        Docs.EdgeSourceType)
+                    ConstraintMode.Edge_StartType,
+                    StringStrategyFor<EdgeStartTypeConstraint>(
+                        Docs.EdgeStartType)
                 },
                 {
-                    ConstraintMode.EdgeTargetIndex,
-                    NumericStrategyFor<EdgeTargetIndexConstraint>(
-                        Docs.EdgeTargetIndex)
+                    ConstraintMode.Edge_EndIndex,
+                    NumericStrategyFor<EdgeEndIndexConstraint>(
+                        Docs.EdgeEndIndex)
                 },
                 {
-                    ConstraintMode.EdgeTargetType,
-                    StringStrategyFor<EdgeTargetTypeConstraint>(
-                        Docs.EdgeTargetType)
+                    ConstraintMode.Edge_EndType,
+                    StringStrategyFor<EdgeEndTypeConstraint>(Docs.EdgeEndType)
                 },
                 {
-                    ConstraintMode.EdgeIsLinear,
+                    ConstraintMode.Edge_IsLinear,
                     BooleanStrategyFor<IsLinearEdgeConstraint>(
                         Docs.IsLinearRule)
                 },
                 {
-                    ConstraintMode.EdgeVectorSimilarity,
+                    ConstraintMode.Edge_VectorSimilarity,
                     VectorStrategyFor<EdgeVectorConstraint>(Docs.EdgeSimilarity)
                 },
             };

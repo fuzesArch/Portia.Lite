@@ -60,7 +60,7 @@ namespace Portia.Lite.Components
                 conditionJson);
         }
 
-        private void SolveByDouble(
+        private void ByDouble(
             IGH_DataAccess da)
         {
             int relationInteger = da.GetOptionalItem(
@@ -81,7 +81,7 @@ namespace Portia.Lite.Components
                 value).ToJson();
         }
 
-        private void SolveByVectorAngle(
+        private void ByVectorAngle(
             IGH_DataAccess da)
         {
             if (!da.GetItem(
@@ -105,7 +105,7 @@ namespace Portia.Lite.Components
                 bidirectional).ToJson();
         }
 
-        private void SolveByString(
+        private void ByString(
             IGH_DataAccess da)
         {
             int relationInteger = da.GetOptionalItem(
@@ -126,13 +126,32 @@ namespace Portia.Lite.Components
                 value).ToJson();
         }
 
+        private void ByBoundary(
+            IGH_DataAccess da)
+        {
+            if (!da.GetItem(
+                    0,
+                    out Brep boundary))
+            {
+                return;
+            }
+
+            bool strictlyIn = da.GetOptionalItem(
+                1,
+                BoundaryCondition.DefStrictlyIn);
+
+            conditionJson = new BoundaryCondition(
+                boundary,
+                strictlyIn).ToJson();
+        }
+
         protected override Dictionary<ConditionMode, ParameterStrategy>
             DefineParameterStrategy()
         {
             return new Dictionary<ConditionMode, ParameterStrategy>
             {
                 {
-                    ConditionMode.DoubleCondition, new ParameterStrategy(
+                    ConditionMode.Double, new ParameterStrategy(
                         new List<ParameterConfig>
                         {
                             new(
@@ -147,11 +166,11 @@ namespace Portia.Lite.Components
                                 Docs.DoubleValue.Add(Prefix.Double),
                                 GH_ParamAccess.item)
                         },
-                        SolveByDouble,
+                        ByDouble,
                         Docs.DoubleCondition)
                 },
                 {
-                    ConditionMode.StringCondition, new ParameterStrategy(
+                    ConditionMode.String, new ParameterStrategy(
                         new List<ParameterConfig>
                         {
                             new(
@@ -166,11 +185,11 @@ namespace Portia.Lite.Components
                                 Docs.StringValue.Add(Prefix.String),
                                 GH_ParamAccess.item)
                         },
-                        SolveByString,
+                        ByString,
                         Docs.StringCondition)
                 },
                 {
-                    ConditionMode.VectorCondition, new ParameterStrategy(
+                    ConditionMode.Vector, new ParameterStrategy(
                         new List<ParameterConfig>
                         {
                             new(
@@ -197,8 +216,30 @@ namespace Portia.Lite.Components
                                 GH_ParamAccess.item,
                                 isOptional: true)
                         },
-                        SolveByVectorAngle,
+                        ByVectorAngle,
                         Docs.VectorCondition)
+                },
+                {
+                    ConditionMode.Boundary, new ParameterStrategy(
+                        new List<ParameterConfig>
+                        {
+                            new(
+                                () => new Param_Brep(),
+                                nameof(BoundaryCondition.Boundary),
+                                Docs.Boundary.Add(Prefix.Brep),
+                                GH_ParamAccess.item),
+                            new(
+                                () => new Param_Boolean(),
+                                nameof(BoundaryCondition.StrictlyIn),
+                                Docs
+                                    .StrictlyIn.ByDefault(
+                                        BoundaryCondition.DefStrictlyIn)
+                                    .Add(Prefix.Boolean),
+                                GH_ParamAccess.item,
+                                isOptional: true)
+                        },
+                        ByBoundary,
+                        Docs.BoundaryCondition)
                 },
             };
         }

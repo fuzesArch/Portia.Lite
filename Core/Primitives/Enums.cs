@@ -1,12 +1,15 @@
 ﻿using Portia.Infrastructure.Core.Primitives;
 
+// ReSharper disable InconsistentNaming
+
 namespace Portia.Lite.Core.Primitives
 {
     public enum ConditionMode
     {
-        DoubleCondition,
-        StringCondition,
-        VectorCondition
+        Double,
+        String,
+        Vector,
+        Boundary
     }
 
     public enum ConstraintMode
@@ -15,58 +18,58 @@ namespace Portia.Lite.Core.Primitives
         Composite,
 
         [Category("Nodes / Edges")]
-        Index,
+        IndexConstraint,
 
         [Category("Nodes / Edges")]
-        Type,
+        TypeConstraint,
 
         [Category("Nodes")]
-        NodeAdjacency,
+        Node_Adjacency,
 
         [Category("Nodes")]
-        NodeAdjacentEdgeType,
+        Node_AdjacentEdgeType,
 
         [Category("Nodes")]
-        NodeProximity,
+        Node_Proximity,
 
         [Category("Nodes")]
-        NodeVectorSum,
+        Node_VectorSum,
 
         [Category("Nodes")]
-        NodeIsLeaf,
+        Node_IsLeaf,
 
         [Category("Nodes")]
-        NodeAdjacentVectors,
+        Node_AdjacentVectors,
 
         [Category("Nodes")]
-        NodeInWrap,
+        Node_InBoundary,
 
         [Category("Edges")]
-        EdgeLength,
+        Edge_Length,
 
         [Category("Edges")]
-        EdgeSourceAdjacency,
+        Edge_StartAdjacency,
 
         [Category("Edges")]
-        EdgeTargetAdjacency,
+        Edge_EndAdjacency,
 
         [Category("Edges")]
-        EdgeSourceIndex,
+        Edge_StartIndex,
 
         [Category("Edges")]
-        EdgeSourceType,
+        Edge_StartType,
 
         [Category("Edges")]
-        EdgeTargetIndex,
+        Edge_EndIndex,
 
         [Category("Edges")]
-        EdgeTargetType,
+        Edge_EndType,
 
         [Category("Edges")]
-        EdgeIsLinear,
+        Edge_IsLinear,
 
         [Category("Edges")]
-        EdgeVectorSimilarity
+        Edge_VectorSimilarity
     }
 
     public enum TaskType

@@ -74,8 +74,8 @@ namespace Portia.Lite
             "Defines a logical filter rule based on the relationship " +
             "with a text-based relation type and a specific string target value.";
 
-        public static string WrapCondition =>
-            "Defines a logical filter rule based on the geometric relationship " +
+        public static string BoundaryCondition =>
+            "Defines a logical filter based on the geometric relationship " +
             "between points and boundaries, where a boundary is a closed Brep evaluated for point containment.";
 
         public static string Identity =>
@@ -112,7 +112,7 @@ namespace Portia.Lite
             "of its connected Edges. Useful for identifying hybrid structural junctions, or " +
             "setting the Type of a Node based on its neighbouring Edge constellation.";
 
-        public static string NodeInWrap =>
+        public static string NodeInBoundary =>
             "A topological query that validates a Node based on its centroid's containment by the input boundary Breps." +
             "Useful to set initial Node Types or Indices as basic categorization.";
 
@@ -137,39 +137,36 @@ namespace Portia.Lite
         public static string EdgeLength =>
             "A rule that evaluates the physical length of an Edge curve.";
 
-        public static string SourceAdjacency =>
-            "A rule that evaluates the direct neighbouring Edge count of an Edge's start (Source) Node.";
+        public static string StartAdjacency =>
+            "A rule that evaluates the direct neighbouring Edge count of an Edge's start Node.";
 
-        public static string TargetAdjacency =>
-            "A rule that evaluates the direct neighbouring Edge count of an Edge's end (Target) Node.";
 
-        public static string EdgeSourceIndex =>
+        public static string EndAdjacency =>
+            "A rule that evaluates the direct neighbouring Edge count of an Edge's end Node.";
+
+        public static string EdgeStartIndex =>
             "A rule that evaluates / captures an Edge based on the numerical Index " +
-            "of its starting (Source) Node.";
+            "of its start Node.";
 
-        public static string EdgeSourceType =>
-            "A bridge rule that evaluates / captures an Edge based on the text-based Type " +
-            "of its starting (Source) Node.";
+        public static string EdgeStartType =>
+            "A rule that evaluates / captures an Edge based on the text-based Type " +
+            "of its end Node.";
 
-        public static string EdgeTargetIndex =>
-            "A bridge rule that evaluates / captures an Edge based on the numerical Index " +
-            "of its ending (Target) Node.";
+        public static string EdgeEndIndex =>
+            "A rule that evaluates / captures an Edge based on the numerical Index " +
+            "of its end Node.";
 
-        public static string EdgeTargetType =>
-            "A bridge rule that evaluates /captures an Edge based on the text-based Type " +
-            "of its ending (Target) Node.";
+        public static string EdgeEndType =>
+            "A rule that evaluates / captures an Edge based on the text-based Type " +
+            "of its end Node.";
 
         public static string IsLinearRule =>
             "A binary validation rule that determines if an Edge is perfectly straight " +
             "within document tolerance, distinguishing between linear members and curved geometry.";
 
-        public static string IsBridgeEdge =>
-            "A topological rule that identifies critical 'bridge' edges whose removal " +
-            "would split the graph into separate, disconnected parts.";
-
         public static string Task =>
             "A specialized graph operation that executes " +
-            "data modifications, queries or validation protocols on the Portia engine.";
+            "data modifications, queries or validation protocols by the Portia engine.";
 
         public static string SetCurves =>
             "A primary Task that translates geometric curves into graph-compatible " +
@@ -261,12 +258,12 @@ namespace Portia.Lite
             "A sophisticated constraint rule that combines multiple constraints criteria " +
             "using a boolean Gate logic in order to capture graph elements.";
 
-        public static string Wrappers =>
-            "A list of boundary Breps used to define the spatial volumes " +
+        public static string Boundary =>
+            "Boundary Brep used to define the spatial volumes " +
             "for Node centroid containment checks.";
 
         public static string Breps =>
-            "The geometric boundary volumes used to evaluate intersections with " +
+            "The geometric boundary volume used to evaluate intersections with " +
             "AND containment by Edges.";
 
         public static string StrictlyIn =>
