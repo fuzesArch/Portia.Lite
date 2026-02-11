@@ -61,6 +61,8 @@ namespace Portia.Lite.Components
         protected override void CommonOutputSetting(
             IGH_DataAccess da)
         {
+            Message = _task.ComponentMessage();
+
             da.SetData(
                 0,
                 _task.ToJson());

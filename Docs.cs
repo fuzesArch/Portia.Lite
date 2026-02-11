@@ -121,8 +121,14 @@ namespace Portia.Lite
             "setting the Type of a Node based on its neighbouring Edge constellation.";
 
         public static string NodeInBoundary =>
-            "A topological query that validates a Node based on its centroid's containment by the input boundary Breps." +
-            "Useful to set initial Node Types or Indices as basic categorization.";
+            "A topological query that validates a Node based on its centroid's " +
+            "containment by the input boundary Breps. Useful to set initial Node Types " +
+            "or Indices for basic categorization.";
+
+        public static string EdgeInBoundary =>
+            "A topological query that validates an Edge based on its start or end point's " +
+            "containment by the input boundary Breps. Useful to set initial Edge Types " +
+            "or Indices for basic categorization.";
 
         public static string NodeAdjacency =>
             "A rule that evaluates a Node's direct neighbouring Edge count.";

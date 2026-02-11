@@ -4,7 +4,7 @@ using Portia.Infrastructure.Components;
 using Portia.Infrastructure.Core.DocStrings;
 using Portia.Infrastructure.Core.Helps;
 using Portia.Infrastructure.Core.Portia.Primitives;
-using Portia.Infrastructure.Core.Portia.Strategies;
+using Portia.Infrastructure.Core.Portia.Rules;
 using Portia.Infrastructure.Core.Primitives;
 using Portia.Infrastructure.Core.Validators;
 using Portia.Lite.Core.Primitives;
@@ -100,6 +100,7 @@ namespace Portia.Lite.Components
         protected override void CommonOutputSetting(
             IGH_DataAccess da)
         {
+            Message = _rule.ComponentMessage();
             da.SetData(
                 0,
                 _rule.ToJson());
@@ -268,7 +269,7 @@ namespace Portia.Lite.Components
             string description)
             where TRule : AbsBoundaryRule, new()
         {
-            return GenericStrategyFor<TRule, Point3d, BoundaryCondition>(
+            return GenericStrategyFor<TRule, GeometryBase, BoundaryCondition>(
                 BoundaryConditionsParameter(),
                 description);
         }
@@ -452,6 +453,10 @@ namespace Portia.Lite.Components
                     RuleMode.Edge_VectorSimilarity,
                     VectorStrategyFor<EdgeVectorSimilarityRule>(
                         Docs.EdgeSimilarity)
+                },
+                {
+                    RuleMode.Edge_InBoundary,
+                    BoundaryStrategyFor<EdgeInBoundaryRule>(Docs.EdgeInBoundary)
                 },
             };
         }

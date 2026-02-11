@@ -69,7 +69,10 @@ namespace Portia.Lite.Core.Primitives
         Edge_IsLinear,
 
         [Category("Edges")]
-        Edge_VectorSimilarity
+        Edge_VectorSimilarity,
+
+        [Category("Edges")]
+        Edge_InBoundary,
     }
 
     public enum TaskType
