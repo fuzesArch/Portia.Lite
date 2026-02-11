@@ -50,7 +50,7 @@ namespace Portia.Lite.Components
                     typeof(Gate).ToEnumString(),
                     nameof(Gate.And))
                 .InJsons(
-                    nameof(AbsConstraint<double, DoubleCondition>.Conditions),
+                    nameof(AbsConstraint<double, NumericCondition>.Conditions),
                     Docs.Condition);
 
             SetInputParameterOptionality(1);
@@ -146,7 +146,7 @@ namespace Portia.Lite.Components
         protected static ParameterConfig DoubleConditionsParameter() =>
             new(
                 () => new Param_String(),
-                nameof(DoubleCondition) + "s",
+                nameof(NumericCondition) + "s",
                 Docs.DoubleCondition.Add(Prefix.JsonList),
                 GH_ParamAccess.list);
 
@@ -244,7 +244,7 @@ namespace Portia.Lite.Components
             string description)
             where TRule : AbsNumericConstraint, new()
         {
-            return GenericStrategyFor<TRule, double, DoubleCondition>(
+            return GenericStrategyFor<TRule, double, NumericCondition>(
                 DoubleConditionsParameter(),
                 description);
         }
@@ -415,9 +415,10 @@ namespace Portia.Lite.Components
                     BooleanStrategyFor<IsLeafNodeConstraint>(Docs.IsLeafNode)
                 },
                 {
-                    ConstraintMode.Node_AdjacentVectors,
-                    VectorCollectionStrategyFor<NodeAdjacentVectorsConstraint>(
-                        Docs.NodeAdjacentVectors)
+                    ConstraintMode.Node_AdjacentVectorSimilarity,
+                    VectorCollectionStrategyFor<
+                        NodeAdjacentVectorSimilarityConstraint>(
+                        Docs.NodeAdjacentVectorSimilarity)
                 },
                 {
                     ConstraintMode.Node_InBoundary,
@@ -464,7 +465,8 @@ namespace Portia.Lite.Components
                 },
                 {
                     ConstraintMode.Edge_VectorSimilarity,
-                    VectorStrategyFor<EdgeVectorConstraint>(Docs.EdgeSimilarity)
+                    VectorStrategyFor<EdgeVectorSimilarityConstraint>(
+                        Docs.EdgeSimilarity)
                 },
             };
         }

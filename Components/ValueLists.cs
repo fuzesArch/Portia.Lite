@@ -4,12 +4,12 @@ using System;
 
 namespace Portia.Lite.Components
 {
-    public class DoubleRelationValueList : AbsValueList<DoubleRelation>
+    public class DoubleRelationValueList : AbsValueList<NumericRelation>
     {
         public DoubleRelationValueList()
             : base(
-                nameof(DoubleRelation),
-                Docs.DoubleRelation,
+                nameof(NumericRelation),
+                Docs.NumericRelation,
                 Naming.Tab,
                 Naming.Tab)
         {

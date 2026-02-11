@@ -4,6 +4,7 @@ using Portia.Infrastructure.Components;
 using Portia.Infrastructure.Core.DocStrings;
 using Portia.Infrastructure.Core.Helps;
 using Portia.Infrastructure.Core.Primitives;
+using Portia.Infrastructure.Core.Validators;
 using Portia.Lite.Core.Primitives;
 using Rhino.Geometry;
 using System;
@@ -15,7 +16,7 @@ namespace Portia.Lite.Components
     {
         public ConditionDropDown()
             : base(
-                nameof(DoubleCondition).Substring(6).AddDropDownMark(),
+                nameof(NumericCondition).Substring(6).AddDropDownMark(),
                 Docs.Condition.AddDropDownNote(),
                 Naming.Tab,
                 Naming.Tab)
@@ -28,46 +29,48 @@ namespace Portia.Lite.Components
         protected override System.Drawing.Bitmap Icon =>
             Properties.Resources.ColoredLogo;
 
-        private string conditionJson;
+        private IConditionBase condition;
 
         protected override void AddInputFields()
         {
             InEnum(
-                    nameof(DoubleRelation),
-                    Docs.DoubleRelation + Environment.NewLine +
-                    typeof(DoubleRelation).ToEnumString(),
-                    DoubleCondition.DefRelation.ToString())
+                    nameof(NumericRelation),
+                    Docs.NumericRelation + Environment.NewLine +
+                    typeof(NumericRelation).ToEnumString(),
+                    NumericCondition.DefRelation.ToString())
                 .InDouble(
-                    nameof(DoubleCondition.Value),
-                    Docs.DoubleValue);
+                    nameof(NumericCondition.Value),
+                    Docs.NumericValue);
 
             SetInputParameterOptionality(0);
-            SetEnumDropDown<DoubleRelation>(0);
+            SetEnumDropDown<NumericRelation>(0);
         }
 
         protected override void AddOutputFields()
         {
             OutJson(
-                nameof(DoubleCondition),
+                nameof(NumericCondition),
                 Docs.Condition);
         }
 
         protected override void CommonOutputSetting(
             IGH_DataAccess da)
         {
+            condition.Guard();
+
             da.SetData(
                 0,
-                conditionJson);
+                condition.ToJson());
         }
 
-        private void ByDouble(
+        private void ByNumeric(
             IGH_DataAccess da)
         {
-            int relationInteger = da.GetOptionalItem(
+            int integer = da.GetOptionalItem(
                 0,
-                (int)DoubleCondition.DefRelation);
+                (int)NumericCondition.DefRelation);
 
-            relationInteger.ValidateEnum<DoubleRelation>();
+            integer.ValidateEnum<NumericRelation>();
 
             if (!da.GetItem(
                     1,
@@ -76,9 +79,9 @@ namespace Portia.Lite.Components
                 return;
             }
 
-            conditionJson = new DoubleCondition(
-                (DoubleRelation)relationInteger,
-                value).ToJson();
+            condition = new NumericCondition(
+                (NumericRelation)integer,
+                value);
         }
 
         private void ByVectorAngle(
@@ -99,20 +102,20 @@ namespace Portia.Lite.Components
                 2,
                 VectorCondition.DefBidirectional);
 
-            conditionJson = new VectorCondition(
+            condition = new VectorCondition(
                 vector,
                 tolerance,
-                bidirectional).ToJson();
+                bidirectional);
         }
 
         private void ByString(
             IGH_DataAccess da)
         {
-            int relationInteger = da.GetOptionalItem(
+            int integer = da.GetOptionalItem(
                 0,
                 (int)StringCondition.DefRelation);
 
-            relationInteger.ValidateEnum<StringRelation>();
+            integer.ValidateEnum<StringRelation>();
 
             if (!da.GetItem(
                     1,
@@ -121,9 +124,9 @@ namespace Portia.Lite.Components
                 return;
             }
 
-            conditionJson = new StringCondition(
-                (StringRelation)relationInteger,
-                value).ToJson();
+            condition = new StringCondition(
+                (StringRelation)integer,
+                value);
         }
 
         private void ByBoundary(
@@ -140,9 +143,9 @@ namespace Portia.Lite.Components
                 1,
                 BoundaryCondition.DefStrictlyIn);
 
-            conditionJson = new BoundaryCondition(
+            condition = new BoundaryCondition(
                 boundary,
-                strictlyIn).ToJson();
+                strictlyIn);
         }
 
         protected override Dictionary<ConditionMode, ParameterStrategy>
@@ -151,22 +154,22 @@ namespace Portia.Lite.Components
             return new Dictionary<ConditionMode, ParameterStrategy>
             {
                 {
-                    ConditionMode.Double, new ParameterStrategy(
+                    ConditionMode.Numeric, new ParameterStrategy(
                         new List<ParameterConfig>
                         {
                             new(
                                 () => new Param_Integer(),
-                                nameof(DoubleRelation),
-                                Docs.DoubleRelation.Add(Prefix.Integer),
+                                nameof(NumericRelation),
+                                Docs.NumericRelation.Add(Prefix.Integer),
                                 GH_ParamAccess.item,
                                 listFactory: DoubleRelationValueList.Create),
                             new(
                                 () => new Param_Number(),
-                                nameof(Docs.DoubleValue),
-                                Docs.DoubleValue.Add(Prefix.Double),
+                                nameof(Docs.NumericValue),
+                                Docs.NumericValue.Add(Prefix.Double),
                                 GH_ParamAccess.item)
                         },
-                        ByDouble,
+                        ByNumeric,
                         Docs.DoubleCondition)
                 },
                 {

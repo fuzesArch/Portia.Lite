@@ -29,7 +29,7 @@ namespace Portia.Lite
 
         public static string TemporaryUnused => "TODO";
 
-        public static string DoubleRelation =>
+        public static string NumericRelation =>
             "Numerical comparison logic (Equal, GreaterThan, ..) for filtering floating point numbers.";
 
         public static string StringRelation =>
@@ -47,8 +47,8 @@ namespace Portia.Lite
             "Boolean operator (AND, OR) to combine multiple conditions into one filter. " +
             "AND means that all conditions must be True, OR means that any of the conditions is enough to be True.";
 
-        public static string DoubleValue =>
-            "The target numerical value for mathematical filtering.";
+        public static string NumericValue =>
+            "The target numerical (double a.k.a. floating point number) value for mathematical filtering.";
 
         public static string StringValue =>
             "The target string value used for text-based filtering.";
@@ -107,7 +107,7 @@ namespace Portia.Lite
             "of its connected Edges. Useful for identifying hybrid structural junctions, or " +
             "setting the Type of a Node based on its neighbour.";
 
-        public static string NodeAdjacentVectors =>
+        public static string NodeAdjacentVectorSimilarity =>
             "A topological query that validates a Node based on the Vectors " +
             "of its connected Edges. Useful for identifying hybrid structural junctions, or " +
             "setting the Type of a Node based on its neighbouring Edge constellation.";

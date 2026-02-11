@@ -6,7 +6,7 @@ namespace Portia.Lite.Core.Primitives
 {
     public enum ConditionMode
     {
-        Double,
+        Numeric,
         String,
         Vector,
         Boundary
@@ -39,7 +39,7 @@ namespace Portia.Lite.Core.Primitives
         Node_IsLeaf,
 
         [Category("Nodes")]
-        Node_AdjacentVectors,
+        Node_AdjacentVectorSimilarity,
 
         [Category("Nodes")]
         Node_InBoundary,
