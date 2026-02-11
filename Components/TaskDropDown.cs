@@ -37,7 +37,7 @@ namespace Portia.Lite.Components
             Properties.Resources.ColoredLogo;
 
         private AbsTask _task;
-        private List<IConstraint> _constraints;
+        private List<IRule> _rules;
 
         protected override void AddInputFields()
         {
@@ -66,7 +66,7 @@ namespace Portia.Lite.Components
                 _task.ToJson());
         }
 
-        protected void SetConstraints(
+        protected void SetRules(
             IGH_DataAccess da)
         {
             if (!da.GetItems(
@@ -76,7 +76,7 @@ namespace Portia.Lite.Components
                 return;
             }
 
-            _constraints = jsons.FromJson<IConstraint>().ToList();
+            _rules = jsons.FromJson<IRule>().ToList();
         }
 
         protected void BySetCurves(
@@ -103,9 +103,9 @@ namespace Portia.Lite.Components
             IGH_DataAccess da)
             where T : AbsSetTypes, new()
         {
-            SetConstraints(da);
+            SetRules(da);
 
-            if (_constraints == null) { return; }
+            if (_rules == null) { return; }
 
             if (!da.GetItems(
                     1,
@@ -114,7 +114,7 @@ namespace Portia.Lite.Components
                 return;
             }
 
-            _task = new T { Constraints = _constraints, Types = types };
+            _task = new T { Rules = _rules, Types = types };
             _task.Guard();
         }
 
@@ -122,11 +122,11 @@ namespace Portia.Lite.Components
             IGH_DataAccess da)
             where T : AbsGetTask, new()
         {
-            SetConstraints(da);
+            SetRules(da);
 
-            if (_constraints == null) { return; }
+            if (_rules == null) { return; }
 
-            _task = new T { Constraints = _constraints };
+            _task = new T { Rules = _rules };
             _task.Guard();
         }
 
@@ -134,9 +134,9 @@ namespace Portia.Lite.Components
             IGH_DataAccess da)
             where T : AbsVerifyTask, new()
         {
-            SetConstraints(da);
+            SetRules(da);
 
-            if (_constraints == null) { return; }
+            if (_rules == null) { return; }
 
             if (!da.GetItems(
                     1,
@@ -147,24 +147,39 @@ namespace Portia.Lite.Components
 
             _task = new T
             {
-                Constraints = _constraints,
-                Logics = logicJsons.FromJson<IConstraint>().ToList()
+                Rules = _rules,
+                Logics = logicJsons.FromJson<IRule>().ToList()
             };
             _task.Guard();
         }
 
-        protected static ParameterConfig ConstraintsParameter() =>
+        protected static ParameterConfig NodeRuleParameter() =>
             new(
                 () => new Param_String(),
-                nameof(Docs.Constraint) + "s",
-                Docs.Constraint,
+                nameof(Docs.NodeRule) + "s",
+                Docs.NodeRule,
                 GH_ParamAccess.list);
 
-        protected static ParameterConfig LogicsParameter() =>
+        protected static ParameterConfig EdgeRuleParameter() =>
             new(
                 () => new Param_String(),
-                nameof(AbsVerifyTask.Logics),
-                Docs.Logics.Add(Prefix.JsonList),
+                nameof(Docs.EdgeRule) + "s",
+                Docs.EdgeRule,
+                GH_ParamAccess.list);
+
+        protected static ParameterConfig NodeLogicsParameter() =>
+            new(
+                () => new Param_String(),
+                nameof(Docs.NodeLogics),
+                Docs.NodeLogics.Add(Prefix.JsonList),
+                GH_ParamAccess.list);
+
+
+        protected static ParameterConfig EdgeLogicsParameter() =>
+            new(
+                () => new Param_String(),
+                nameof(Docs.EdgeLogics),
+                Docs.EdgeLogics.Add(Prefix.JsonList),
                 GH_ParamAccess.list);
 
         protected static ParameterConfig TypesParameter() =>
@@ -208,7 +223,7 @@ namespace Portia.Lite.Components
                     TaskType.SetNodeTypes, new ParameterStrategy(
                         new List<ParameterConfig>
                         {
-                            ConstraintsParameter(), TypesParameter()
+                            NodeRuleParameter(), TypesParameter()
                         },
                         BySetTypes<SetNodeTypes>,
                         Docs.SetNodeTypes)
@@ -217,20 +232,20 @@ namespace Portia.Lite.Components
                     TaskType.SetEdgeTypes, new ParameterStrategy(
                         new List<ParameterConfig>
                         {
-                            ConstraintsParameter(), TypesParameter()
+                            EdgeRuleParameter(), TypesParameter()
                         },
                         BySetTypes<SetEdgeTypes>,
                         Docs.SetEdgeTypes)
                 },
                 {
                     TaskType.GetNodes, new ParameterStrategy(
-                        new List<ParameterConfig> { ConstraintsParameter(), },
+                        new List<ParameterConfig> { NodeRuleParameter(), },
                         ByGet<GetNodes>,
                         Docs.GetNodes)
                 },
                 {
                     TaskType.GetEdges, new ParameterStrategy(
-                        new List<ParameterConfig> { ConstraintsParameter(), },
+                        new List<ParameterConfig> { EdgeRuleParameter(), },
                         ByGet<GetEdges>,
                         Docs.GetEdges)
                 },
@@ -238,7 +253,7 @@ namespace Portia.Lite.Components
                     TaskType.VerifyNodes, new ParameterStrategy(
                         new List<ParameterConfig>
                         {
-                            ConstraintsParameter(), LogicsParameter()
+                            NodeRuleParameter(), NodeLogicsParameter()
                         },
                         ByVerify<VerifyNodes>,
                         Docs.VerifyNodes)
@@ -247,7 +262,7 @@ namespace Portia.Lite.Components
                     TaskType.VerifyEdges, new ParameterStrategy(
                         new List<ParameterConfig>
                         {
-                            ConstraintsParameter(), LogicsParameter()
+                            EdgeRuleParameter(), EdgeLogicsParameter()
                         },
                         ByVerify<VerifyEdges>,
                         Docs.VerifyEdges)

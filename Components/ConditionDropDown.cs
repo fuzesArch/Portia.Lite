@@ -29,7 +29,7 @@ namespace Portia.Lite.Components
         protected override System.Drawing.Bitmap Icon =>
             Properties.Resources.ColoredLogo;
 
-        private IConditionBase condition;
+        private IConditionBase _condition;
 
         protected override void AddInputFields()
         {
@@ -56,11 +56,11 @@ namespace Portia.Lite.Components
         protected override void CommonOutputSetting(
             IGH_DataAccess da)
         {
-            condition.Guard();
+            _condition.Guard();
 
             da.SetData(
                 0,
-                condition.ToJson());
+                _condition.ToJson());
         }
 
         private void ByNumeric(
@@ -79,7 +79,7 @@ namespace Portia.Lite.Components
                 return;
             }
 
-            condition = new NumericCondition(
+            _condition = new NumericCondition(
                 (NumericRelation)integer,
                 value);
         }
@@ -102,7 +102,7 @@ namespace Portia.Lite.Components
                 2,
                 VectorCondition.DefBidirectional);
 
-            condition = new VectorCondition(
+            _condition = new VectorCondition(
                 vector,
                 tolerance,
                 bidirectional);
@@ -124,7 +124,7 @@ namespace Portia.Lite.Components
                 return;
             }
 
-            condition = new StringCondition(
+            _condition = new StringCondition(
                 (StringRelation)integer,
                 value);
         }
@@ -143,7 +143,7 @@ namespace Portia.Lite.Components
                 1,
                 BoundaryCondition.DefStrictlyIn);
 
-            condition = new BoundaryCondition(
+            _condition = new BoundaryCondition(
                 boundary,
                 strictlyIn);
         }

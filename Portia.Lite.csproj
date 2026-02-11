@@ -73,7 +73,7 @@
   <ItemGroup>
     <Compile Include="Components\DeconstructItemComponent.cs" />
     <Compile Include="Components\GraphItemParameter.cs" />
-    <Compile Include="Components\ConstraintDropDown.cs" />
+    <Compile Include="Components\RuleDropDown.cs" />
     <Compile Include="Components\PortiaComponent.cs" />
     <Compile Include="Components\TaskDropDown.cs" />
     <Compile Include="Components\Naming.cs" />

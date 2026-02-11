@@ -12,16 +12,16 @@ namespace Portia.Lite.Core.Primitives
         Boundary
     }
 
-    public enum ConstraintMode
+    public enum RuleMode
     {
         [Category("Nodes / Edges")]
         Composite,
 
         [Category("Nodes / Edges")]
-        IndexConstraint,
+        IndexRule,
 
         [Category("Nodes / Edges")]
-        TypeConstraint,
+        TypeRule,
 
         [Category("Nodes")]
         Node_Adjacency,

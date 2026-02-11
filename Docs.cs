@@ -90,15 +90,23 @@ namespace Portia.Lite
             "A user-defined text string used to categorize and map " +
             "specific elements (nodes or edges) within the graph structure.";
 
-        public static string Constraint =>
+        public static string Rule =>
             "Defines a localized graph process that evaluates " +
             "nodes or edges based on their geometric and topological behavior.";
 
-        public static string IndexConstraint =>
+        public static string NodeRule =>
+            "Defines a localized graph process that evaluates " +
+            "Nodes based on their geometric and topological behavior.";
+
+        public static string EdgeRule =>
+            "Defines a localized graph process that evaluates " +
+            "Edges based on their geometric and topological behavior.";
+
+        public static string IndexRule =>
             "Defines a localized graph process that evaluates both " +
             "Nodes AND Edges based on their numerical Index.";
 
-        public static string TypeConstraint =>
+        public static string TypeRule =>
             "Defines a localized graph process that evaluates both " +
             "Nodes AND Edges based on their text-based Type value.";
 
@@ -204,35 +212,23 @@ namespace Portia.Lite
             "The optional Type strings assigned to the Edges during the " +
             "initial graph generation process, used for categorization.";
 
-        public static string Selection =>
-            "A criteria used to isolate specific Nodes or Edges " +
-            "for targeted graph modification or retrieval.";
-
-        public static string Selections =>
-            "A set of Selection criteria used to isolate specific Nodes or Edges " +
-            "for targeted graph modification or retrieval.";
-
         public static string Types =>
             "The specific text-based Type values to be assigned to the " +
             "elements that get captured by the current input Selection logics.";
 
-        public static string Logics =>
-            "The graph logic rules used to evaluate and verify the topological or " +
-            "geometric integrity of the elements that get captured " +
-            "by the current input Selection logics.";
+        public static string NodeLogics =>
+            "The graph logic rules that verify the topological or " +
+            "geometric integrity of the Nodes that are captured " +
+            "by the input Node rules!";
+
+        public static string EdgeLogics =>
+            "The graph logic rules that verify the topological or " +
+            "geometric integrity of the Edges that are captured " +
+            "by the input Edge rules!";
 
         public static string Name =>
             "A unique identifier used to label logic results and " +
             "dynamically name the corresponding Portia output fields for easy tracking.";
-
-        public static string DirectionLines =>
-            "Edge directions (as a Lines) that will be checked against every Node's adjacent Edges for " +
-            "a successful constellation match. Only one intersection point is allowed between the Lines' start points since a " +
-            "constellation must radiate outwards.";
-
-        public static string StrictMatch =>
-            "When enabled, the node must have an exact count of connected edges " +
-            "matching the number of defined NodeVectors to pass the rule.";
 
         public static string AngleTolerance =>
             "Allowed angle deviation between vectors IN DEGREES. Used during similarity comparison between " +
@@ -242,29 +238,13 @@ namespace Portia.Lite
             "When enabled, the rule validates the connection regardless of edge direction, " +
             "checking both start-to-end and end-to-start orientations.";
 
-        public static string ByLogicSelection =>
-            "A selection rule that identifies elements based on whether they satisfy " +
-            "a specific topological or geometric Logic condition.";
-
-        public static string ByWrapSelection =>
-            "A spatial selection rule that captures Nodes whose centroids are " +
-            "contained within the volume of the specified input Breps.";
-
-        public static string ByIntersectionSelection =>
-            "A spatial selection rule that identifies Edges based on their physical intersection " +
-            "AND containment with(in) the volumes of specified Breps.";
-
-        public static string CompositeConstraint =>
-            "A sophisticated constraint rule that combines multiple constraints criteria " +
-            "using a boolean Gate logic in order to capture graph elements.";
+        public static string CompositeRule =>
+            "A sophisticated rule rule that combines multiple rules " +
+            "using a boolean Gate logic in order to capture graph Nodes or Edges.";
 
         public static string Boundary =>
             "Boundary Brep used to define the spatial volumes " +
             "for Node centroid containment checks.";
-
-        public static string Breps =>
-            "The geometric boundary volume used to evaluate intersections with " +
-            "AND containment by Edges.";
 
         public static string StrictlyIn =>
             "A boolean toggle that determines if elements lying exactly on the " +

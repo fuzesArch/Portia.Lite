@@ -8,6 +8,7 @@ using Portia.Infrastructure.Core.Helps;
 using Portia.Infrastructure.Core.Portia.Helps;
 using Portia.Infrastructure.Core.Portia.Main;
 using Portia.Infrastructure.Core.Portia.Tasks;
+using Portia.Infrastructure.Core.Validators;
 
 namespace Portia.Lite.Components
 {
@@ -31,7 +32,7 @@ namespace Portia.Lite.Components
         private const int FixedInputCount = 1;
         private static int LastFixedInputIndex => FixedInputCount - 1;
 
-        private List<IGraphQuery> queries = new();
+        private List<IGraphQuery> _queries = new();
 
         protected override void AddInputFields()
         {
@@ -45,7 +46,7 @@ namespace Portia.Lite.Components
             new SetCurves().RegisterOutputs(Params);
         }
 
-        protected override void SolveInstance(
+        protected override void Solve(
             IGH_DataAccess da)
         {
             var tasks = new List<AbsTask>();
@@ -92,12 +93,19 @@ namespace Portia.Lite.Components
                 .ToList();
 
             var pipeline = new GraphPipeline(orderedTasks);
+            pipeline.Guard();
+
+            foreach (var task in orderedTasks)
+            {
+                task.Guard();
+            }
+
             var requiredQueries =
                 pipeline.Tasks.SelectMany(x => x.Queries).ToList();
 
             if (OutputsMismatch(requiredQueries))
             {
-                queries = requiredQueries;
+                _queries = requiredQueries;
 
                 OnPingDocument()
                     .ScheduleSolution(
@@ -131,27 +139,18 @@ namespace Portia.Lite.Components
             return false;
         }
 
-        //private void UpdateOutputsCallback(
-        //    GH_Document doc)
-        //{
-        //    Params.ClearOutputs();
-        //    queries.RegisterOutputs(Params);
-        //    Params.OnParametersChanged();
-        //    ExpireSolution(true);
-        //}
-
         private void UpdateOutputsCallback(
             GH_Document doc)
         {
-            while (queries.Count < Params.Output.Count)
+            while (_queries.Count < Params.Output.Count)
             {
                 Params.UnregisterOutputParameter(
                     Params.Output[Params.Output.Count - 1]);
             }
 
-            for (int i = 0; i < queries.Count; i++)
+            for (int i = 0; i < _queries.Count; i++)
             {
-                var query = queries[i];
+                var query = _queries[i];
 
                 if (i < Params.Output.Count)
                 {

@@ -15,16 +15,16 @@ using System.Linq;
 
 namespace Portia.Lite.Components
 {
-    public class ConstraintDropDown : AbsDropDownComponent<ConstraintMode>
+    public class RuleDropDown : AbsDropDownComponent<RuleMode>
     {
-        public ConstraintDropDown()
+        public RuleDropDown()
             : base(
-                nameof(ConstraintDropDown)
+                nameof(RuleDropDown)
                     .Substring(
                         0,
-                        10)
+                        4)
                     .AddDropDownMark(),
-                Docs.Constraint,
+                Docs.Rule,
                 Naming.Tab,
                 Naming.Tab)
         {
@@ -38,19 +38,19 @@ namespace Portia.Lite.Components
 
         private Gate _gate;
         private string _name;
-        private IConstraint _constraint;
+        private IRule _rule;
 
         protected override void AddInputFields()
         {
             InString(
-                    nameof(IConstraint.Name),
+                    nameof(IRule.Name),
                     Docs.Name)
                 .InEnum(
                     nameof(Gate),
                     typeof(Gate).ToEnumString(),
                     nameof(Gate.And))
                 .InJsons(
-                    nameof(AbsConstraint<double, NumericCondition>.Conditions),
+                    nameof(AbsRule<double, NumericCondition>.Conditions),
                     Docs.Condition);
 
             SetInputParameterOptionality(1);
@@ -70,8 +70,8 @@ namespace Portia.Lite.Components
         protected override void AddOutputFields()
         {
             OutJson(
-                nameof(Docs.Constraint),
-                Docs.Constraint);
+                nameof(Docs.Rule),
+                Docs.Rule);
         }
 
         protected override void CommonInputSetting(
@@ -81,7 +81,7 @@ namespace Portia.Lite.Components
                     0,
                     out _name))
             {
-                exit = true;
+                _exit = true;
             }
         }
 
@@ -102,13 +102,13 @@ namespace Portia.Lite.Components
         {
             da.SetData(
                 0,
-                _constraint.ToJson());
+                _rule.ToJson());
         }
 
         protected static ParameterConfig NameParameter() =>
             new(
                 () => new Param_String(),
-                nameof(AbsNumericConstraint.Name),
+                nameof(AbsNumericRule.Name),
                 Docs.Name.Add(Prefix.String),
                 GH_ParamAccess.item);
 
@@ -124,9 +124,7 @@ namespace Portia.Lite.Components
             new(
                 () => new Param_Integer(),
                 nameof(Gate),
-                Docs
-                    .Gate.ByDefault(AbsNumericConstraint.DefGate)
-                    .Add(Prefix.Integer),
+                Docs.Gate.ByDefault(AbsNumericRule.DefGate).Add(Prefix.Integer),
                 GH_ParamAccess.item,
                 isOptional: true);
 
@@ -137,8 +135,7 @@ namespace Portia.Lite.Components
                 Docs
                     .MatchAll
                     .ByDefault(
-                        AbsCollectionConstraint<string, StringCondition>
-                            .DefMatchAll)
+                        AbsCollectionRule<string, StringCondition>.DefMatchAll)
                     .Add(Prefix.Boolean),
                 GH_ParamAccess.item,
                 isOptional: true);
@@ -171,16 +168,16 @@ namespace Portia.Lite.Components
                 Docs.BoundaryCondition.Add(Prefix.JsonList),
                 GH_ParamAccess.list);
 
-        protected static ParameterConfig ConstraintsParameter() =>
+        protected static ParameterConfig RuleParameter() =>
             new(
                 () => new Param_String(),
-                nameof(CompositeConstraint.Constraints),
-                Docs.CompositeConstraint + Prefix.JsonList,
+                nameof(CompositeRule.Rules),
+                Docs.CompositeRule + Prefix.JsonList,
                 GH_ParamAccess.list);
 
         protected ParameterStrategy BooleanStrategyFor<TRule>(
             string description)
-            where TRule : IConstraint, IBooleanLogic, new()
+            where TRule : IRule, IBooleanLogic, new()
         {
             return new ParameterStrategy(
                 new List<ParameterConfig>
@@ -199,8 +196,8 @@ namespace Portia.Lite.Components
                     var rule = new TRule { Name = _name };
                     rule.SetNegatableBaseCondition(condition);
 
-                    _constraint = rule;
-                    _constraint.Guard();
+                    _rule = rule;
+                    _rule.Guard();
                 },
                 description);
         }
@@ -209,7 +206,7 @@ namespace Portia.Lite.Components
             TCondition>(
             ParameterConfig conditionsConfig,
             string description)
-            where TRule : AbsBaseConstraint<TValue, TCondition>, new()
+            where TRule : AbsBaseRule<TValue, TCondition>, new()
             where TCondition : AbsCondition<TValue>
         {
             return new ParameterStrategy(
@@ -228,21 +225,21 @@ namespace Portia.Lite.Components
                         return;
                     }
 
-                    _constraint = new TRule
+                    _rule = new TRule
                     {
                         Name = _name,
                         Gate = _gate,
                         Conditions = jsons.FromJsonByTypeCheck<TCondition>()
                     };
 
-                    _constraint.Guard();
+                    _rule.Guard();
                 },
                 description);
         }
 
         protected ParameterStrategy NumericStrategyFor<TRule>(
             string description)
-            where TRule : AbsNumericConstraint, new()
+            where TRule : AbsNumericRule, new()
         {
             return GenericStrategyFor<TRule, double, NumericCondition>(
                 DoubleConditionsParameter(),
@@ -251,7 +248,7 @@ namespace Portia.Lite.Components
 
         protected ParameterStrategy StringStrategyFor<TRule>(
             string description)
-            where TRule : AbsStringConstraint, new()
+            where TRule : AbsStringRule, new()
         {
             return GenericStrategyFor<TRule, string, StringCondition>(
                 StringConditionsParameter(),
@@ -260,7 +257,7 @@ namespace Portia.Lite.Components
 
         protected ParameterStrategy VectorStrategyFor<TRule>(
             string description)
-            where TRule : AbsVectorConstraint, new()
+            where TRule : AbsVectorRule, new()
         {
             return GenericStrategyFor<TRule, Vector3d, VectorCondition>(
                 VectorConditionsParameter(),
@@ -269,7 +266,7 @@ namespace Portia.Lite.Components
 
         protected ParameterStrategy BoundaryStrategyFor<TRule>(
             string description)
-            where TRule : AbsBoundaryConstraint, new()
+            where TRule : AbsBoundaryRule, new()
         {
             return GenericStrategyFor<TRule, Point3d, BoundaryCondition>(
                 BoundaryConditionsParameter(),
@@ -278,12 +275,12 @@ namespace Portia.Lite.Components
 
         protected ParameterStrategy CompositeStrategyFor<TRule>(
             string description)
-            where TRule : CompositeConstraint, new()
+            where TRule : CompositeRule, new()
         {
             return new ParameterStrategy(
                 new List<ParameterConfig>
                 {
-                    NameParameter(), GateParameter(), ConstraintsParameter()
+                    NameParameter(), GateParameter(), RuleParameter()
                 },
                 da =>
                 {
@@ -296,14 +293,14 @@ namespace Portia.Lite.Components
                         return;
                     }
 
-                    var nested = jsons.FromJson<IConstraint>().ToList();
+                    var nested = jsons.FromJson<IRule>().ToList();
 
-                    _constraint = new TRule
+                    _rule = new TRule
                     {
-                        Name = _name, Gate = _gate, Constraints = nested
+                        Name = _name, Gate = _gate, Rules = nested
                     };
 
-                    _constraint.Guard();
+                    _rule.Guard();
                 },
                 description);
         }
@@ -313,7 +310,7 @@ namespace Portia.Lite.Components
             TCondition>(
             ParameterConfig conditionsParameterConfig,
             string description)
-            where TRule : AbsCollectionConstraint<TValue, TCondition>, new()
+            where TRule : AbsCollectionRule<TValue, TCondition>, new()
             where TCondition : AbsCondition<TValue>
         {
             return new ParameterStrategy(
@@ -330,8 +327,7 @@ namespace Portia.Lite.Components
 
                     bool matchAll = da.GetOptionalItem(
                         2,
-                        AbsCollectionConstraint<TValue, TCondition>
-                            .DefMatchAll);
+                        AbsCollectionRule<TValue, TCondition>.DefMatchAll);
 
                     if (!da.GetItems(
                             3,
@@ -340,7 +336,7 @@ namespace Portia.Lite.Components
                         return;
                     }
 
-                    _constraint = new TRule
+                    _rule = new TRule
                     {
                         Name = _name,
                         Gate = _gate,
@@ -348,14 +344,14 @@ namespace Portia.Lite.Components
                         Conditions = jsons.FromJsonByTypeCheck<TCondition>()
                     };
 
-                    _constraint.Guard();
+                    _rule.Guard();
                 },
                 description);
         }
 
         protected ParameterStrategy StringCollectionStrategyFor<TRule>(
             string description)
-            where TRule : AbsStringCollectionConstraint, new()
+            where TRule : AbsStringCollectionRule, new()
         {
             return CollectionStrategyFor<TRule, string, StringCondition>(
                 StringConditionsParameter(),
@@ -364,108 +360,97 @@ namespace Portia.Lite.Components
 
         protected ParameterStrategy VectorCollectionStrategyFor<TRule>(
             string description)
-            where TRule : AbsVectorCollectionConstraint, new()
+            where TRule : AbsVectorCollectionRule, new()
         {
             return CollectionStrategyFor<TRule, Vector3d, VectorCondition>(
                 VectorConditionsParameter(),
                 description);
         }
 
-        protected override Dictionary<ConstraintMode, ParameterStrategy>
+        protected override Dictionary<RuleMode, ParameterStrategy>
             DefineParameterStrategy()
         {
-            return new Dictionary<ConstraintMode, ParameterStrategy>
+            return new Dictionary<RuleMode, ParameterStrategy>
             {
                 {
-                    ConstraintMode.Composite,
-                    CompositeStrategyFor<CompositeConstraint>(
-                        Docs.CompositeConstraint)
+                    RuleMode.Composite,
+                    CompositeStrategyFor<CompositeRule>(Docs.CompositeRule)
                 },
                 {
-                    ConstraintMode.IndexConstraint,
-                    NumericStrategyFor<NodeAdjacencyConstraint>(
-                        Docs.IndexConstraint)
+                    RuleMode.IndexRule,
+                    NumericStrategyFor<NodeAdjacencyRule>(Docs.IndexRule)
                 },
                 {
-                    ConstraintMode.TypeConstraint,
-                    StringStrategyFor<TypeConstraint>(Docs.TypeConstraint)
+                    RuleMode.TypeRule,
+                    StringStrategyFor<TypeRule>(Docs.TypeRule)
                 },
                 {
-                    ConstraintMode.Node_Adjacency,
-                    NumericStrategyFor<NodeAdjacencyConstraint>(
-                        Docs.NodeAdjacency)
+                    RuleMode.Node_Adjacency,
+                    NumericStrategyFor<NodeAdjacencyRule>(Docs.NodeAdjacency)
                 },
                 {
-                    ConstraintMode.Node_AdjacentEdgeType,
-                    StringCollectionStrategyFor<NodeAdjacentEdgeTypeConstraint>(
+                    RuleMode.Node_AdjacentEdgeType,
+                    StringCollectionStrategyFor<NodeAdjacentEdgeTypeRule>(
                         Docs.NodeAdjacentEdgeType)
                 },
                 {
-                    ConstraintMode.Node_Proximity,
-                    NumericStrategyFor<NodeProximityConstraint>(
-                        Docs.NodeProximity)
+                    RuleMode.Node_Proximity,
+                    NumericStrategyFor<NodeProximityRule>(Docs.NodeProximity)
                 },
                 {
-                    ConstraintMode.Node_VectorSum,
-                    NumericStrategyFor<NodeVectorSumConstraint>(
-                        Docs.NodeVectorSum)
+                    RuleMode.Node_VectorSum,
+                    NumericStrategyFor<NodeVectorSumRule>(Docs.NodeVectorSum)
                 },
                 {
-                    ConstraintMode.Node_IsLeaf,
-                    BooleanStrategyFor<IsLeafNodeConstraint>(Docs.IsLeafNode)
+                    RuleMode.Node_IsLeaf,
+                    BooleanStrategyFor<IsLeafNodeRule>(Docs.IsLeafNode)
                 },
                 {
-                    ConstraintMode.Node_AdjacentVectorSimilarity,
+                    RuleMode.Node_AdjacentVectorSimilarity,
                     VectorCollectionStrategyFor<
-                        NodeAdjacentVectorSimilarityConstraint>(
+                        NodeAdjacentVectorSimilarityRule>(
                         Docs.NodeAdjacentVectorSimilarity)
                 },
                 {
-                    ConstraintMode.Node_InBoundary,
-                    BoundaryStrategyFor<NodeInBoundaryConstraint>(
-                        Docs.NodeInBoundary)
+                    RuleMode.Node_InBoundary,
+                    BoundaryStrategyFor<NodeInBoundaryRule>(Docs.NodeInBoundary)
                 },
                 {
-                    ConstraintMode.Edge_Length,
-                    NumericStrategyFor<EdgeLengthConstraint>(Docs.EdgeLength)
+                    RuleMode.Edge_Length,
+                    NumericStrategyFor<EdgeLengthRule>(Docs.EdgeLength)
                 },
                 {
-                    ConstraintMode.Edge_StartAdjacency,
-                    NumericStrategyFor<EdgeStartAdjacencyConstraint>(
+                    RuleMode.Edge_StartAdjacency,
+                    NumericStrategyFor<EdgeStartAdjacencyRule>(
                         Docs.StartAdjacency)
                 },
                 {
-                    ConstraintMode.Edge_EndAdjacency,
-                    NumericStrategyFor<EndAdjacencyConstraint>(
-                        Docs.EndAdjacency)
+                    RuleMode.Edge_EndAdjacency,
+                    NumericStrategyFor<EndAdjacencyRule>(Docs.EndAdjacency)
                 },
                 {
-                    ConstraintMode.Edge_StartIndex,
-                    NumericStrategyFor<EdgeStartIndexConstraint>(
-                        Docs.EdgeStartIndex)
+                    RuleMode.Edge_StartIndex,
+                    NumericStrategyFor<EdgeStartIndexRule>(Docs.EdgeStartIndex)
                 },
                 {
-                    ConstraintMode.Edge_StartType,
-                    StringStrategyFor<EdgeStartTypeConstraint>(
-                        Docs.EdgeStartType)
+                    RuleMode.Edge_StartType,
+                    StringStrategyFor<EdgeStartTypeRule>(Docs.EdgeStartType)
                 },
                 {
-                    ConstraintMode.Edge_EndIndex,
-                    NumericStrategyFor<EdgeEndIndexConstraint>(
-                        Docs.EdgeEndIndex)
+                    RuleMode.Edge_EndIndex,
+                    NumericStrategyFor<EdgeEndIndexRule>(Docs.EdgeEndIndex)
                 },
                 {
-                    ConstraintMode.Edge_EndType,
-                    StringStrategyFor<EdgeEndTypeConstraint>(Docs.EdgeEndType)
+                    RuleMode.Edge_EndType,
+                    StringStrategyFor<EdgeEndTypeRule>(Docs.EdgeEndType)
                 },
                 {
-                    ConstraintMode.Edge_IsLinear,
-                    BooleanStrategyFor<IsLinearEdgeConstraint>(
-                        Docs.IsLinearRule)
+                    RuleMode.Edge_IsLinear,
+                    BooleanStrategyFor<IsLinearEdgeRule>(Docs.IsLinearRule)
                 },
                 {
-                    ConstraintMode.Edge_VectorSimilarity,
-                    VectorStrategyFor<EdgeVectorSimilarityConstraint>(
+                    RuleMode.Edge_VectorSimilarity,
+                    VectorStrategyFor<EdgeVectorSimilarityRule>(
                         Docs.EdgeSimilarity)
                 },
             };
