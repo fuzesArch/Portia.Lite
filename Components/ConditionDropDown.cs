@@ -16,8 +16,8 @@ namespace Portia.Lite.Components
     {
         public ConditionDropDown()
             : base(
-                nameof(NumericCondition).Substring(6).AddDropDownMark(),
-                Docs.Condition.AddDropDownNote(),
+                nameof(NumericCondition).Substring(7),
+                Docs.Condition,
                 Naming.Tab,
                 Naming.Tab)
         {

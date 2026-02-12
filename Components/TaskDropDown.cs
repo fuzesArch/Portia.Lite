@@ -22,9 +22,8 @@ namespace Portia.Lite.Components
                 nameof(TaskDropDown)
                     .Substring(
                         0,
-                        4)
-                    .AddDropDownMark(),
-                Docs.Task.AddDropDownNote(),
+                        4),
+                Docs.Task,
                 Naming.Tab,
                 Naming.Tab)
         {
@@ -120,9 +119,9 @@ namespace Portia.Lite.Components
             _task = new T { Rules = _rules, Types = types };
         }
 
-        protected void ByGet<T>(
+        protected void ByFilter<T>(
             IGH_DataAccess da)
-            where T : AbsGetTask, new()
+            where T : AbsFilterTask, new()
         {
             SetRules(da);
 
@@ -238,16 +237,16 @@ namespace Portia.Lite.Components
                         Docs.SetEdgeTypes)
                 },
                 {
-                    TaskType.GetNodes, new ParameterStrategy(
+                    TaskType.FilterNodes, new ParameterStrategy(
                         new List<ParameterConfig> { NodeRuleParameter(), },
-                        ByGet<GetNodes>,
-                        Docs.GetNodes)
+                        ByFilter<FilterNodes>,
+                        Docs.FilterNodes)
                 },
                 {
-                    TaskType.GetEdges, new ParameterStrategy(
+                    TaskType.FilterEdges, new ParameterStrategy(
                         new List<ParameterConfig> { EdgeRuleParameter(), },
-                        ByGet<GetEdges>,
-                        Docs.GetEdges)
+                        ByFilter<FilterEdges>,
+                        Docs.FilterEdges)
                 },
                 {
                     TaskType.VerifyNodes, new ParameterStrategy(

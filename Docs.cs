@@ -4,31 +4,6 @@ namespace Portia.Lite
 {
     public static class Docs
     {
-        public static string AddDropDownMark(
-            this string text)
-        {
-            if (string.IsNullOrEmpty(text))
-            {
-                return text;
-            }
-
-            return "< " + text;
-        }
-
-        public static string AddDropDownNote(
-            this string text)
-        {
-            if (string.IsNullOrEmpty(text))
-            {
-                return text;
-            }
-
-            return
-                $"{text}{Environment.NewLine}Right-click to change the input structure!";
-        }
-
-        public static string TemporaryUnused => "TODO";
-
         public static string NumericRelation =>
             "Numerical comparison logic (Equal, GreaterThan, ..) for filtering floating point numbers.";
 
@@ -56,7 +31,13 @@ namespace Portia.Lite
         public static string PortiaComponent =>
             "The core building block of the Portia ecosystem, " +
             "designed to manage complex graph logic with architectural data " +
-            "through customizable Task inputs.";
+            "through customizable Task inputs." + Environment.NewLine +
+            Environment.NewLine +
+            "The Portia module ecosystem is developed and maintained by Bálint Füzes." +
+            Environment.NewLine +
+            "For development inquiries, enterprise customization requests, or technical feedback, please reach out via the following channels:" +
+            Environment.NewLine + "https://fuzesarch.com/" +
+            Environment.NewLine + "balint@fuzesarch.com";
 
         public static string Condition =>
             "Defines a logical filter rule based on the relationship " +
@@ -194,11 +175,11 @@ namespace Portia.Lite
             "A modification Task that assigns specific Type string values to " +
             "existing graph Edges for categorization.";
 
-        public static string GetNodes =>
+        public static string FilterNodes =>
             "A retrieval (query) Task that extracts Node identity values and geometry data " +
             "from the graph for downstream modeling.";
 
-        public static string GetEdges =>
+        public static string FilterEdges =>
             "A retrieval (query) Task that extracts Edge identity values and geometry data " +
             "from the graph for downstream modeling.";
 

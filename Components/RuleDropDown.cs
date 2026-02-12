@@ -22,8 +22,7 @@ namespace Portia.Lite.Components
                 nameof(RuleDropDown)
                     .Substring(
                         0,
-                        4)
-                    .AddDropDownMark(),
+                        4),
                 Docs.Rule,
                 Naming.Tab,
                 Naming.Tab)
@@ -379,15 +378,15 @@ namespace Portia.Lite.Components
                 },
                 {
                     RuleMode.IndexRule,
-                    NumericStrategyFor<NodeAdjacencyRule>(Docs.IndexRule)
+                    NumericStrategyFor<NodeDegreeRule>(Docs.IndexRule)
                 },
                 {
                     RuleMode.TypeRule,
                     StringStrategyFor<TypeRule>(Docs.TypeRule)
                 },
                 {
-                    RuleMode.Node_Adjacency,
-                    NumericStrategyFor<NodeAdjacencyRule>(Docs.NodeAdjacency)
+                    RuleMode.Node_Degree,
+                    NumericStrategyFor<NodeDegreeRule>(Docs.NodeAdjacency)
                 },
                 {
                     RuleMode.Node_AdjacentEdgeType,

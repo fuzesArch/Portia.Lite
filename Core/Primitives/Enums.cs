@@ -14,17 +14,17 @@ namespace Portia.Lite.Core.Primitives
 
     public enum RuleMode
     {
-        [Category("Nodes / Edges")]
+        [Category("Composite")]
         Composite,
 
-        [Category("Nodes / Edges")]
+        [Category("Universal: Nodes / Edges")]
         IndexRule,
 
-        [Category("Nodes / Edges")]
+        [Category("Universal: Nodes / Edges")]
         TypeRule,
 
         [Category("Nodes")]
-        Node_Adjacency,
+        Node_Degree,
 
         [Category("Nodes")]
         Node_AdjacentEdgeType,
@@ -80,8 +80,8 @@ namespace Portia.Lite.Core.Primitives
         SetCurves,
         SetNodeTypes,
         SetEdgeTypes,
-        GetNodes,
-        GetEdges,
+        FilterNodes,
+        FilterEdges,
         VerifyNodes,
         VerifyEdges,
     }
