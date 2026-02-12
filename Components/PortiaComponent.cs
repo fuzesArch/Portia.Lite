@@ -118,6 +118,8 @@ namespace Portia.Lite.Components
                 da,
                 this,
                 requiredQueries);
+
+            Message = pipeline.Graph.ComponentMessage();
         }
 
         private bool OutputsMismatch(

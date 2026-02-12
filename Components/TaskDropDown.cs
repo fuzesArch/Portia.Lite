@@ -61,6 +61,7 @@ namespace Portia.Lite.Components
         protected override void CommonOutputSetting(
             IGH_DataAccess da)
         {
+            _task.Guard();
             Message = _task.ComponentMessage();
 
             da.SetData(
@@ -117,7 +118,6 @@ namespace Portia.Lite.Components
             }
 
             _task = new T { Rules = _rules, Types = types };
-            _task.Guard();
         }
 
         protected void ByGet<T>(
@@ -129,7 +129,6 @@ namespace Portia.Lite.Components
             if (_rules == null) { return; }
 
             _task = new T { Rules = _rules };
-            _task.Guard();
         }
 
         protected void ByVerify<T>(
@@ -152,7 +151,6 @@ namespace Portia.Lite.Components
                 Rules = _rules,
                 Logics = logicJsons.FromJson<IRule>().ToList()
             };
-            _task.Guard();
         }
 
         protected static ParameterConfig NodeRuleParameter() =>
