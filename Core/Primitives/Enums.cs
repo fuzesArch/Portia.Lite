@@ -39,19 +39,22 @@ namespace Portia.Lite.Core.Primitives
         Node_IsLeaf,
 
         [Category("Nodes")]
-        Node_AdjacentVectorSimilarity,
+        Node_AdjacentEdgeVectorSimilarity,
 
         [Category("Nodes")]
         Node_InBoundary,
 
         [Category("Edges")]
-        Edge_Length,
+        Edge_CurveLength,
 
         [Category("Edges")]
-        Edge_StartAdjacency,
+        Edge_StartEndDistance,
 
         [Category("Edges")]
-        Edge_EndAdjacency,
+        Edge_StartDegree,
+
+        [Category("Edges")]
+        Edge_EndDegree,
 
         [Category("Edges")]
         Edge_StartIndex,
@@ -78,6 +81,8 @@ namespace Portia.Lite.Core.Primitives
     public enum TaskType
     {
         SetCurves,
+        SetNodeIndices,
+        SetEdgeIndices,
         SetNodeTypes,
         SetEdgeTypes,
         FilterNodes,

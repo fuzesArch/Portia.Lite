@@ -96,8 +96,8 @@ namespace Portia.Lite
             "of its connected Edges. Useful for identifying hybrid structural junctions, or " +
             "setting the Type of a Node based on its neighbour.";
 
-        public static string NodeAdjacentVectorSimilarity =>
-            "A topological query that validates a Node based on the Vectors " +
+        public static string NodeAdjacentEdgeVectorSimilarity =>
+            "A topological query that validates a Node based on the outgoing vectors " +
             "of its connected Edges. Useful for identifying hybrid structural junctions, or " +
             "setting the Type of a Node based on its neighbouring Edge constellation.";
 
@@ -118,9 +118,17 @@ namespace Portia.Lite
             "A rule that checks the spatial distance between Nodes " +
             "regardless of direct edge connections.";
 
-        public static string NodeVectorSum =>
+        public static string NodeVectorScalarSum =>
             "A rule that calculates the resultant force or orientation of a node " +
-            "by summing the directional vectors of all connected edges.";
+            "by summing the directional vectors of all connected edges." +
+            Environment.NewLine +
+            "0.0 / Perfect Symmetry: A cross(X) or a star where every force is perfectly cancelled out by an opposite one." +
+            Environment.NewLine +
+            "Close to 0.0 /	Balanced Junction: A standard 'T1 junction or a straight line (180°). The vectors point in opposite directions, 'pulling' the node equally." +
+            Environment.NewLine +
+            "1.0 /	Unbalanced / Corner: A 90° corner with two edges.The vectors don't cancel out; they combine to point toward the 'outside' of the corner." +
+            Environment.NewLine +
+            "High ( > 2.0) / Acute Bunching: Many edges all pointing in roughly the same direction.The node is 'heavily weighted' toward one side.";
 
         public static string IsLeafNode =>
             "A binary validation rule that identifies 'leaf' nodes—elements " +
@@ -129,14 +137,16 @@ namespace Portia.Lite
         public static string EdgeSimilarity =>
             "A geometric rule that compares an Edge's start tangent vector to the input vectors by the input conditions.";
 
-        public static string EdgeLength =>
-            "A rule that evaluates the physical length of an Edge curve.";
+        public static string EdgeCurveLength =>
+            "A rule that evaluates the physical length of an Edge' curve.";
 
-        public static string StartAdjacency =>
+        public static string EdgeStartEndDistance =>
+            "A rule that evaluates the virtual length between the Start and End Node Centroids of an Edge.";
+
+        public static string StartDegree =>
             "A rule that evaluates the direct neighbouring Edge count of an Edge's start Node.";
 
-
-        public static string EndAdjacency =>
+        public static string EndDegree =>
             "A rule that evaluates the direct neighbouring Edge count of an Edge's end Node.";
 
         public static string EdgeStartIndex =>
@@ -166,6 +176,14 @@ namespace Portia.Lite
         public static string SetCurves =>
             "A primary Task that translates geometric curves into graph-compatible " +
             "edge data for network processing.";
+
+        public static string SetNodeIndices =>
+            "A modification Task that assigns specific Index integer values to " +
+            "existing graph Nodes for categorization.";
+
+        public static string SetEdgeIndices =>
+            "A modification Task that assigns specificIndex integer values to " +
+            "existing graph Edges for categorization.";
 
         public static string SetNodeTypes =>
             "A modification Task that assigns specific Type string values to " +
@@ -199,9 +217,13 @@ namespace Portia.Lite
             "The optional Type strings assigned to the Edges during the " +
             "initial graph generation process, used for categorization.";
 
+        public static string Indices =>
+            "The specific integer-based Index values to be assigned to the " +
+            "elements that get captured by the current input Rule.";
+
         public static string Types =>
             "The specific text-based Type values to be assigned to the " +
-            "elements that get captured by the current input Selection logics.";
+            "elements that get captured by the current input Rule.";
 
         public static string NodeLogics =>
             "The graph logic rules that verify the topological or " +

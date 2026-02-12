@@ -399,34 +399,40 @@ namespace Portia.Lite.Components
                 },
                 {
                     RuleMode.Node_VectorSum,
-                    NumericStrategyFor<NodeVectorSumRule>(Docs.NodeVectorSum)
+                    NumericStrategyFor<NodeVectorScalarSumRule>(
+                        Docs.NodeVectorScalarSum)
                 },
                 {
                     RuleMode.Node_IsLeaf,
                     BooleanStrategyFor<IsLeafNodeRule>(Docs.IsLeafNode)
                 },
                 {
-                    RuleMode.Node_AdjacentVectorSimilarity,
+                    RuleMode.Node_AdjacentEdgeVectorSimilarity,
                     VectorCollectionStrategyFor<
-                        NodeAdjacentVectorSimilarityRule>(
-                        Docs.NodeAdjacentVectorSimilarity)
+                        NodeAdjacentEdgeVectorSimilarityRule>(
+                        Docs.NodeAdjacentEdgeVectorSimilarity)
                 },
                 {
                     RuleMode.Node_InBoundary,
                     BoundaryStrategyFor<NodeInBoundaryRule>(Docs.NodeInBoundary)
                 },
                 {
-                    RuleMode.Edge_Length,
-                    NumericStrategyFor<EdgeLengthRule>(Docs.EdgeLength)
+                    RuleMode.Edge_CurveLength,
+                    NumericStrategyFor<EdgeCurveLengthRule>(
+                        Docs.EdgeCurveLength)
                 },
                 {
-                    RuleMode.Edge_StartAdjacency,
-                    NumericStrategyFor<EdgeStartAdjacencyRule>(
-                        Docs.StartAdjacency)
+                    RuleMode.Edge_StartEndDistance,
+                    NumericStrategyFor<EdgeStartEndDistanceRule>(
+                        Docs.EdgeStartEndDistance)
                 },
                 {
-                    RuleMode.Edge_EndAdjacency,
-                    NumericStrategyFor<EndAdjacencyRule>(Docs.EndAdjacency)
+                    RuleMode.Edge_StartDegree,
+                    NumericStrategyFor<EdgeStartDegreeRule>(Docs.StartDegree)
+                },
+                {
+                    RuleMode.Edge_EndDegree,
+                    NumericStrategyFor<EndDegreeRule>(Docs.EndDegree)
                 },
                 {
                     RuleMode.Edge_StartIndex,

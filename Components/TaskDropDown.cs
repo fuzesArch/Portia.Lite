@@ -101,6 +101,25 @@ namespace Portia.Lite.Components
                 tags);
         }
 
+        protected void BySetIndices<T>(
+            IGH_DataAccess da)
+            where T : AbsSetIndices, new()
+        {
+            SetRules(da);
+
+            if (_rules == null) { return; }
+
+            if (!da.GetItems(
+                    1,
+                    out List<int> indices))
+            {
+                return;
+            }
+
+            _task = new T { Rules = _rules, Indices = indices };
+        }
+
+
         protected void BySetTypes<T>(
             IGH_DataAccess da)
             where T : AbsSetTypes, new()
@@ -181,6 +200,13 @@ namespace Portia.Lite.Components
                 Docs.EdgeLogics.Add(Prefix.JsonList),
                 GH_ParamAccess.list);
 
+        protected static ParameterConfig IndicesParameter() =>
+            new(
+                () => new Param_Integer(),
+                nameof(AbsSetIndices.Indices),
+                Docs.Indices.Add(Prefix.IntegerList),
+                GH_ParamAccess.list);
+
         protected static ParameterConfig TypesParameter() =>
             new(
                 () => new Param_String(),
@@ -217,6 +243,24 @@ namespace Portia.Lite.Components
                         },
                         BySetCurves,
                         Docs.SetCurves)
+                },
+                {
+                    TaskType.SetNodeIndices, new ParameterStrategy(
+                        new List<ParameterConfig>
+                        {
+                            NodeRuleParameter(), IndicesParameter()
+                        },
+                        BySetIndices<SetNodeIndices>,
+                        Docs.SetNodeIndices)
+                },
+                {
+                    TaskType.SetEdgeIndices, new ParameterStrategy(
+                        new List<ParameterConfig>
+                        {
+                            EdgeRuleParameter(), IndicesParameter()
+                        },
+                        BySetIndices<SetEdgeIndices>,
+                        Docs.SetEdgeIndices)
                 },
                 {
                     TaskType.SetNodeTypes, new ParameterStrategy(
