@@ -225,12 +225,12 @@ namespace Portia.Lite
             "The specific text-based Type values to be assigned to the " +
             "elements that get captured by the current input Rule.";
 
-        public static string NodeLogics =>
+        public static string NodeRulesToVerify =>
             "The graph logic rules that verify the topological or " +
             "geometric integrity of the Nodes that are captured " +
             "by the input Node rules!";
 
-        public static string EdgeLogics =>
+        public static string EdgeRulesToVerify =>
             "The graph logic rules that verify the topological or " +
             "geometric integrity of the Edges that are captured " +
             "by the input Edge rules!";

@@ -378,7 +378,7 @@ namespace Portia.Lite.Components
                 },
                 {
                     RuleMode.IndexRule,
-                    NumericStrategyFor<NodeDegreeRule>(Docs.IndexRule)
+                    NumericStrategyFor<IndexRule>(Docs.IndexRule)
                 },
                 {
                     RuleMode.TypeRule,

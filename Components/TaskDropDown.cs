@@ -159,7 +159,7 @@ namespace Portia.Lite.Components
 
             if (!da.GetItems(
                     1,
-                    out List<string> logicJsons))
+                    out List<string> rulesToVerifyJsons))
             {
                 return;
             }
@@ -167,7 +167,8 @@ namespace Portia.Lite.Components
             _task = new T
             {
                 Rules = _rules,
-                Logics = logicJsons.FromJson<IRule>().ToList()
+                RulesToVerify =
+                    rulesToVerifyJsons.FromJson<IRule>().ToList()
             };
         }
 
@@ -185,19 +186,19 @@ namespace Portia.Lite.Components
                 Docs.EdgeRule,
                 GH_ParamAccess.list);
 
-        protected static ParameterConfig NodeLogicsParameter() =>
+        protected static ParameterConfig NodeRulesToVerifyParameter() =>
             new(
                 () => new Param_String(),
-                nameof(Docs.NodeLogics),
-                Docs.NodeLogics.Add(Prefix.JsonList),
+                nameof(Docs.NodeRulesToVerify),
+                Docs.NodeRulesToVerify.Add(Prefix.JsonList),
                 GH_ParamAccess.list);
 
 
-        protected static ParameterConfig EdgeLogicsParameter() =>
+        protected static ParameterConfig EdgeRulesToVerifyParameter() =>
             new(
                 () => new Param_String(),
-                nameof(Docs.EdgeLogics),
-                Docs.EdgeLogics.Add(Prefix.JsonList),
+                nameof(Docs.EdgeRulesToVerify),
+                Docs.EdgeRulesToVerify.Add(Prefix.JsonList),
                 GH_ParamAccess.list);
 
         protected static ParameterConfig IndicesParameter() =>
@@ -296,7 +297,7 @@ namespace Portia.Lite.Components
                     TaskType.VerifyNodes, new ParameterStrategy(
                         new List<ParameterConfig>
                         {
-                            NodeRuleParameter(), NodeLogicsParameter()
+                            NodeRuleParameter(), NodeRulesToVerifyParameter()
                         },
                         ByVerify<VerifyNodes>,
                         Docs.VerifyNodes)
@@ -305,7 +306,7 @@ namespace Portia.Lite.Components
                     TaskType.VerifyEdges, new ParameterStrategy(
                         new List<ParameterConfig>
                         {
-                            EdgeRuleParameter(), EdgeLogicsParameter()
+                            EdgeRuleParameter(), EdgeRulesToVerifyParameter()
                         },
                         ByVerify<VerifyEdges>,
                         Docs.VerifyEdges)
