@@ -36,9 +36,11 @@
   <ItemGroup>
     <Reference Include="Ed.Eto, Version=1.0.0.0, Culture=neutral, PublicKeyToken=552281e97c755530, processorArchitecture=MSIL">
       <HintPath>..\packages\RhinoCommon.8.27.26019.16021\lib\net48\Ed.Eto.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Eto, Version=2.11.0.0, Culture=neutral, PublicKeyToken=552281e97c755530, processorArchitecture=MSIL">
       <HintPath>..\packages\RhinoCommon.8.27.26019.16021\lib\net48\Eto.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="GH_IO, Version=8.27.26019.16021, Culture=neutral, PublicKeyToken=6a29997d2e6b4f97, processorArchitecture=MSIL">
       <HintPath>..\packages\Grasshopper.8.27.26019.16021\lib\net48\GH_IO.dll</HintPath>
