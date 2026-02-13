@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Portia.Infrastructure.Core.Portia.Tasks;
+using System;
 
 namespace Portia.Lite
 {
@@ -32,12 +33,31 @@ namespace Portia.Lite
             "The core building block of the Portia ecosystem, " +
             "designed to manage complex graph logic with architectural data " +
             "through customizable Task inputs." + Environment.NewLine +
+            "Portia reorders the input Tasks in the following order (independent from the input order after" +
+            "the first curve setting task):" + Environment.NewLine +
+            Environment.NewLine + $"Foundation  /  {nameof(SetCurves)}" +
             Environment.NewLine +
-            "The Portia module ecosystem is developed and maintained by Bálint Füzes." +
+            $"Identity  /  {nameof(SetNodeIndices)} & {nameof(SetEdgeIndices)}" +
             Environment.NewLine +
-            "For development inquiries, enterprise customization requests, or technical feedback, please reach out via the following channels:" +
-            Environment.NewLine + "https://fuzesarch.com/" +
-            Environment.NewLine + "balint@fuzesarch.com";
+            $"Topology  /  {nameof(SetNodeTypes)} & {nameof(SetEdgeTypes)}" +
+            Environment.NewLine +
+            $"Selection  /  {nameof(FilterNodes)} & {nameof(FilterEdges)}" +
+            Environment.NewLine +
+            $"Validation  /  {nameof(VerifyNodes)} & {nameof(VerifyEdges)}" +
+            Environment.NewLine + Environment.NewLine + "•••" +
+            Environment.NewLine + Environment.NewLine +
+            "The PORTIA ecosystem is developed and maintained by Bálint Füzes of FUZES/ARCH." +
+            Environment.NewLine +
+            "I am always happy to discuss new development ideas, roadmap suggestions, or " +
+            "specific enterprise customization needs." + Environment.NewLine +
+            " Whether you have technical feedback or just want to say hello, please feel free to reach out:" +
+            Environment.NewLine + Environment.NewLine +
+            "• Web: https://fuzesarch.com/" + Environment.NewLine +
+            "• Direct: balint@fuzesarch.com | info@fuzesarch.com" +
+            Environment.NewLine + "• Discord: https://discord.gg/GHXCYeX5" +
+            Environment.NewLine + Environment.NewLine + Environment.NewLine +
+            "You are also warmly invited to explore and contribute to the open-source core here:" +
+            Environment.NewLine + "https://github.com/fuzesArch/Portia.Lite";
 
         public static string Condition =>
             "Defines a logical filter rule based on the relationship " +

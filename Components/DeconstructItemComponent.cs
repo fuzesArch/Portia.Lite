@@ -27,7 +27,7 @@ namespace Portia.Lite.Components
             new("c7ca6133-1a0f-4d40-80c6-7761eaabaa5a");
 
         protected override System.Drawing.Bitmap Icon =>
-            Properties.Resources.ColoredLogo;
+            Properties.Resources.BaseLogo;
 
         protected override void RegisterInputParams(
             GH_InputParamManager pManager)

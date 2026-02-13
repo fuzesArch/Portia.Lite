@@ -63,9 +63,9 @@ namespace Portia.Lite.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap ColoredLogo {
+        internal static System.Drawing.Bitmap BaseLogo {
             get {
-                object obj = ResourceManager.GetObject("ColoredLogo", resourceCulture);
+                object obj = ResourceManager.GetObject("BaseLogo", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -73,9 +73,9 @@ namespace Portia.Lite.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap ColoredPortiaLogo {
+        internal static System.Drawing.Bitmap PortiaLogo {
             get {
-                object obj = ResourceManager.GetObject("ColoredPortiaLogo", resourceCulture);
+                object obj = ResourceManager.GetObject("PortiaLogo", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

@@ -33,7 +33,7 @@ namespace Portia.Lite.Components
             new("700c752f-a51e-4a2e-944a-a8941d1fc518");
 
         protected override System.Drawing.Bitmap Icon =>
-            Properties.Resources.ColoredLogo;
+            Properties.Resources.BaseLogo;
 
         private AbsTask _task;
         private List<IRule> _rules;
