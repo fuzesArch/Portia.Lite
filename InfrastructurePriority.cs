@@ -31,7 +31,7 @@ namespace Portia.Lite
             object sender,
             GH_SolutionEventArgs e)
         {
-            GraphMemoryCache.Clear();
+            GraphCache.Clear();
         }
     }
 }

@@ -229,7 +229,8 @@ namespace Portia.Lite.Components
                     {
                         Name = _name,
                         Gate = _gate,
-                        Conditions = jsons.FromJsonByTypeCheck<TCondition>()
+                        Conditions =
+                            jsons.FromJsonByConditionTypeCheck<TCondition>()
                     };
 
                     _rule.Guard();
@@ -341,7 +342,8 @@ namespace Portia.Lite.Components
                         Name = _name,
                         Gate = _gate,
                         MatchAll = matchAll,
-                        Conditions = jsons.FromJsonByTypeCheck<TCondition>()
+                        Conditions =
+                            jsons.FromJsonByConditionTypeCheck<TCondition>()
                     };
 
                     _rule.Guard();

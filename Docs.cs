@@ -33,9 +33,6 @@ namespace Portia.Lite
             "The core building block of the Portia ecosystem, " +
             "a graph structure designed to manage complex graph logic with architectural data.";
 
-        public static string NodeRule =>
-            "Defines a localized graph process that evaluates " +
-            "Nodes based on their geometric and topological behavior.";
 
         public static string PortiaComponent =>
             "The core building block of the Portia ecosystem, " +
@@ -43,7 +40,8 @@ namespace Portia.Lite
             "through customizable Task inputs." + Environment.NewLine +
             "Portia reorders the input Tasks in the following order (independent from the input order after" +
             "the first curve setting task):" + Environment.NewLine +
-            Environment.NewLine + $"Foundation  /  {nameof(SetGraphByCurves)}" +
+            Environment.NewLine +
+            $"Foundation  /  {nameof(SetGraphByCurves)} & {nameof(LoadGraph)}" +
             Environment.NewLine +
             $"Identity  /  {nameof(SetNodeIndices)} & {nameof(SetEdgeIndices)}" +
             Environment.NewLine +
@@ -103,7 +101,7 @@ namespace Portia.Lite
             "Defines a localized graph process that evaluates " +
             "nodes or edges based on their geometric and topological behavior.";
 
-        public static string EdgeRule =>
+        public static string EdgeRules =>
             "Defines a localized graph process that evaluates " +
             "Edges based on their geometric and topological behavior.";
 
@@ -114,6 +112,10 @@ namespace Portia.Lite
         public static string TypeRule =>
             "Defines a localized graph process that evaluates both " +
             "Nodes AND Edges based on their text-based Type value.";
+
+        public static string NodeRules =>
+            "Defines a localized graph process that evaluates " +
+            "Nodes based on their geometric and topological behavior.";
 
         public static string NodeAdjacentEdgeType =>
             "A topological query that validates a Node based on the Type " +
@@ -205,6 +207,10 @@ namespace Portia.Lite
             "A primary Task that activates a Graph instance from the input " +
             "Graph Goo wrapper.";
 
+        public static string Amalgamate =>
+            "Fuses an external Payload Graph into the " +
+            "active Host Graph based on topological Target and Anchor matches.";
+
         public static string SetNodeIndices =>
             "A modification Task that assigns specific Index integer values to " +
             "existing graph Nodes for categorization.";
@@ -262,6 +268,14 @@ namespace Portia.Lite
             "The graph logic rules that verify the topological or " +
             "geometric integrity of the Edges that are captured " +
             "by the input Edge rules!";
+
+        public static string TargetNodeRules =>
+            "Rules defining the exact insertion points " +
+            "on the host Graph. (Must be Node Rules).";
+
+        public static string AnchorNodeRules =>
+            "Rules defining the exact receiving connection points " +
+            "on the Payload Graph. (Must be Node Rules).";
 
         public static string Name =>
             "A unique identifier used to label logic results and " +
