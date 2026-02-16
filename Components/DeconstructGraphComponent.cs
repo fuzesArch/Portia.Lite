@@ -43,10 +43,10 @@ namespace Portia.Lite.Components
         {
             OutGenerics(
                     nameof(Graph.Nodes),
-                    Docs.GraphItem)
+                    Docs.GraphItemGoo)
                 .OutGenerics(
                     nameof(Graph.Edges),
-                    Docs.GraphItem)
+                    Docs.GraphItemGoo)
                 .OutJson(
                     nameof(Docs.Json),
                     Docs.Json);

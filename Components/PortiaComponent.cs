@@ -29,7 +29,7 @@ namespace Portia.Lite.Components
         protected override System.Drawing.Bitmap Icon =>
             Properties.Resources.PortiaLogo;
 
-        private const int FixedInputCount = 1;
+        private const int FixedInputCount = 0;
         private static int LastFixedInputIndex => FixedInputCount - 1;
 
         private List<IGraphQuery> _queries = new();
@@ -37,13 +37,13 @@ namespace Portia.Lite.Components
         protected override void AddInputFields()
         {
             InString(
-                nameof(SetCurves),
+                nameof(AbsSetGraph).Substring(3),
                 "");
         }
 
         protected override void AddOutputFields()
         {
-            new SetCurves().RegisterOutputs(Params);
+            new SetGraphByCurves().RegisterOutputs(Params);
         }
 
         protected override void Solve(
@@ -63,11 +63,6 @@ namespace Portia.Lite.Components
 
                 var task = json.FromJson<AbsTask>();
                 tasks.Add(task);
-
-                if (LastFixedInputIndex >= index)
-                {
-                    continue;
-                }
 
                 string name = task.GetType().Name;
                 var param = Params.Input[index];
@@ -189,8 +184,7 @@ namespace Portia.Lite.Components
             GH_ParameterSide side,
             int index)
         {
-            return side == GH_ParameterSide.Input &&
-                   LastFixedInputIndex < index;
+            return side == GH_ParameterSide.Input && 0 < index;
         }
 
         public IGH_Param CreateParameter(
@@ -215,7 +209,7 @@ namespace Portia.Lite.Components
 
         public void VariableParameterMaintenance()
         {
-            for (int i = 1; i < Params.Input.Count; i++)
+            for (int i = 0; i < Params.Input.Count; i++)
             {
                 var param = Params.Input[i];
 
@@ -224,9 +218,19 @@ namespace Portia.Lite.Components
                     continue;
                 }
 
-                param.Name = $"Task_{i}";
-                param.NickName = $"Task_{i}";
-                param.Description = "Connect a JSON Task here";
+                if (i == 0)
+                {
+                    param.Name = nameof(AbsSetGraph).Substring(3);
+                    param.NickName = nameof(AbsSetGraph).Substring(3);
+                    param.Description =
+                        $"Connect a {nameof(SetGraphByCurves)} or {nameof(LoadGraph)} Task JSON here.";
+                }
+                else
+                {
+                    param.Name = $"Task_{i}";
+                    param.NickName = $"Task_{i}";
+                    param.Description = "Connect a JSON Task here.";
+                }
             }
         }
     }

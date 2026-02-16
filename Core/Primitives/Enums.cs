@@ -80,14 +80,34 @@ namespace Portia.Lite.Core.Primitives
 
     public enum TaskType
     {
-        SetCurves,
+        [Category("Set graph")]
+        SetGraphByCurves,
+
+        [Category("Set graph")]
+        LoadGraph,
+
+        [Category("Set indices")]
         SetNodeIndices,
+
+        [Category("Set indices")]
         SetEdgeIndices,
+
+        [Category("Set types")]
         SetNodeTypes,
+
+        [Category("Set types")]
         SetEdgeTypes,
+
+        [Category("Filter")]
         FilterNodes,
+
+        [Category("Filter")]
         FilterEdges,
+
+        [Category("Verify")]
         VerifyNodes,
+
+        [Category("Verify")]
         VerifyEdges,
     }
 }

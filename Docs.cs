@@ -43,7 +43,7 @@ namespace Portia.Lite
             "through customizable Task inputs." + Environment.NewLine +
             "Portia reorders the input Tasks in the following order (independent from the input order after" +
             "the first curve setting task):" + Environment.NewLine +
-            Environment.NewLine + $"Foundation  /  {nameof(SetCurves)}" +
+            Environment.NewLine + $"Foundation  /  {nameof(SetGraphByCurves)}" +
             Environment.NewLine +
             $"Identity  /  {nameof(SetNodeIndices)} & {nameof(SetEdgeIndices)}" +
             Environment.NewLine +
@@ -197,9 +197,13 @@ namespace Portia.Lite
             "A specialized graph operation that executes " +
             "data modifications, queries or validation protocols by the Portia engine.";
 
-        public static string SetCurves =>
+        public static string SetGraphByCurves =>
             "A primary Task that translates geometric curves into graph-compatible " +
             "edge data for network processing.";
+
+        public static string LoadGraph =>
+            "A primary Task that activates a Graph instance from the input " +
+            "Graph Goo wrapper.";
 
         public static string SetNodeIndices =>
             "A modification Task that assigns specific Index integer values to " +
@@ -293,8 +297,12 @@ namespace Portia.Lite
             "extracting its Nodes and Edges, and its raw JSON format data. " +
             "Connect the outputs to item-related deconstruction components!";
 
-        public static string GraphItem =>
+        public static string GraphItemGoo =>
             "The proprietary 'Sovereign Goo' wrapper that encapsulates a graph element (Node or Edge), " +
+            "carrying its full topological intelligence and metadata through the network.";
+
+        public static string GrapGoo =>
+            "The proprietary 'Sovereign Goo' wrapper that encapsulates a graph (with its Nodes and Edges), " +
             "carrying its full topological intelligence and metadata through the network.";
 
         public static string Json =>

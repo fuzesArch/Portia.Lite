@@ -36,7 +36,7 @@ namespace Portia.Lite.Components
                 new GraphItemParameter(),
                 nameof(GraphItem),
                 nameof(GraphItem),
-                Docs.GraphItem,
+                Docs.GraphItemGoo,
                 GH_ParamAccess.list);
         }
 

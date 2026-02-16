@@ -4,6 +4,7 @@ using Portia.Infrastructure.Components;
 using Portia.Infrastructure.Core.DocStrings;
 using Portia.Infrastructure.Core.Helps;
 using Portia.Infrastructure.Core.Portia.Main;
+using Portia.Infrastructure.Core.Portia.Natives;
 using Portia.Infrastructure.Core.Portia.Primitives;
 using Portia.Infrastructure.Core.Portia.Tasks;
 using Portia.Infrastructure.Core.Validators;
@@ -41,10 +42,10 @@ namespace Portia.Lite.Components
         protected override void AddInputFields()
         {
             InGeometries(
-                    nameof(SetCurves.Curves),
+                    nameof(SetGraphByCurves.Curves),
                     Docs.Curves)
                 .InStrings(
-                    nameof(SetCurves.Types),
+                    nameof(SetGraphByCurves.Types),
                     Docs.InitialEdgeTypes);
 
             SetInputParameterOptionality(1);
@@ -81,7 +82,7 @@ namespace Portia.Lite.Components
             _rules = jsons.FromJson<IRule>().ToList();
         }
 
-        protected void BySetCurves(
+        protected void BySetGraphByCurves(
             IGH_DataAccess da)
         {
             if (!da.GetItems(
@@ -96,9 +97,22 @@ namespace Portia.Lite.Components
                 .ByDefault(Identity.DefType)
                 .BoostTo(curves.Count);
 
-            _task = new SetCurves(
+            _task = new SetGraphByCurves(
                 curves,
                 tags);
+        }
+
+        protected void ByLoadGraph(
+            IGH_DataAccess da)
+        {
+            if (!da.GetItem(
+                    0,
+                    out GraphGoo goo) || goo?.Value == null)
+            {
+                return;
+            }
+
+            _task = new LoadGraph(goo.Value);
         }
 
         protected void BySetIndices<T>(
@@ -221,29 +235,42 @@ namespace Portia.Lite.Components
             return new Dictionary<TaskType, ParameterStrategy>
             {
                 {
-                    TaskType.SetCurves, new ParameterStrategy(
+                    TaskType.SetGraphByCurves, new ParameterStrategy(
                         new List<ParameterConfig>
                         {
                             new(
                                 () => new Param_Curve(),
-                                nameof(SetCurves.Curves),
+                                nameof(SetGraphByCurves.Curves),
                                 Docs.Curves.Add(Prefix.GeometryList),
                                 GH_ParamAccess.list),
                             new(
                                 () => new Param_String(),
-                                nameof(SetCurves.Types),
+                                nameof(SetGraphByCurves.Types),
                                 Docs
                                     .InitialEdgeTypes
                                     .ByDefault(Identity.DefType)
                                     .Extend(
                                         CoreDocStrings.Boost(
-                                            nameof(SetCurves.Curves)))
+                                            nameof(SetGraphByCurves.Curves)))
                                     .Add(Prefix.StringList),
                                 GH_ParamAccess.list,
                                 isOptional: true)
                         },
-                        BySetCurves,
-                        Docs.SetCurves)
+                        BySetGraphByCurves,
+                        Docs.SetGraphByCurves)
+                },
+                {
+                    TaskType.LoadGraph, new ParameterStrategy(
+                        new List<ParameterConfig>
+                        {
+                            new(
+                                () => new GraphParameter(),
+                                nameof(Graph),
+                                Docs.GrapGoo,
+                                GH_ParamAccess.item)
+                        },
+                        ByLoadGraph,
+                        Docs.LoadGraph)
                 },
                 {
                     TaskType.SetNodeIndices, new ParameterStrategy(
