@@ -98,6 +98,9 @@ namespace Portia.Lite.Core.Primitives
         [Category("Set types")]
         SetEdgeTypes,
 
+        [Category("Amalgamate")]
+        AmalgamateGraph,
+
         [Category("Filter")]
         FilterNodes,
 
@@ -109,5 +112,8 @@ namespace Portia.Lite.Core.Primitives
 
         [Category("Verify")]
         VerifyEdges,
+
+        [Category("Adapt")]
+        Adapt,
     }
 }
