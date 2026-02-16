@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Rhino.Geometry;
+using System;
 
 namespace Portia.Lite
 {
@@ -27,6 +28,14 @@ namespace Portia.Lite
 
         public static string StringValue =>
             "The target string value used for text-based filtering.";
+
+        public static string PortiaGraph =>
+            "The core building block of the Portia ecosystem, " +
+            "a graph structure designed to manage complex graph logic with architectural data.";
+
+        public static string NodeRule =>
+            "Defines a localized graph process that evaluates " +
+            "Nodes based on their geometric and topological behavior.";
 
         public static string PortiaComponent =>
             "The core building block of the Portia ecosystem, " +
@@ -93,10 +102,6 @@ namespace Portia.Lite
         public static string Rule =>
             "Defines a localized graph process that evaluates " +
             "nodes or edges based on their geometric and topological behavior.";
-
-        public static string NodeRule =>
-            "Defines a localized graph process that evaluates " +
-            "Nodes based on their geometric and topological behavior.";
 
         public static string EdgeRule =>
             "Defines a localized graph process that evaluates " +
@@ -282,6 +287,11 @@ namespace Portia.Lite
             "A helper component used to unlock the details of a graph element (both Node or Edge), " +
             "extracting its identity, geometric content (Centroid or Curve), and its raw JSON format data. " +
             "Connect to Portia Nodes and Edges outputs!";
+
+        public static string DeconstructGraph =>
+            "A helper component used to unlock the details of a Portia graph, " +
+            "extracting its Nodes and Edges, and its raw JSON format data. " +
+            "Connect the outputs to item-related deconstruction components!";
 
         public static string GraphItem =>
             "The proprietary 'Sovereign Goo' wrapper that encapsulates a graph element (Node or Edge), " +
