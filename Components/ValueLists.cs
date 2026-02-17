@@ -1,5 +1,5 @@
 ﻿using Portia.Infrastructure.Components;
-using Portia.Infrastructure.Core.Primitives;
+using Portia.Infrastructure.Primitives;
 using System;
 
 namespace Portia.Lite.Components

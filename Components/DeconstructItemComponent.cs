@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using Grasshopper.Kernel;
 using Portia.Infrastructure.Components;
-using Portia.Infrastructure.Core.Goo;
-using Portia.Infrastructure.Core.Helps;
-using Portia.Infrastructure.Core.Main;
+using Portia.Infrastructure.Goo;
+using Portia.Infrastructure.Helps;
 using System.Linq;
+using Portia.Infrastructure.Main;
 
 namespace Portia.Lite.Components
 {
@@ -72,11 +72,11 @@ namespace Portia.Lite.Components
 
             da.SetDataList(
                 1,
-                goos.Select(x => x.Value.Identity.Index));
+                goos.Select(x => x.Value.GraphIdentity.Index));
 
             da.SetDataList(
                 2,
-                goos.Select(x => x.Value.Identity.Type));
+                goos.Select(x => x.Value.GraphIdentity.Type));
 
             da.SetDataList(
                 3,

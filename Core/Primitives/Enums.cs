@@ -1,4 +1,4 @@
-﻿using Portia.Infrastructure.Core.Primitives;
+﻿using Portia.Infrastructure.Primitives;
 
 // ReSharper disable InconsistentNaming
 

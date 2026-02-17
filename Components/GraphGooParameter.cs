@@ -1,6 +1,6 @@
 ﻿using Grasshopper.Kernel;
-using Portia.Infrastructure.Core.Goo;
-using Portia.Infrastructure.Core.Main;
+using Portia.Infrastructure.Goo;
+using Portia.Infrastructure.Main;
 using System;
 
 namespace Portia.Lite.Components

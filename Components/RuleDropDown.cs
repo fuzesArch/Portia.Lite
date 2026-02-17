@@ -1,11 +1,11 @@
 ﻿using Grasshopper.Kernel;
 using Grasshopper.Kernel.Parameters;
 using Portia.Infrastructure.Components;
-using Portia.Infrastructure.Core.DocStrings;
-using Portia.Infrastructure.Core.Helps;
-using Portia.Infrastructure.Core.Primitives;
-using Portia.Infrastructure.Core.Rules;
-using Portia.Infrastructure.Core.Validators;
+using Portia.Infrastructure.DocStrings;
+using Portia.Infrastructure.Helps;
+using Portia.Infrastructure.Primitives;
+using Portia.Infrastructure.Rules;
+using Portia.Infrastructure.Validators;
 using Portia.Lite.Core.Primitives;
 using Rhino.Geometry;
 using System;

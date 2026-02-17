@@ -1,13 +1,13 @@
 ﻿using Grasshopper.Kernel;
 using Grasshopper.Kernel.Parameters;
 using Portia.Infrastructure.Components;
-using Portia.Infrastructure.Core.DocStrings;
-using Portia.Infrastructure.Core.Goo;
-using Portia.Infrastructure.Core.Helps;
-using Portia.Infrastructure.Core.Main;
-using Portia.Infrastructure.Core.Rules;
-using Portia.Infrastructure.Core.Tasks;
-using Portia.Infrastructure.Core.Validators;
+using Portia.Infrastructure.DocStrings;
+using Portia.Infrastructure.Goo;
+using Portia.Infrastructure.Helps;
+using Portia.Infrastructure.Main;
+using Portia.Infrastructure.Rules;
+using Portia.Infrastructure.Tasks;
+using Portia.Infrastructure.Validators;
 using Portia.Lite.Core.Primitives;
 using Rhino.Geometry;
 using System;
@@ -94,7 +94,7 @@ namespace Portia.Lite.Components
 
             var tags = da
                 .GetOptionalItems<string>(1)
-                .ByDefault(Identity.DefType)
+                .ByDefault(GraphIdentity.DefType)
                 .BoostTo(curves.Count);
 
             _task = new SetGraphByCurves(
@@ -286,7 +286,7 @@ namespace Portia.Lite.Components
                                 nameof(SetGraphByCurves.Types),
                                 Docs
                                     .InitialEdgeTypes
-                                    .ByDefault(Identity.DefType)
+                                    .ByDefault(GraphIdentity.DefType)
                                     .Extend(
                                         CoreDocStrings.Boost(
                                             nameof(SetGraphByCurves.Curves)))
