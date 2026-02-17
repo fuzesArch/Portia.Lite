@@ -104,7 +104,7 @@ namespace Portia.Lite.Components
                 _rule.ToJson());
         }
 
-        protected static ParameterConfig NameParameter() =>
+        protected static ParameterConfig NameParam() =>
             new(
                 () => new Param_String(),
                 nameof(AbsNumericRule.Name),
@@ -119,7 +119,7 @@ namespace Portia.Lite.Components
                 GH_ParamAccess.item);
 
 
-        protected static ParameterConfig GateParameter() =>
+        protected static ParameterConfig GateParam() =>
             new(
                 () => new Param_Integer(),
                 nameof(Gate),
@@ -127,7 +127,7 @@ namespace Portia.Lite.Components
                 GH_ParamAccess.item,
                 isOptional: true);
 
-        protected static ParameterConfig MatchAllParameter() =>
+        protected static ParameterConfig MatchAllParam() =>
             new(
                 () => new Param_Boolean(),
                 nameof(Docs.MatchAll),
@@ -139,50 +139,47 @@ namespace Portia.Lite.Components
                 GH_ParamAccess.item,
                 isOptional: true);
 
-        protected static ParameterConfig DoubleConditionsParameter() =>
+        protected static ParameterConfig DoubleConditionsParam() =>
             new(
                 () => new Param_String(),
                 nameof(NumericCondition) + "s",
                 Docs.DoubleCondition.Add(Prefix.JsonList),
                 GH_ParamAccess.list);
 
-        protected static ParameterConfig StringConditionsParameter() =>
+        protected static ParameterConfig StringConditionsParam() =>
             new(
                 () => new Param_String(),
                 nameof(StringCondition) + "s",
                 Docs.StringCondition.Add(Prefix.JsonList),
                 GH_ParamAccess.list);
 
-        protected static ParameterConfig VectorConditionsParameter() =>
+        protected static ParameterConfig VectorConditionsParam() =>
             new(
                 () => new Param_String(),
                 nameof(VectorCondition) + "s",
                 Docs.VectorCondition.Add(Prefix.JsonList),
                 GH_ParamAccess.list);
 
-        protected static ParameterConfig BoundaryConditionsParameter() =>
+        protected static ParameterConfig BoundaryConditionsParam() =>
             new(
                 () => new Param_String(),
                 nameof(BoundaryCondition) + "s",
                 Docs.BoundaryCondition.Add(Prefix.JsonList),
                 GH_ParamAccess.list);
 
-        protected static ParameterConfig RuleParameter() =>
+        protected static ParameterConfig RuleParam() =>
             new(
                 () => new Param_String(),
                 nameof(CompositeRule.Rules),
                 Docs.CompositeRule + Prefix.JsonList,
                 GH_ParamAccess.list);
 
-        protected ParameterStrategy BooleanStrategyFor<TRule>(
+        protected ParameterSetup BooleanSetup<TRule>(
             string description)
             where TRule : IRule, IBooleanLogic, new()
         {
-            return new ParameterStrategy(
-                new List<ParameterConfig>
-                {
-                    NameParameter(), BooleanParameter()
-                },
+            return new ParameterSetup(
+                new List<ParameterConfig> { NameParam(), BooleanParameter() },
                 da =>
                 {
                     if (!da.GetItem(
@@ -201,17 +198,16 @@ namespace Portia.Lite.Components
                 description);
         }
 
-        protected ParameterStrategy GenericStrategyFor<TRule, TValue,
-            TCondition>(
+        protected ParameterSetup GenericSetup<TRule, TValue, TCondition>(
             ParameterConfig conditionsConfig,
             string description)
             where TRule : AbsBaseRule<TValue, TCondition>, new()
             where TCondition : AbsCondition<TValue>
         {
-            return new ParameterStrategy(
+            return new ParameterSetup(
                 new List<ParameterConfig>
                 {
-                    NameParameter(), GateParameter(), conditionsConfig
+                    NameParam(), GateParam(), conditionsConfig
                 },
                 da =>
                 {
@@ -237,50 +233,50 @@ namespace Portia.Lite.Components
                 description);
         }
 
-        protected ParameterStrategy NumericStrategyFor<TRule>(
+        protected ParameterSetup NumericSetup<TRule>(
             string description)
             where TRule : AbsNumericRule, new()
         {
-            return GenericStrategyFor<TRule, double, NumericCondition>(
-                DoubleConditionsParameter(),
+            return GenericSetup<TRule, double, NumericCondition>(
+                DoubleConditionsParam(),
                 description);
         }
 
-        protected ParameterStrategy StringStrategyFor<TRule>(
+        protected ParameterSetup StringSetup<TRule>(
             string description)
             where TRule : AbsStringRule, new()
         {
-            return GenericStrategyFor<TRule, string, StringCondition>(
-                StringConditionsParameter(),
+            return GenericSetup<TRule, string, StringCondition>(
+                StringConditionsParam(),
                 description);
         }
 
-        protected ParameterStrategy VectorStrategyFor<TRule>(
+        protected ParameterSetup VectorSetup<TRule>(
             string description)
             where TRule : AbsVectorRule, new()
         {
-            return GenericStrategyFor<TRule, Vector3d, VectorCondition>(
-                VectorConditionsParameter(),
+            return GenericSetup<TRule, Vector3d, VectorCondition>(
+                VectorConditionsParam(),
                 description);
         }
 
-        protected ParameterStrategy BoundaryStrategyFor<TRule>(
+        protected ParameterSetup BoundarySetup<TRule>(
             string description)
             where TRule : AbsBoundaryRule, new()
         {
-            return GenericStrategyFor<TRule, GeometryBase, BoundaryCondition>(
-                BoundaryConditionsParameter(),
+            return GenericSetup<TRule, GeometryBase, BoundaryCondition>(
+                BoundaryConditionsParam(),
                 description);
         }
 
-        protected ParameterStrategy CompositeStrategyFor<TRule>(
+        protected ParameterSetup CompositeSetup<TRule>(
             string description)
             where TRule : CompositeRule, new()
         {
-            return new ParameterStrategy(
+            return new ParameterSetup(
                 new List<ParameterConfig>
                 {
-                    NameParameter(), GateParameter(), RuleParameter()
+                    NameParam(), GateParam(), RuleParam()
                 },
                 da =>
                 {
@@ -305,20 +301,18 @@ namespace Portia.Lite.Components
                 description);
         }
 
-
-        protected ParameterStrategy CollectionStrategyFor<TRule, TValue,
-            TCondition>(
+        protected ParameterSetup CollectionSetup<TRule, TValue, TCondition>(
             ParameterConfig conditionsParameterConfig,
             string description)
             where TRule : AbsCollectionRule<TValue, TCondition>, new()
             where TCondition : AbsCondition<TValue>
         {
-            return new ParameterStrategy(
+            return new ParameterSetup(
                 new List<ParameterConfig>
                 {
-                    NameParameter(),
-                    GateParameter(),
-                    MatchAllParameter(),
+                    NameParam(),
+                    GateParam(),
+                    MatchAllParam(),
                     conditionsParameterConfig,
                 },
                 da =>
@@ -350,119 +344,109 @@ namespace Portia.Lite.Components
                 description);
         }
 
-        protected ParameterStrategy StringCollectionStrategyFor<TRule>(
+        protected ParameterSetup StringCollectionSetup<TRule>(
             string description)
             where TRule : AbsStringCollectionRule, new()
         {
-            return CollectionStrategyFor<TRule, string, StringCondition>(
-                StringConditionsParameter(),
+            return CollectionSetup<TRule, string, StringCondition>(
+                StringConditionsParam(),
                 description);
         }
 
-        protected ParameterStrategy VectorCollectionStrategyFor<TRule>(
+        protected ParameterSetup VectorCollectionSetup<TRule>(
             string description)
             where TRule : AbsVectorCollectionRule, new()
         {
-            return CollectionStrategyFor<TRule, Vector3d, VectorCondition>(
-                VectorConditionsParameter(),
+            return CollectionSetup<TRule, Vector3d, VectorCondition>(
+                VectorConditionsParam(),
                 description);
         }
 
-        protected override Dictionary<RuleMode, ParameterStrategy>
-            DefineParameterStrategy()
+        protected override Dictionary<RuleMode, ParameterSetup> DefineSetup()
         {
-            return new Dictionary<RuleMode, ParameterStrategy>
+            return new Dictionary<RuleMode, ParameterSetup>
             {
                 {
                     RuleMode.Composite,
-                    CompositeStrategyFor<CompositeRule>(Docs.CompositeRule)
+                    CompositeSetup<CompositeRule>(Docs.CompositeRule)
                 },
-                {
-                    RuleMode.IndexRule,
-                    NumericStrategyFor<IndexRule>(Docs.IndexRule)
-                },
-                {
-                    RuleMode.TypeRule,
-                    StringStrategyFor<TypeRule>(Docs.TypeRule)
-                },
+                { RuleMode.IndexRule, NumericSetup<IndexRule>(Docs.IndexRule) },
+                { RuleMode.TypeRule, StringSetup<TypeRule>(Docs.TypeRule) },
                 {
                     RuleMode.Node_Degree,
-                    NumericStrategyFor<NodeDegreeRule>(Docs.NodeAdjacency)
+                    NumericSetup<NodeDegreeRule>(Docs.NodeAdjacency)
                 },
                 {
                     RuleMode.Node_AdjacentEdgeType,
-                    StringCollectionStrategyFor<NodeAdjacentEdgeTypeRule>(
+                    StringCollectionSetup<NodeAdjacentEdgeTypeRule>(
                         Docs.NodeAdjacentEdgeType)
                 },
                 {
                     RuleMode.Node_Proximity,
-                    NumericStrategyFor<NodeProximityRule>(Docs.NodeProximity)
+                    NumericSetup<NodeProximityRule>(Docs.NodeProximity)
                 },
                 {
                     RuleMode.Node_VectorSum,
-                    NumericStrategyFor<NodeVectorScalarSumRule>(
+                    NumericSetup<NodeVectorScalarSumRule>(
                         Docs.NodeVectorScalarSum)
                 },
                 {
                     RuleMode.Node_IsLeaf,
-                    BooleanStrategyFor<IsLeafNodeRule>(Docs.IsLeafNode)
+                    BooleanSetup<IsLeafNodeRule>(Docs.IsLeafNode)
                 },
                 {
                     RuleMode.Node_AdjacentEdgeVectorSimilarity,
-                    VectorCollectionStrategyFor<
-                        NodeAdjacentEdgeVectorSimilarityRule>(
+                    VectorCollectionSetup<NodeAdjacentEdgeVectorSimilarityRule>(
                         Docs.NodeAdjacentEdgeVectorSimilarity)
                 },
                 {
                     RuleMode.Node_InBoundary,
-                    BoundaryStrategyFor<NodeInBoundaryRule>(Docs.NodeInBoundary)
+                    BoundarySetup<NodeInBoundaryRule>(Docs.NodeInBoundary)
                 },
                 {
                     RuleMode.Edge_CurveLength,
-                    NumericStrategyFor<EdgeCurveLengthRule>(
-                        Docs.EdgeCurveLength)
+                    NumericSetup<EdgeCurveLengthRule>(Docs.EdgeCurveLength)
                 },
                 {
                     RuleMode.Edge_StartEndDistance,
-                    NumericStrategyFor<EdgeStartEndDistanceRule>(
+                    NumericSetup<EdgeStartEndDistanceRule>(
                         Docs.EdgeStartEndDistance)
                 },
                 {
                     RuleMode.Edge_StartDegree,
-                    NumericStrategyFor<EdgeStartDegreeRule>(Docs.StartDegree)
+                    NumericSetup<EdgeStartDegreeRule>(Docs.StartDegree)
                 },
                 {
                     RuleMode.Edge_EndDegree,
-                    NumericStrategyFor<EndDegreeRule>(Docs.EndDegree)
+                    NumericSetup<EndDegreeRule>(Docs.EndDegree)
                 },
                 {
                     RuleMode.Edge_StartIndex,
-                    NumericStrategyFor<EdgeStartIndexRule>(Docs.EdgeStartIndex)
+                    NumericSetup<EdgeStartIndexRule>(Docs.EdgeStartIndex)
                 },
                 {
                     RuleMode.Edge_StartType,
-                    StringStrategyFor<EdgeStartTypeRule>(Docs.EdgeStartType)
+                    StringSetup<EdgeStartTypeRule>(Docs.EdgeStartType)
                 },
                 {
                     RuleMode.Edge_EndIndex,
-                    NumericStrategyFor<EdgeEndIndexRule>(Docs.EdgeEndIndex)
+                    NumericSetup<EdgeEndIndexRule>(Docs.EdgeEndIndex)
                 },
                 {
                     RuleMode.Edge_EndType,
-                    StringStrategyFor<EdgeEndTypeRule>(Docs.EdgeEndType)
+                    StringSetup<EdgeEndTypeRule>(Docs.EdgeEndType)
                 },
                 {
                     RuleMode.Edge_IsLinear,
-                    BooleanStrategyFor<IsLinearEdgeRule>(Docs.IsLinearRule)
+                    BooleanSetup<IsLinearEdgeRule>(Docs.IsLinearRule)
                 },
                 {
                     RuleMode.Edge_VectorSimilarity,
-                    VectorStrategyFor<EdgeVectorSimilarityRule>(
-                        Docs.EdgeSimilarity)
+                    VectorSetup<EdgeVectorSimilarityRule>(Docs.EdgeSimilarity)
                 },
                 {
                     RuleMode.Edge_InBoundary,
-                    BoundaryStrategyFor<EdgeInBoundaryRule>(Docs.EdgeInBoundary)
+                    BoundarySetup<EdgeInBoundaryRule>(Docs.EdgeInBoundary)
                 },
             };
         }

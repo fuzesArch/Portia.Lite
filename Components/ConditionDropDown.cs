@@ -148,13 +148,13 @@ namespace Portia.Lite.Components
                 strictlyIn);
         }
 
-        protected override Dictionary<ConditionMode, ParameterStrategy>
-            DefineParameterStrategy()
+        protected override Dictionary<ConditionMode, ParameterSetup>
+            DefineSetup()
         {
-            return new Dictionary<ConditionMode, ParameterStrategy>
+            return new Dictionary<ConditionMode, ParameterSetup>
             {
                 {
-                    ConditionMode.Numeric, new ParameterStrategy(
+                    ConditionMode.Numeric, new ParameterSetup(
                         new List<ParameterConfig>
                         {
                             new(
@@ -173,7 +173,7 @@ namespace Portia.Lite.Components
                         Docs.DoubleCondition)
                 },
                 {
-                    ConditionMode.String, new ParameterStrategy(
+                    ConditionMode.String, new ParameterSetup(
                         new List<ParameterConfig>
                         {
                             new(
@@ -192,7 +192,7 @@ namespace Portia.Lite.Components
                         Docs.StringCondition)
                 },
                 {
-                    ConditionMode.Vector, new ParameterStrategy(
+                    ConditionMode.Vector, new ParameterSetup(
                         new List<ParameterConfig>
                         {
                             new(
@@ -223,7 +223,7 @@ namespace Portia.Lite.Components
                         Docs.VectorCondition)
                 },
                 {
-                    ConditionMode.Boundary, new ParameterStrategy(
+                    ConditionMode.Boundary, new ParameterSetup(
                         new List<ParameterConfig>
                         {
                             new(

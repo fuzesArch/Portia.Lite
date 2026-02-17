@@ -12,6 +12,16 @@ namespace Portia.Lite.Core.Primitives
         Boundary
     }
 
+    public enum FeatureMode
+    {
+        Numeric,
+        String,
+        Boolean,
+        Curve,
+        Profile,
+        Constraint
+    }
+
     public enum RuleMode
     {
         [Category("Composite")]
@@ -80,16 +90,43 @@ namespace Portia.Lite.Core.Primitives
 
     public enum TaskType
     {
+        [Category("Setup Graph")]
         SetGraphByCurves,
+
+        [Category("Setup Graph")]
         LoadGraph,
+
+        [Category("Setup")]
         SetNodeIndices,
+
+        [Category("Setup")]
         SetEdgeIndices,
+
+        [Category("Setup")]
         SetNodeTypes,
+
+        [Category("Setup")]
         SetEdgeTypes,
+
+        [Category("Setup")]
+        SetNodeFeatures,
+
+        [Category("Setup")]
+        SetEdgeFeatures,
+
+        [Category("Filter")]
         FilterNodes,
+
+        [Category("Filter")]
         FilterEdges,
+
+        [Category("Validate")]
         VerifyNodes,
+
+        [Category("Validate")]
         VerifyEdges,
+
+        [Category("Manipulate Graph")]
         Adapt,
         Amalgamate,
     }

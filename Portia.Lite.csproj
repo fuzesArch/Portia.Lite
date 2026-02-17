@@ -75,6 +75,7 @@
   <ItemGroup>
     <Compile Include="Components\DeconstructGraphComponent.cs" />
     <Compile Include="Components\DeconstructItemComponent.cs" />
+    <Compile Include="Components\FeatureDropDown.cs" />
     <Compile Include="Components\GraphGooParameter.cs" />
     <Compile Include="Components\GraphItemParameter.cs" />
     <Compile Include="Components\Naming.cs" />

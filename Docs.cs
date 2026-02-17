@@ -1,4 +1,5 @@
-﻿using Rhino.Geometry;
+﻿using Portia.Infrastructure.Main;
+using Rhino.Geometry;
 using System;
 
 namespace Portia.Lite
@@ -32,7 +33,6 @@ namespace Portia.Lite
         public static string PortiaGraph =>
             "The core building block of the Portia ecosystem, " +
             "a graph structure designed to manage complex graph logic with architectural data.";
-
 
         public static string PortiaComponent =>
             "The core building block of the Portia ecosystem, " +
@@ -84,6 +84,18 @@ namespace Portia.Lite
         public static string BoundaryCondition =>
             "Defines a logical filter based on the geometric relationship " +
             "between points and boundaries, where a boundary is a closed Brep evaluated for point containment.";
+
+        public static string Feature =>
+            "Graph payload: a user-defined name-value pair that gets " +
+            "added to the selected Nodes or Edges in order to enrich them.";
+
+        public static string NodeFeatures =>
+            "Graph payloads: user-defined name-value pairs that get " +
+            "added to the selected Nodes in order to enrich them.";
+
+        public static string EdgeFeatures =>
+            "Graph payloads: user-defined name-value pairs that get " +
+            "added to the selected Edges in order to enrich them.";
 
         public static string Identity =>
             "Defines the primary identification rule for graph elements " +
@@ -226,6 +238,14 @@ namespace Portia.Lite
         public static string SetEdgeTypes =>
             "A modification Task that assigns specific Type string values to " +
             "existing graph Edges for categorization.";
+
+        public static string SetNodeFeatures =>
+            "A modification Task that assigns specific Feature values to " +
+            "existing graph Nodes in order to enrich the data stored in them.";
+
+        public static string SetEdgeFeatures =>
+            "A modification Task that assigns specific Feature values to " +
+            "existing graph Edges in order to enrich the data stored in them.";
 
         public static string FilterNodes =>
             "A retrieval (query) Task that extracts Node identity values and geometry data " +

@@ -2,6 +2,7 @@
 using Grasshopper.Kernel.Parameters;
 using Portia.Infrastructure.Components;
 using Portia.Infrastructure.DocStrings;
+using Portia.Infrastructure.Features;
 using Portia.Infrastructure.Goo;
 using Portia.Infrastructure.Helps;
 using Portia.Infrastructure.Main;
@@ -153,6 +154,28 @@ namespace Portia.Lite.Components
             _task = new T { Rules = _rules, Types = types };
         }
 
+        protected void BySetFeatures<T>(
+            IGH_DataAccess da)
+            where T : AbsSetFeatures, new()
+        {
+            SetRules(da);
+
+            if (_rules == null) { return; }
+
+            if (!da.GetItems(
+                    1,
+                    out List<string> jsons))
+            {
+                return;
+            }
+
+            _task = new T
+            {
+                Rules = _rules,
+                Features = jsons.FromJson<IFeature>().ToList()
+            };
+        }
+
         protected void ByFilter<T>(
             IGH_DataAccess da)
             where T : AbsFilterTask, new()
@@ -214,14 +237,7 @@ namespace Portia.Lite.Components
                 goo.Value);
         }
 
-        protected static ParameterConfig NodeRulesParameter() =>
-            new(
-                () => new Param_String(),
-                nameof(Docs.NodeRules),
-                Docs.NodeRules.Add(Prefix.JsonList),
-                GH_ParamAccess.list);
-
-        protected static ParameterConfig NodeRulesParameter(
+        protected static ParameterConfig JsonsParam(
             string name,
             string description) =>
             new(
@@ -230,50 +246,43 @@ namespace Portia.Lite.Components
                 description.Add(Prefix.JsonList),
                 GH_ParamAccess.list);
 
-        protected static ParameterConfig EdgeRulesParameter() =>
-            new(
-                () => new Param_String(),
+        protected static ParameterConfig NodeRulesParam() =>
+            JsonsParam(
+                nameof(Docs.NodeRules),
+                Docs.NodeRules);
+
+        protected static ParameterConfig EdgeRulesParam() =>
+            JsonsParam(
                 nameof(Docs.EdgeRules),
-                Docs.EdgeRules.Add(Prefix.JsonList),
-                GH_ParamAccess.list);
+                Docs.EdgeRules);
 
-        protected static ParameterConfig EdgeRulesParameter(
-            string docsString,
-            string description) =>
-            new(
-                () => new Param_String(),
-                docsString,
-                description.Add(Prefix.JsonList),
-                GH_ParamAccess.list);
-
-        protected static ParameterConfig IndicesParameter() =>
+        protected static ParameterConfig IndicesParam() =>
             new(
                 () => new Param_Integer(),
                 nameof(AbsSetIndices.Indices),
                 Docs.Indices.Add(Prefix.IntegerList),
                 GH_ParamAccess.list);
 
-        protected static ParameterConfig TypesParameter() =>
+        protected static ParameterConfig TypesParam() =>
             new(
                 () => new Param_String(),
                 nameof(AbsSetTypes.Types),
                 Docs.Types.Add(Prefix.StringList),
                 GH_ParamAccess.list);
 
-        protected static ParameterConfig GraphParameter() =>
+        protected static ParameterConfig GraphParam() =>
             new(
                 () => new GraphParameter(),
                 nameof(Graph),
                 Docs.GrapGoo,
                 GH_ParamAccess.item);
 
-        protected override Dictionary<TaskType, ParameterStrategy>
-            DefineParameterStrategy()
+        protected override Dictionary<TaskType, ParameterSetup> DefineSetup()
         {
-            return new Dictionary<TaskType, ParameterStrategy>
+            return new Dictionary<TaskType, ParameterSetup>
             {
                 {
-                    TaskType.SetGraphByCurves, new ParameterStrategy(
+                    TaskType.SetGraphByCurves, new ParameterSetup(
                         new List<ParameterConfig>
                         {
                             new(
@@ -298,65 +307,92 @@ namespace Portia.Lite.Components
                         Docs.SetGraphByCurves)
                 },
                 {
-                    TaskType.LoadGraph, new ParameterStrategy(
-                        new List<ParameterConfig> { GraphParameter() },
+                    TaskType.LoadGraph, new ParameterSetup(
+                        new List<ParameterConfig> { GraphParam() },
                         ByLoadGraph,
                         Docs.LoadGraph)
                 },
                 {
-                    TaskType.SetNodeIndices, new ParameterStrategy(
+                    TaskType.SetNodeIndices, new ParameterSetup(
                         new List<ParameterConfig>
                         {
-                            NodeRulesParameter(), IndicesParameter()
+                            NodeRulesParam(), IndicesParam()
                         },
                         BySetIndices<SetNodeIndices>,
                         Docs.SetNodeIndices)
                 },
                 {
-                    TaskType.SetEdgeIndices, new ParameterStrategy(
+                    TaskType.SetEdgeIndices, new ParameterSetup(
                         new List<ParameterConfig>
                         {
-                            EdgeRulesParameter(), IndicesParameter()
+                            EdgeRulesParam(), IndicesParam()
                         },
                         BySetIndices<SetEdgeIndices>,
                         Docs.SetEdgeIndices)
                 },
                 {
-                    TaskType.SetNodeTypes, new ParameterStrategy(
+                    TaskType.SetNodeTypes, new ParameterSetup(
                         new List<ParameterConfig>
                         {
-                            NodeRulesParameter(), TypesParameter()
+                            NodeRulesParam(), TypesParam()
                         },
                         BySetTypes<SetNodeTypes>,
                         Docs.SetNodeTypes)
                 },
                 {
-                    TaskType.SetEdgeTypes, new ParameterStrategy(
+                    TaskType.SetEdgeTypes, new ParameterSetup(
                         new List<ParameterConfig>
                         {
-                            EdgeRulesParameter(), TypesParameter()
+                            EdgeRulesParam(),
+                            JsonsParam(
+                                nameof(Docs.NodeFeatures),
+                                Docs.SetNodeFeatures)
                         },
                         BySetTypes<SetEdgeTypes>,
                         Docs.SetEdgeTypes)
                 },
                 {
-                    TaskType.FilterNodes, new ParameterStrategy(
-                        new List<ParameterConfig> { NodeRulesParameter(), },
+                    TaskType.SetNodeFeatures, new ParameterSetup(
+                        new List<ParameterConfig>
+                        {
+                            NodeRulesParam(),
+                            JsonsParam(
+                                nameof(Docs.NodeFeatures),
+                                Docs.SetNodeFeatures)
+                        },
+                        BySetFeatures<SetNodeFeatures>,
+                        Docs.SetNodeFeatures)
+                },
+                {
+                    TaskType.SetEdgeFeatures, new ParameterSetup(
+                        new List<ParameterConfig>
+                        {
+                            EdgeRulesParam(),
+                            JsonsParam(
+                                nameof(Docs.EdgeFeatures),
+                                Docs.SetEdgeFeatures)
+                        },
+                        BySetFeatures<SetEdgeFeatures>,
+                        Docs.SetEdgeFeatures)
+                },
+                {
+                    TaskType.FilterNodes, new ParameterSetup(
+                        new List<ParameterConfig> { NodeRulesParam(), },
                         ByFilter<FilterNodes>,
                         Docs.FilterNodes)
                 },
                 {
-                    TaskType.FilterEdges, new ParameterStrategy(
-                        new List<ParameterConfig> { EdgeRulesParameter(), },
+                    TaskType.FilterEdges, new ParameterSetup(
+                        new List<ParameterConfig> { EdgeRulesParam(), },
                         ByFilter<FilterEdges>,
                         Docs.FilterEdges)
                 },
                 {
-                    TaskType.VerifyNodes, new ParameterStrategy(
+                    TaskType.VerifyNodes, new ParameterSetup(
                         new List<ParameterConfig>
                         {
-                            NodeRulesParameter(),
-                            NodeRulesParameter(
+                            NodeRulesParam(),
+                            JsonsParam(
                                 nameof(Docs.NodeRulesToVerify),
                                 Docs.NodeRulesToVerify),
                         },
@@ -364,11 +400,11 @@ namespace Portia.Lite.Components
                         Docs.VerifyNodes)
                 },
                 {
-                    TaskType.VerifyEdges, new ParameterStrategy(
+                    TaskType.VerifyEdges, new ParameterSetup(
                         new List<ParameterConfig>
                         {
-                            EdgeRulesParameter(),
-                            EdgeRulesParameter(
+                            EdgeRulesParam(),
+                            JsonsParam(
                                 nameof(Docs.EdgeRulesToVerify),
                                 Docs.EdgeRulesToVerify)
                         },
@@ -376,16 +412,16 @@ namespace Portia.Lite.Components
                         Docs.VerifyEdges)
                 },
                 {
-                    TaskType.Amalgamate, new ParameterStrategy(
+                    TaskType.Amalgamate, new ParameterSetup(
                         new List<ParameterConfig>
                         {
-                            NodeRulesParameter(
+                            JsonsParam(
                                 nameof(Docs.TargetNodeRules),
                                 Docs.TargetNodeRules),
-                            NodeRulesParameter(
+                            JsonsParam(
                                 nameof(Docs.AnchorNodeRules),
                                 Docs.AnchorNodeRules),
-                            GraphParameter()
+                            GraphParam()
                         },
                         ByAmalgamation,
                         Docs.Amalgamate)
