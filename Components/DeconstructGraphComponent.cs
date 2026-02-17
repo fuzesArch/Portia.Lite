@@ -1,9 +1,9 @@
 ﻿using Grasshopper.Kernel;
 using Portia.Infrastructure.Components;
+using Portia.Infrastructure.Core.Goo;
+using Portia.Infrastructure.Core.GraphHelps;
 using Portia.Infrastructure.Core.Helps;
-using Portia.Infrastructure.Core.Portia.Helps;
-using Portia.Infrastructure.Core.Portia.Main;
-using Portia.Infrastructure.Core.Portia.Natives;
+using Portia.Infrastructure.Core.Main;
 using System;
 
 namespace Portia.Lite.Components

@@ -4,10 +4,10 @@ using System.Linq;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Parameters;
 using Portia.Infrastructure.Components;
+using Portia.Infrastructure.Core.GraphHelps;
 using Portia.Infrastructure.Core.Helps;
-using Portia.Infrastructure.Core.Portia.Helps;
-using Portia.Infrastructure.Core.Portia.Main;
-using Portia.Infrastructure.Core.Portia.Tasks;
+using Portia.Infrastructure.Core.Main;
+using Portia.Infrastructure.Core.Tasks;
 using Portia.Infrastructure.Core.Validators;
 
 namespace Portia.Lite.Components

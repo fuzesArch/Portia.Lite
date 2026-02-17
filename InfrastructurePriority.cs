@@ -1,6 +1,6 @@
 ﻿using Grasshopper;
 using Grasshopper.Kernel;
-using Portia.Infrastructure.Core.Portia.Helps;
+using Portia.Infrastructure.Core.GraphHelps;
 
 namespace Portia.Lite
 {
