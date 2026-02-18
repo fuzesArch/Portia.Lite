@@ -48,6 +48,7 @@ namespace Portia.Lite.Components.DropDowns
                 _solver.ToJson());
         }
 
+        #if INTERNAL
         private void ByJunction(
             IGH_DataAccess da)
         {
@@ -57,11 +58,13 @@ namespace Portia.Lite.Components.DropDowns
 
             _solver = new JunctionSolver { WidthKey = widthKey };
         }
+        #endif
 
         protected override Dictionary<SolverMode, ParameterSetup> DefineSetup()
         {
             return new Dictionary<SolverMode, ParameterSetup>
             {
+                #if INTERNAL
                 {
                     SolverMode.Junction, new ParameterSetup(
                         new List<ParameterConfig>
@@ -78,6 +81,7 @@ namespace Portia.Lite.Components.DropDowns
                         ByJunction,
                         Docs.Solve)
                 }
+                #endif
             };
         }
     }

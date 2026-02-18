@@ -46,10 +46,7 @@ namespace Portia.Lite.Components.DropDowns
                             Docs.GraphNodeGoo)
                         .OutGenerics(
                             nameof(Docs.GraphEdgeGoo),
-                            Docs.GraphEdgeGoo)
-                        .OutJson(
-                            nameof(Docs.Json),
-                            Docs.Json);
+                            Docs.GraphEdgeGoo);
                     break;
 
                 case DecodeMode.Node:
@@ -65,10 +62,7 @@ namespace Portia.Lite.Components.DropDowns
                             Docs.Type)
                         .OutGenericTree(
                             nameof(Docs.FeatureGoo) + "s",
-                            Docs.FeatureGoo)
-                        .OutJsons(
-                            nameof(Docs.Json),
-                            Docs.Json);
+                            Docs.FeatureGoo);
                     break;
 
                 case DecodeMode.Feature:
@@ -91,15 +85,14 @@ namespace Portia.Lite.Components.DropDowns
             }
 
             var graph = _graphGoo.Value;
+
             da.SetDataList(
                 0,
                 graph.Nodes.ToGoo());
+
             da.SetDataList(
                 1,
                 graph.Edges.ToGoo());
-            da.SetData(
-                2,
-                graph.ToJson());
         }
 
         private void SetItemOutputs(
@@ -113,14 +106,17 @@ namespace Portia.Lite.Components.DropDowns
             da.SetDataList(
                 0,
                 _itemGoos.Select(x => x?.GetGeometries()));
+
             da.SetDataList(
                 1,
                 _itemGoos.Select(x => x?.Value?.GraphIdentity.Index));
+
             da.SetDataList(
                 2,
                 _itemGoos.Select(x => x?.Value?.GraphIdentity.Type));
 
             var featureTree = new DataTree<FeatureGoo>();
+
             for (int i = 0; i < _itemGoos.Count; i++)
             {
                 var path = new GH_Path(
@@ -143,9 +139,6 @@ namespace Portia.Lite.Components.DropDowns
             da.SetDataTree(
                 3,
                 featureTree);
-            da.SetDataList(
-                4,
-                _itemGoos.Select(x => x?.Value?.ToJson()));
         }
 
         private void SetFeatureOutputs(
@@ -159,6 +152,7 @@ namespace Portia.Lite.Components.DropDowns
             da.SetDataList(
                 0,
                 _featureGoos.Select(x => x?.Value?.Name));
+
             da.SetDataList(
                 1,
                 _featureGoos.Select(x =>
