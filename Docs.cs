@@ -327,6 +327,12 @@ namespace Portia.Lite
             "A boolean toggle that determines if elements lying exactly on the " +
             "Brep boundary surface are included in the selection or not.";
 
+        public static string Decode =>
+            "A helper component used to unlock the details of the different Portia elements. " +
+            "Nodes, Edges, Graphs and the FeatureSets (of Nodes and Edges) can be deconstructed into " +
+            "their constituent parts. The items passed around are wrapped in the " +
+            "Grasshopper-native Goo equivalents - hence the Goo suffix everywhere.";
+
         public static string DeconstructItem =>
             "A helper component used to unlock the details of a graph element (both Node or Edge), " +
             "extracting its identity, geometric content (Centroid or Curve), and its raw JSON format data. " +
@@ -336,6 +342,10 @@ namespace Portia.Lite
             "A helper component used to unlock the details of a Portia graph, " +
             "extracting its Nodes and Edges, and its raw JSON format data. " +
             "Connect the outputs to item-related deconstruction components!";
+
+        public static string DeconstructFeature =>
+            "A helper component used to unlock the details of a Feature, hosted by an element (both Node or Edge), " +
+            "extracting its Name key and Value pair";
 
         public static string GraphItemGoo =>
             "The proprietary 'Sovereign Goo' wrapper that encapsulates a graph item (Node or Edge), " +

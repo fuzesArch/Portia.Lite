@@ -49,18 +49,6 @@ namespace Portia.Lite.Components.DropDowns
         private AbsTask _task;
         private List<IRule> _rules;
 
-        protected override void AddInputFields()
-        {
-            InGeometries(
-                    nameof(SetGraphByCurves.Curves),
-                    Docs.Curves)
-                .InStrings(
-                    nameof(SetGraphByCurves.Types),
-                    Docs.InitialEdgeTypes);
-
-            SetInputParameterOptionality(1);
-        }
-
         protected override void AddOutputFields()
         {
             OutString(

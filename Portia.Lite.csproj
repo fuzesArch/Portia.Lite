@@ -73,10 +73,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Components\Decode\DecodeFeatureComponent.cs" />
+    <Compile Include="Components\DropDowns\DecodeDropDown.cs" />
     <Compile Include="Components\DropDowns\SolverDropDown.cs" />
-    <Compile Include="Components\Decode\DecodeGraphComponent.cs" />
-    <Compile Include="Components\Decode\DecodeItemComponent.cs" />
     <Compile Include="Components\DropDowns\FeatureDropDown.cs" />
     <Compile Include="Components\Goo\FeatureGooParameter.cs" />
     <Compile Include="Components\Goo\GraphGooParameter.cs" />

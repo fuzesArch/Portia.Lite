@@ -31,16 +31,6 @@ namespace Portia.Lite.Components.DropDowns
 
         private ISolver _solver;
 
-        protected override void AddInputFields()
-        {
-            InString(
-                FeatureKey.Width,
-                Docs.Name.ByDefault(FeatureKey.Width).Add(Prefix.Json),
-                FeatureKey.Width);
-
-            SetInputParameterOptionality(0);
-        }
-
         protected override void AddOutputFields()
         {
             OutJson(

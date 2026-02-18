@@ -47,23 +47,6 @@ namespace Portia.Lite.Components.DropDowns
         private string _name;
         private IRule _rule;
 
-        protected override void AddInputFields()
-        {
-            InString(
-                    nameof(IRule.Name),
-                    Docs.Name)
-                .InEnum(
-                    nameof(Gate),
-                    typeof(Gate).ToEnumString(),
-                    nameof(Gate.And))
-                .InJsons(
-                    nameof(AbsRule<double, NumericCondition>.Conditions),
-                    Docs.Condition);
-
-            SetInputParameterOptionality(1);
-            SetEnumDropDown<Gate>(1);
-        }
-
         public override void AddedToDocument(
             GH_Document document)
         {

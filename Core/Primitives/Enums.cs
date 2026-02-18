@@ -27,6 +27,14 @@ namespace Portia.Lite.Core.Primitives
         Junction,
     }
 
+    public enum DecodeMode
+    {
+        Node,
+        Edge,
+        Graph,
+        Feature
+    }
+
     public enum RuleMode
     {
         [Category("Composite")]

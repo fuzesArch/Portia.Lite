@@ -33,20 +33,20 @@ namespace Portia.Lite.Components.DropDowns
 
         private IConditionBase _condition;
 
-        protected override void AddInputFields()
-        {
-            InEnum(
-                    nameof(NumericRelation),
-                    Docs.NumericRelation + Environment.NewLine +
-                    typeof(NumericRelation).ToEnumString(),
-                    NumericCondition.DefRelation.ToString())
-                .InDouble(
-                    nameof(NumericCondition.Value),
-                    Docs.NumericValue);
+        //protected override void AddInputFields()
+        //{
+        //    InEnum(
+        //            nameof(NumericRelation),
+        //            Docs.NumericRelation + Environment.NewLine +
+        //            typeof(NumericRelation).ToEnumString(),
+        //            NumericCondition.DefRelation.ToString())
+        //        .InDouble(
+        //            nameof(NumericCondition.Value),
+        //            Docs.NumericValue);
 
-            SetInputParameterOptionality(0);
-            SetEnumDropDown<NumericRelation>(0);
-        }
+        //    SetInputParameterOptionality(0);
+        //    SetEnumDropDown<NumericRelation>(0);
+        //}
 
         protected override void AddOutputFields()
         {

@@ -32,19 +32,6 @@ namespace Portia.Lite.Components.DropDowns
 
         private IFeature _feature;
 
-        protected override void AddInputFields()
-        {
-            InString(
-                    nameof(IFeature.Name),
-                    Docs.Name.ByDefault(FeatureKey.Width).Add(Prefix.String),
-                    FeatureKey.Width)
-                .InDouble(
-                    nameof(NumericFeature.Value),
-                    Docs.NumericValue.Add(Prefix.Double));
-
-            SetInputParameterOptionality(0);
-        }
-
         protected override void AddOutputFields()
         {
             OutJson(
