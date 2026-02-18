@@ -1,6 +1,6 @@
 ﻿using Grasshopper.Kernel;
 using Portia.Infrastructure.Goo;
-using Portia.Infrastructure.Main;
+using Portia.Infrastructure.GraphItems;
 using System;
 
 namespace Portia.Lite.Components.Goo
@@ -9,8 +9,8 @@ namespace Portia.Lite.Components.Goo
     {
         public GraphItemGooParameter()
             : base(
-                nameof(GraphItem),
-                nameof(GraphItem),
+                nameof(IGraphItem).Substring(1),
+                nameof(IGraphItem).Substring(1),
                 Docs.GraphItemGoo,
                 Naming.Tab,
                 Naming.Tab,
