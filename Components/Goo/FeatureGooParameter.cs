@@ -1,17 +1,17 @@
 ﻿using Grasshopper.Kernel;
+using Portia.Infrastructure.Features.Base;
 using Portia.Infrastructure.Goo;
-using Portia.Infrastructure.Main;
 using System;
 
 namespace Portia.Lite.Components.Goo
 {
-    public class GraphItemParameter : GH_Param<GraphItemGoo>
+    public class FeatureGooParameter : GH_Param<FeatureGoo>
     {
-        public GraphItemParameter()
+        public FeatureGooParameter()
             : base(
-                nameof(GraphItem),
-                nameof(GraphItem),
-                Docs.Rule,
+                nameof(IFeature).Substring(1),
+                nameof(IFeature).Substring(1),
+                Docs.FeatureGoo,
                 Naming.Tab,
                 Naming.Tab,
                 GH_ParamAccess.item)
@@ -19,7 +19,7 @@ namespace Portia.Lite.Components.Goo
         }
 
         public override Guid ComponentGuid =>
-            new("78e9f1a2-4c5d-4b3a-9e2f-1d2c3b4a5e6f");
+            new("57dbc0ed-1e03-4e83-8b4b-e33d4cf65ab3");
 
         public override GH_Exposure Exposure => GH_Exposure.hidden;
     }

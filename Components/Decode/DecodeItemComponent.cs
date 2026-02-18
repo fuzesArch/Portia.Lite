@@ -5,18 +5,20 @@ using Portia.Infrastructure.Components;
 using Portia.Infrastructure.Goo;
 using Portia.Infrastructure.Helps;
 using System.Linq;
-using Portia.Infrastructure.Main;
+using Portia.Lite.Components.Goo;
+using Grasshopper.Kernel.Data;
+using Grasshopper;
 
-namespace Portia.Lite.Components.Goo
+namespace Portia.Lite.Components.Decode
 {
-    public class DeconstructItemComponent : GenericBase
+    public class DecodeItemComponent : GenericBase
     {
-        public DeconstructItemComponent()
+        public DecodeItemComponent()
             : base(
-                nameof(DeconstructItemComponent)
+                nameof(DecodeItemComponent)
                     .Substring(
                         0,
-                        11),
+                        10),
                 Docs.DeconstructItem,
                 Naming.Tab,
                 Naming.Tab)
@@ -33,9 +35,9 @@ namespace Portia.Lite.Components.Goo
             GH_InputParamManager pManager)
         {
             pManager.AddParameter(
-                new GraphItemParameter(),
-                nameof(GraphItem),
-                nameof(GraphItem),
+                new GraphItemGooParameter(),
+                nameof(GraphItemGoo),
+                nameof(GraphItemGoo),
                 Docs.GraphItemGoo,
                 GH_ParamAccess.list);
         }
@@ -51,6 +53,9 @@ namespace Portia.Lite.Components.Goo
                 .OutStrings(
                     nameof(Docs.Type) + "s",
                     Docs.Type)
+                .OutGenericTree(
+                    nameof(Docs.FeatureGoo) + "s",
+                    Docs.FeatureGoo)
                 .OutJsons(
                     nameof(Docs.Json),
                     Docs.Json);
@@ -78,8 +83,29 @@ namespace Portia.Lite.Components.Goo
                 2,
                 goos.Select(x => x.Value.GraphIdentity.Type));
 
-            da.SetDataList(
+            var featureTree = new DataTree<FeatureGoo>();
+
+            for (int i = 0; i < goos.Count; i++)
+            {
+                var path = new GH_Path(
+                    da.Iteration,
+                    i);
+                var features = goos[i].Value.FeatureSet.GetAll();
+
+                foreach (var feature in features)
+                {
+                    featureTree.Add(
+                        new FeatureGoo(feature),
+                        path);
+                }
+            }
+
+            da.SetDataTree(
                 3,
+                featureTree);
+
+            da.SetDataList(
+                4,
                 goos.Select(x => x.Value.ToJson()));
         }
     }

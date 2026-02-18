@@ -5,13 +5,13 @@ using System;
 
 namespace Portia.Lite.Components.Goo
 {
-    public class GraphParameter : GH_Param<GraphGoo>
+    public class GraphItemGooParameter : GH_Param<GraphItemGoo>
     {
-        public GraphParameter()
+        public GraphItemGooParameter()
             : base(
-                nameof(Graph),
-                nameof(Graph),
-                Docs.GraphGoo,
+                nameof(GraphItem),
+                nameof(GraphItem),
+                Docs.GraphItemGoo,
                 Naming.Tab,
                 Naming.Tab,
                 GH_ParamAccess.item)
@@ -19,7 +19,7 @@ namespace Portia.Lite.Components.Goo
         }
 
         public override Guid ComponentGuid =>
-            new("65fbe9a6-94d5-4f38-a072-ae1e44c050bf");
+            new("78e9f1a2-4c5d-4b3a-9e2f-1d2c3b4a5e6f");
 
         public override GH_Exposure Exposure => GH_Exposure.hidden;
     }

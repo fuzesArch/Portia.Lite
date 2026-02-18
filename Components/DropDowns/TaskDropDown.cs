@@ -299,7 +299,7 @@ namespace Portia.Lite.Components.DropDowns
             new(
                 () => new GraphParameter(),
                 nameof(Graph),
-                Docs.GrapGoo,
+                Docs.GraphGoo,
                 GH_ParamAccess.item);
 
         protected override Dictionary<TaskType, ParameterSetup> DefineSetup()

@@ -87,6 +87,10 @@ namespace Portia.Lite
             "Graph payload: a user-defined name-value pair that gets " +
             "added to the selected Nodes or Edges in order to enrich them.";
 
+        public static string FeatureValue =>
+            "Node or Edge Feature payload: a user-defined value (numeric, boolean, etc.) " +
+            "that is stored by its Name in a Feature. ";
+
         public static string NodeFeatures =>
             "Graph payloads: user-defined name-value pairs that get " +
             "added to the selected Nodes in order to enrich them.";
@@ -334,12 +338,24 @@ namespace Portia.Lite
             "Connect the outputs to item-related deconstruction components!";
 
         public static string GraphItemGoo =>
-            "The proprietary 'Sovereign Goo' wrapper that encapsulates a graph element (Node or Edge), " +
+            "The proprietary 'Sovereign Goo' wrapper that encapsulates a graph item (Node or Edge), " +
             "carrying its full topological intelligence and metadata through the network.";
 
-        public static string GrapGoo =>
+        public static string GraphNodeGoo =>
+            "The proprietary 'Sovereign Goo' wrapper that encapsulates a graph Node, " +
+            "carrying its full topological intelligence and metadata through the network.";
+
+        public static string GraphEdgeGoo =>
+            "The proprietary 'Sovereign Goo' wrapper that encapsulates a graph Edge, " +
+            "carrying its full topological intelligence and metadata through the network.";
+
+        public static string GraphGoo =>
             "The proprietary 'Sovereign Goo' wrapper that encapsulates a graph (with its Nodes and Edges), " +
             "carrying its full topological intelligence and metadata through the network.";
+
+        public static string FeatureGoo =>
+            "The proprietary 'Sovereign Goo' wrapper that encapsulates a Feature, " +
+            "carrying its full key-value pair dictionary.";
 
         public static string Json =>
             "The universal, transaction-ready string representation of a graph element (Node or Edge), " +

@@ -3,19 +3,19 @@ using Portia.Infrastructure.Components;
 using Portia.Infrastructure.Goo;
 using Portia.Infrastructure.GraphHelps;
 using Portia.Infrastructure.Helps;
-using Portia.Infrastructure.Main;
+using Portia.Lite.Components.Goo;
 using System;
 
-namespace Portia.Lite.Components.Goo
+namespace Portia.Lite.Components.Decode
 {
-    public class DeconstructGraphComponent : GenericBase
+    public class DecodeGraphComponent : GenericBase
     {
-        public DeconstructGraphComponent()
+        public DecodeGraphComponent()
             : base(
-                nameof(DeconstructGraphComponent)
+                nameof(DecodeGraphComponent)
                     .Substring(
                         0,
-                        16),
+                        11),
                 Docs.DeconstructGraph,
                 Naming.Tab,
                 Naming.Tab)
@@ -33,20 +33,20 @@ namespace Portia.Lite.Components.Goo
         {
             pManager.AddParameter(
                 new GraphParameter(),
-                nameof(Graph),
-                nameof(Graph),
-                Docs.PortiaGraph,
+                nameof(GraphGoo),
+                nameof(GraphGoo),
+                Docs.GraphGoo,
                 GH_ParamAccess.item);
         }
 
         protected override void AddOutputFields()
         {
             OutGenerics(
-                    nameof(Graph.Nodes),
-                    Docs.GraphItemGoo)
+                    nameof(Docs.GraphNodeGoo),
+                    Docs.GraphNodeGoo)
                 .OutGenerics(
-                    nameof(Graph.Edges),
-                    Docs.GraphItemGoo)
+                    nameof(Docs.GraphEdgeGoo),
+                    Docs.GraphEdgeGoo)
                 .OutJson(
                     nameof(Docs.Json),
                     Docs.Json);
