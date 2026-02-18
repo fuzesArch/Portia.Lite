@@ -6,11 +6,10 @@ using Portia.Infrastructure.Features;
 using Portia.Infrastructure.Helps;
 using Portia.Infrastructure.Validators;
 using Portia.Lite.Core.Primitives;
-using Rhino.Geometry;
 using System;
 using System.Collections.Generic;
 
-namespace Portia.Lite.Components
+namespace Portia.Lite.Components.DropDowns
 {
     public class FeatureDropDown : AbsDropDownComponent<FeatureMode>
     {

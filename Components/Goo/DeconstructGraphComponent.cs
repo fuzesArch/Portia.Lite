@@ -6,7 +6,7 @@ using Portia.Infrastructure.Helps;
 using Portia.Infrastructure.Main;
 using System;
 
-namespace Portia.Lite.Components
+namespace Portia.Lite.Components.Goo
 {
     public class DeconstructGraphComponent : GenericBase
     {

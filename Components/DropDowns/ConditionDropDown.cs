@@ -10,7 +10,7 @@ using Rhino.Geometry;
 using System;
 using System.Collections.Generic;
 
-namespace Portia.Lite.Components
+namespace Portia.Lite.Components.DropDowns
 {
     public class ConditionDropDown : AbsDropDownComponent<ConditionMode>
     {

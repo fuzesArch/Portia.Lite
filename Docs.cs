@@ -1,6 +1,4 @@
-﻿using Portia.Infrastructure.Main;
-using Rhino.Geometry;
-using System;
+﻿using System;
 
 namespace Portia.Lite
 {
@@ -223,6 +221,10 @@ namespace Portia.Lite
             "Fuses an external Payload Graph into the " +
             "active Host Graph based on topological Target and Anchor matches.";
 
+        public static string Solve =>
+            "Executes the different logics on the Graph supplied and " +
+            "specified concretely by the different Solvers.";
+
         public static string SetNodeIndices =>
             "A modification Task that assigns specific Index integer values to " +
             "existing graph Nodes for categorization.";
@@ -347,5 +349,9 @@ namespace Portia.Lite
             "The projected geometric representation of an element: a Node's Centroid or Edge's Curve.";
 
         public static string Vector => "3D vector.";
+
+        public static string Solvers =>
+            "A collection of specific, complex logics " +
+            "executed on the graph.";
     }
 }

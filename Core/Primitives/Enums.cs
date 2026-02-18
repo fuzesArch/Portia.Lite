@@ -22,6 +22,11 @@ namespace Portia.Lite.Core.Primitives
         Constraint
     }
 
+    public enum SolverMode
+    {
+        Junction,
+    }
+
     public enum RuleMode
     {
         [Category("Composite")]
@@ -96,6 +101,9 @@ namespace Portia.Lite.Core.Primitives
         [Category("Setup Graph")]
         LoadGraph,
 
+        [Category("Setup Graph")]
+        AmalgamateGraph,
+
         [Category("Setup")]
         SetNodeIndices,
 
@@ -126,8 +134,7 @@ namespace Portia.Lite.Core.Primitives
         [Category("Validate")]
         VerifyEdges,
 
-        [Category("Manipulate Graph")]
-        Adapt,
-        Amalgamate,
+        [Category("Manipulate")]
+        Solve,
     }
 }

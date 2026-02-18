@@ -7,7 +7,8 @@ using Portia.Infrastructure.Components;
 using Portia.Infrastructure.GraphHelps;
 using Portia.Infrastructure.Helps;
 using Portia.Infrastructure.Main;
-using Portia.Infrastructure.Tasks;
+using Portia.Infrastructure.Tasks.Base;
+using Portia.Infrastructure.Tasks.GraphSetting;
 using Portia.Infrastructure.Validators;
 
 namespace Portia.Lite.Components
@@ -37,7 +38,7 @@ namespace Portia.Lite.Components
         protected override void AddInputFields()
         {
             InString(
-                nameof(AbsSetGraph).Substring(3),
+                nameof(AbsSetGraphTask).Substring(3),
                 "");
         }
 
@@ -220,8 +221,8 @@ namespace Portia.Lite.Components
 
                 if (i == 0)
                 {
-                    param.Name = nameof(AbsSetGraph).Substring(3);
-                    param.NickName = nameof(AbsSetGraph).Substring(3);
+                    param.Name = nameof(AbsSetGraphTask).Substring(3);
+                    param.NickName = nameof(AbsSetGraphTask).Substring(3);
                     param.Description =
                         $"Connect a {nameof(SetGraphByCurves)} or {nameof(LoadGraph)} Task JSON here.";
                 }

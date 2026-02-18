@@ -4,7 +4,14 @@ using Portia.Infrastructure.Components;
 using Portia.Infrastructure.DocStrings;
 using Portia.Infrastructure.Helps;
 using Portia.Infrastructure.Primitives;
-using Portia.Infrastructure.Rules;
+using Portia.Infrastructure.Rules.Base;
+using Portia.Infrastructure.Rules.BoundaryBased;
+using Portia.Infrastructure.Rules.Composite;
+using Portia.Infrastructure.Rules.Numeric;
+using Portia.Infrastructure.Rules.StringBased;
+using Portia.Infrastructure.Rules.StringCollectionBased;
+using Portia.Infrastructure.Rules.VectorBased;
+using Portia.Infrastructure.Rules.VectorCollectionBased;
 using Portia.Infrastructure.Validators;
 using Portia.Lite.Core.Primitives;
 using Rhino.Geometry;
@@ -12,7 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Portia.Lite.Components
+namespace Portia.Lite.Components.DropDowns
 {
     public class RuleDropDown : AbsDropDownComponent<RuleMode>
     {
@@ -418,7 +425,7 @@ namespace Portia.Lite.Components
                 },
                 {
                     RuleMode.Edge_EndDegree,
-                    NumericSetup<EndDegreeRule>(Docs.EndDegree)
+                    NumericSetup<EdgeEndDegreeRule>(Docs.EndDegree)
                 },
                 {
                     RuleMode.Edge_StartIndex,

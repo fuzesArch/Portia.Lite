@@ -6,16 +6,25 @@ using Portia.Infrastructure.Features;
 using Portia.Infrastructure.Goo;
 using Portia.Infrastructure.Helps;
 using Portia.Infrastructure.Main;
-using Portia.Infrastructure.Rules;
-using Portia.Infrastructure.Tasks;
+using Portia.Infrastructure.Rules.Base;
+using Portia.Infrastructure.Solvers;
+using Portia.Infrastructure.Tasks.Base;
+using Portia.Infrastructure.Tasks.GraphSetting;
+using Portia.Infrastructure.Tasks.RuleBased.Filtering;
+using Portia.Infrastructure.Tasks.RuleBased.Setting.FeatureSetting;
+using Portia.Infrastructure.Tasks.RuleBased.Setting.IndexSetting;
+using Portia.Infrastructure.Tasks.RuleBased.Setting.TypeSetting;
+using Portia.Infrastructure.Tasks.RuleBased.Verification;
+using Portia.Infrastructure.Tasks.Solving;
 using Portia.Infrastructure.Validators;
+using Portia.Lite.Components.Goo;
 using Portia.Lite.Core.Primitives;
 using Rhino.Geometry;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Portia.Lite.Components
+namespace Portia.Lite.Components.DropDowns
 {
     public class TaskDropDown : AbsDropDownComponent<TaskType>
     {
@@ -119,7 +128,7 @@ namespace Portia.Lite.Components
 
         protected void BySetIndices<T>(
             IGH_DataAccess da)
-            where T : AbsSetIndices, new()
+            where T : AbsSetIndicesTask, new()
         {
             SetRules(da);
 
@@ -138,7 +147,7 @@ namespace Portia.Lite.Components
 
         protected void BySetTypes<T>(
             IGH_DataAccess da)
-            where T : AbsSetTypes, new()
+            where T : AbsSetTypesTask, new()
         {
             SetRules(da);
 
@@ -156,7 +165,7 @@ namespace Portia.Lite.Components
 
         protected void BySetFeatures<T>(
             IGH_DataAccess da)
-            where T : AbsSetFeatures, new()
+            where T : AbsSetFeaturesTask, new()
         {
             SetRules(da);
 
@@ -231,10 +240,26 @@ namespace Portia.Lite.Components
                 return;
             }
 
-            _task = new Amalgamate(
+            _task = new AmalgamateGraph(
                 _rules,
                 anchorRuleJsons.FromJson<IRule>().ToList(),
                 goo.Value);
+        }
+
+        protected void BySolve(
+            IGH_DataAccess da)
+        {
+            if (!da.GetItems(
+                    0,
+                    out List<string> solverJsons))
+            {
+                return;
+            }
+
+            _task = new Solve
+            {
+                Solvers = solverJsons.FromJson<ISolver>().ToList()
+            };
         }
 
         protected static ParameterConfig JsonsParam(
@@ -259,14 +284,14 @@ namespace Portia.Lite.Components
         protected static ParameterConfig IndicesParam() =>
             new(
                 () => new Param_Integer(),
-                nameof(AbsSetIndices.Indices),
+                nameof(AbsSetIndicesTask.Indices),
                 Docs.Indices.Add(Prefix.IntegerList),
                 GH_ParamAccess.list);
 
         protected static ParameterConfig TypesParam() =>
             new(
                 () => new Param_String(),
-                nameof(AbsSetTypes.Types),
+                nameof(AbsSetTypesTask.Types),
                 Docs.Types.Add(Prefix.StringList),
                 GH_ParamAccess.list);
 
@@ -412,7 +437,7 @@ namespace Portia.Lite.Components
                         Docs.VerifyEdges)
                 },
                 {
-                    TaskType.Amalgamate, new ParameterSetup(
+                    TaskType.AmalgamateGraph, new ParameterSetup(
                         new List<ParameterConfig>
                         {
                             JsonsParam(
@@ -425,6 +450,17 @@ namespace Portia.Lite.Components
                         },
                         ByAmalgamation,
                         Docs.Amalgamate)
+                },
+                {
+                    TaskType.Solve, new ParameterSetup(
+                        new List<ParameterConfig>
+                        {
+                            JsonsParam(
+                                nameof(Docs.Solvers),
+                                Docs.Solvers),
+                        },
+                        BySolve,
+                        Docs.Solve)
                 }
             };
         }

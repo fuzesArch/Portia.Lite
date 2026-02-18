@@ -7,7 +7,7 @@ using Portia.Infrastructure.Helps;
 using System.Linq;
 using Portia.Infrastructure.Main;
 
-namespace Portia.Lite.Components
+namespace Portia.Lite.Components.Goo
 {
     public class DeconstructItemComponent : GenericBase
     {
