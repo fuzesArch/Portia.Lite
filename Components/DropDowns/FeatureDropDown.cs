@@ -3,6 +3,8 @@ using Grasshopper.Kernel.Parameters;
 using Portia.Infrastructure.Components;
 using Portia.Infrastructure.DocStrings;
 using Portia.Infrastructure.Features;
+using Portia.Infrastructure.Features.Base;
+using Portia.Infrastructure.Features.Implementations;
 using Portia.Infrastructure.Helps;
 using Portia.Infrastructure.Validators;
 using Portia.Lite.Core.Primitives;
@@ -34,10 +36,8 @@ namespace Portia.Lite.Components.DropDowns
         {
             InString(
                     nameof(IFeature.Name),
-                    Docs
-                        .Name.ByDefault(nameof(FeatureKey.Width))
-                        .Add(Prefix.String),
-                    nameof(FeatureKey.Width))
+                    Docs.Name.ByDefault(FeatureKey.Width).Add(Prefix.String),
+                    FeatureKey.Width)
                 .InDouble(
                     nameof(NumericFeature.Value),
                     Docs.NumericValue.Add(Prefix.Double));
@@ -105,7 +105,7 @@ namespace Portia.Lite.Components.DropDowns
                             nameof(NumericFeature.Value),
                             nameof(Prefix.Double),
                             GH_ParamAccess.item),
-                        nameof(FeatureKey.Width))
+                        FeatureKey.Width)
                 },
                 {
                     FeatureMode.String, GenericSetup<StringFeature, string>(
@@ -114,7 +114,7 @@ namespace Portia.Lite.Components.DropDowns
                             nameof(StringFeature.Value),
                             nameof(Prefix.String),
                             GH_ParamAccess.item),
-                        nameof(FeatureKey.GroupType))
+                        FeatureKey.GroupType)
                 },
                 {
                     FeatureMode.Boolean, GenericSetup<BooleanFeature, bool>(
@@ -123,7 +123,7 @@ namespace Portia.Lite.Components.DropDowns
                             nameof(BooleanFeature.Value),
                             nameof(Prefix.Boolean),
                             GH_ParamAccess.item),
-                        nameof(FeatureKey.Active))
+                        FeatureKey.Active)
                 },
                 //{
                 //    FeatureMode.Curve, new ParameterStrategy(

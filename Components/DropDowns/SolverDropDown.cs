@@ -34,9 +34,9 @@ namespace Portia.Lite.Components.DropDowns
         protected override void AddInputFields()
         {
             InString(
-                nameof(FeatureKey.Width),
-                Docs.Name.ByDefault(nameof(FeatureKey.Width)).Add(Prefix.Json),
-                nameof(FeatureKey.Width));
+                FeatureKey.Width,
+                Docs.Name.ByDefault(FeatureKey.Width).Add(Prefix.Json),
+                FeatureKey.Width);
 
             SetInputParameterOptionality(0);
         }
@@ -63,7 +63,7 @@ namespace Portia.Lite.Components.DropDowns
         {
             string widthKey = da.GetOptionalItem(
                 0,
-                nameof(FeatureKey.Width));
+                FeatureKey.Width);
 
             _solver = new JunctionSolver { WidthKey = widthKey };
         }
@@ -80,7 +80,7 @@ namespace Portia.Lite.Components.DropDowns
                                 () => new Param_String(),
                                 nameof(JunctionSolver.WidthKey),
                                 Docs
-                                    .Name.ByDefault(nameof(FeatureKey.Width))
+                                    .Name.ByDefault(FeatureKey.Width)
                                     .Add(Prefix.String),
                                 GH_ParamAccess.item,
                                 isOptional: true)
