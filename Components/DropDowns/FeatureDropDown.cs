@@ -52,7 +52,7 @@ namespace Portia.Lite.Components.DropDowns
             new(
                 () => new Param_String(),
                 nameof(IFeature.Name),
-                Docs.Name.Add(Prefix.String),
+                Docs.Name.ByDefault(FeatureName.Width).Add(Prefix.String),
                 GH_ParamAccess.item,
                 isOptional: true);
 
@@ -92,7 +92,7 @@ namespace Portia.Lite.Components.DropDowns
                             nameof(NumericFeature.Value),
                             nameof(Prefix.Double),
                             GH_ParamAccess.item),
-                        FeatureKey.Width)
+                        FeatureName.Width)
                 },
                 {
                     FeatureMode.String, GenericSetup<StringFeature, string>(
@@ -101,7 +101,7 @@ namespace Portia.Lite.Components.DropDowns
                             nameof(StringFeature.Value),
                             nameof(Prefix.String),
                             GH_ParamAccess.item),
-                        FeatureKey.GroupType)
+                        FeatureName.GroupType)
                 },
                 {
                     FeatureMode.Boolean, GenericSetup<BooleanFeature, bool>(
@@ -110,7 +110,7 @@ namespace Portia.Lite.Components.DropDowns
                             nameof(BooleanFeature.Value),
                             nameof(Prefix.Boolean),
                             GH_ParamAccess.item),
-                        FeatureKey.Active)
+                        FeatureName.Active)
                 },
                 //{
                 //    FeatureMode.Curve, new ParameterStrategy(

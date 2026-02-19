@@ -12,6 +12,12 @@ namespace Portia.Lite.Core.Primitives
         Boundary
     }
 
+    public enum FeatureNameMode
+    {
+        Width,
+        Rank,
+    }
+
     public enum FeatureMode
     {
         Numeric,

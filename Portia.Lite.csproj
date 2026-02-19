@@ -86,6 +86,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Components\DropDowns\DecodeDropDown.cs" />
+    <Compile Include="Components\DropDowns\FeatureNameDropDown.cs" />
     <Compile Include="Components\DropDowns\SolverDropDown.cs" />
     <Compile Include="Components\DropDowns\FeatureDropDown.cs" />
     <Compile Include="Components\Goo\FeatureGooParameter.cs" />

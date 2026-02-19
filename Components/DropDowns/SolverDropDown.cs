@@ -1,8 +1,5 @@
 ﻿using Grasshopper.Kernel;
-using Grasshopper.Kernel.Parameters;
 using Portia.Infrastructure.Components;
-using Portia.Infrastructure.DocStrings;
-using Portia.Infrastructure.Features;
 using Portia.Infrastructure.Helps;
 using Portia.Infrastructure.Solvers;
 using Portia.Infrastructure.Validators;
@@ -52,11 +49,7 @@ namespace Portia.Lite.Components.DropDowns
         private void ByJunction(
             IGH_DataAccess da)
         {
-            string widthKey = da.GetOptionalItem(
-                0,
-                FeatureKey.Width);
-
-            _solver = new JunctionSolver { WidthKey = widthKey };
+            _solver = new JunctionSolver();
         }
         #endif
 
@@ -67,17 +60,7 @@ namespace Portia.Lite.Components.DropDowns
                 #if INTERNAL
                 {
                     SolverMode.Junction, new ParameterSetup(
-                        new List<ParameterConfig>
-                        {
-                            new(
-                                () => new Param_String(),
-                                nameof(JunctionSolver.WidthKey),
-                                Docs
-                                    .Name.ByDefault(FeatureKey.Width)
-                                    .Add(Prefix.String),
-                                GH_ParamAccess.item,
-                                isOptional: true)
-                        },
+                        new List<ParameterConfig>(),
                         ByJunction,
                         Docs.Solve)
                 }

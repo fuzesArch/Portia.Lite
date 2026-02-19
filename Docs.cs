@@ -84,8 +84,12 @@ namespace Portia.Lite
             "between points and boundaries, where a boundary is a closed Brep evaluated for point containment.";
 
         public static string Feature =>
-            "Graph payload: a user-defined name-value pair that gets " +
-            "added to the selected Nodes or Edges in order to enrich them.";
+            "Graph payload: a user-defined name-value pair (Feature) that gets " +
+            "added to the selected Nodes or Edges in order to enrich them for downstream Solver logics.";
+
+        public static string FeatureName =>
+            "Graph payload: a user-defined name pair that defines the Feature that gets " +
+            "added to the selected Nodes or Edges in order to enrich them for downstream Solver logics..";
 
         public static string FeatureValue =>
             "Node or Edge Feature payload: a user-defined value (numeric, boolean, etc.) " +
