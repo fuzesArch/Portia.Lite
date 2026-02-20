@@ -89,6 +89,7 @@
     <Compile Include="Components\DropDowns\FeatureNameDropDown.cs" />
     <Compile Include="Components\DropDowns\SolverDropDown.cs" />
     <Compile Include="Components\DropDowns\FeatureDropDown.cs" />
+    <Compile Include="Components\Goo\EdgeJunctionGooParameter.cs" />
     <Compile Include="Components\Goo\FeatureGooParameter.cs" />
     <Compile Include="Components\Goo\GraphGooParameter.cs" />
     <Compile Include="Components\Goo\GraphItemGooParameter.cs" />

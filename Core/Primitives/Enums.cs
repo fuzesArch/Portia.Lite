@@ -38,7 +38,8 @@ namespace Portia.Lite.Core.Primitives
         Node,
         Edge,
         Graph,
-        Feature
+        Feature,
+        EdgeJunction
     }
 
     public enum RuleMode

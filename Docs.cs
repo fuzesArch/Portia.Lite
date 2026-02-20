@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Rhino.Geometry;
+using System;
 
 namespace Portia.Lite
 {
@@ -371,6 +372,10 @@ namespace Portia.Lite
             "The proprietary 'Sovereign Goo' wrapper that encapsulates a Feature, " +
             "carrying its full key-value pair dictionary.";
 
+        public static string EdgeJunctionGoo =>
+            "The proprietary 'Sovereign Goo' wrapper that encapsulates the result of an Edge' Junction boundary result, " +
+            "carrying its full geometric dictionary.";
+
         public static string Json =>
             "The universal, transaction-ready string representation of a graph element (Node or Edge), " +
             "allowing for seamless data exchange between Portia and external logic engines.";
@@ -383,5 +388,25 @@ namespace Portia.Lite
         public static string Solvers =>
             "A collection of specific, complex logics " +
             "executed on the graph.";
+
+        public static string StartCap =>
+            "An Edge's resulting polyline section around its " +
+            "start node, spawned by the width- and rank-driven junction resolution.";
+
+        public static string EndCap =>
+            "An Edge's resulting polyline section around its " +
+            "end node, spawned by the width- and rank-driven junction resolution.";
+
+        public static string LeftSweep =>
+            "An Edge's resulting left-side polyline section parallel to its axis, " +
+            "spawned by the width- and rank-driven junction resolution.";
+
+        public static string RightSweep =>
+            "An Edge's resulting right-side polyline section parallel to its axis, " +
+            "spawned by the width- and rank-driven junction resolution.";
+
+        public static string EdgeJunctionBoundary =>
+            "An Edge's resulting joined polyline around its entire curvature, " +
+            "spawned by the width- and rank-driven junction resolution.";
     }
 }
