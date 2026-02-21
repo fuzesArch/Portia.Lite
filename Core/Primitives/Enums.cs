@@ -16,6 +16,7 @@ namespace Portia.Lite.Core.Primitives
     {
         Width,
         Rank,
+        EdgeDivision,
     }
 
     public enum FeatureMode
@@ -31,6 +32,7 @@ namespace Portia.Lite.Core.Primitives
     public enum SolverMode
     {
         Junction,
+        Spot
     }
 
     public enum DecodeMode

@@ -7,7 +7,6 @@ using Portia.Infrastructure.Features.Base;
 using Portia.Infrastructure.Goo;
 using Portia.Infrastructure.GraphHelps;
 using Portia.Infrastructure.Helps;
-using Portia.Infrastructure.Solvers;
 using Portia.Lite.Components.Goo;
 using Portia.Lite.Core.Primitives;
 using System;
@@ -36,7 +35,6 @@ namespace Portia.Lite.Components.DropDowns
         private GraphGoo _graphGoo;
         private List<GraphItemGoo> _itemGoos;
         private List<FeatureGoo> _featureGoos;
-        private List<EdgeJunctionGoo> _edgeJunctionGoos;
 
         protected override void AddOutputFields()
         {
@@ -74,30 +72,6 @@ namespace Portia.Lite.Components.DropDowns
                         .OutGenerics(
                             nameof(AbsFeature<double>.Value),
                             Docs.FeatureValue);
-                    break;
-
-                case DecodeMode.EdgeJunction:
-                    OutGenerics(
-                            nameof(EdgeJunction.StartCap),
-                            Docs.StartCap)
-                        .OutGenerics(
-                            nameof(EdgeJunction.EndCap),
-                            Docs.EndCap)
-                        .OutGenerics(
-                            nameof(EdgeJunction.LeftSweep),
-                            Docs.LeftSweep)
-                        .OutGenerics(
-                            nameof(EdgeJunction.RightSweep),
-                            Docs.RightSweep)
-                        .OutStrings(
-                            nameof(EdgeJunction.StartRankState),
-                            Docs.StartState)
-                        .OutStrings(
-                            nameof(EdgeJunction.EndRankState),
-                            Docs.EndState)
-                        .OutGenerics(
-                            nameof(EdgeJunction.Boundary),
-                            Docs.EdgeJunctionBoundary);
                     break;
             }
         }
@@ -193,43 +167,6 @@ namespace Portia.Lite.Components.DropDowns
                 }));
         }
 
-        private void SetEdgeJunctionOutputs(
-            IGH_DataAccess da)
-        {
-            if (_edgeJunctionGoos == null || !_edgeJunctionGoos.Any())
-            {
-                return;
-            }
-
-            da.SetDataList(
-                0,
-                _edgeJunctionGoos.Select(x => x?.Value?.StartCap));
-
-            da.SetDataList(
-                1,
-                _edgeJunctionGoos.Select(x => x?.Value?.EndCap));
-
-            da.SetDataList(
-                2,
-                _edgeJunctionGoos.Select(x => x?.Value?.LeftSweep));
-
-            da.SetDataList(
-                3,
-                _edgeJunctionGoos.Select(x => x?.Value?.RightSweep));
-
-            da.SetDataList(
-                4,
-                _edgeJunctionGoos.Select(x => x?.Value?.StartRankState));
-
-            da.SetDataList(
-                5,
-                _edgeJunctionGoos.Select(x => x?.Value?.EndRankState));
-
-            da.SetDataList(
-                6,
-                _edgeJunctionGoos.Select(x => x?.Value?.Boundary));
-        }
-
         protected override void CommonOutputSetting(
             IGH_DataAccess da)
         {
@@ -246,10 +183,6 @@ namespace Portia.Lite.Components.DropDowns
 
                 case DecodeMode.Feature:
                     SetFeatureOutputs(da);
-                    break;
-
-                case DecodeMode.EdgeJunction:
-                    SetEdgeJunctionOutputs(da);
                     break;
             }
         }
@@ -277,14 +210,6 @@ namespace Portia.Lite.Components.DropDowns
             da.GetItems(
                 0,
                 out _featureGoos);
-        }
-
-        private void ByEdgeJunction(
-            IGH_DataAccess da)
-        {
-            da.GetItems(
-                0,
-                out _edgeJunctionGoos);
         }
 
         protected override Dictionary<DecodeMode, ParameterSetup> DefineSetup()
@@ -343,20 +268,6 @@ namespace Portia.Lite.Components.DropDowns
                         ByFeature,
                         Docs.DeconstructFeature)
                 },
-                {
-                    DecodeMode.EdgeJunction, new ParameterSetup(
-                        new List<ParameterConfig>
-                        {
-                            new(
-                                () => new EdgeJunctionGooParameter(),
-                                nameof(Docs.EdgeJunctionGoo),
-                                Docs.EdgeJunctionGoo.Add(
-                                    Prefix.EdgeJunctionGoo),
-                                GH_ParamAccess.list)
-                        },
-                        ByEdgeJunction,
-                        Docs.EdgeJunctionGoo)
-                }
             };
         }
     }

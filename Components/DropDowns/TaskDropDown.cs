@@ -8,6 +8,8 @@ using Portia.Infrastructure.Graphs;
 using Portia.Infrastructure.Helps;
 using Portia.Infrastructure.Rules.Base;
 using Portia.Infrastructure.Solvers;
+using Portia.Infrastructure.Solvers.Base;
+using Portia.Infrastructure.Solvers.JunctionSolving;
 using Portia.Infrastructure.Tasks.Base;
 using Portia.Infrastructure.Tasks.GraphSetting;
 using Portia.Infrastructure.Tasks.RuleBased.Filtering;

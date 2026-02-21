@@ -6,6 +6,7 @@ using Portia.Infrastructure.Conditions.Implementations;
 using Portia.Infrastructure.DocStrings;
 using Portia.Infrastructure.Helps;
 using Portia.Infrastructure.Primitives;
+using Portia.Infrastructure.Primitives.Enums;
 using Portia.Infrastructure.Rules.Base;
 using Portia.Infrastructure.Rules.BoundaryBased;
 using Portia.Infrastructure.Rules.Composite;

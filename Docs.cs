@@ -1,5 +1,4 @@
-﻿using Rhino.Geometry;
-using System;
+﻿using System;
 
 namespace Portia.Lite
 {
@@ -28,10 +27,6 @@ namespace Portia.Lite
 
         public static string StringValue =>
             "The target string value used for text-based filtering.";
-
-        public static string PortiaGraph =>
-            "The core building block of the Portia ecosystem, " +
-            "a graph structure designed to manage complex graph logic with architectural data.";
 
         public static string PortiaComponent =>
             "The core building block of the Portia ecosystem, " +
@@ -234,6 +229,7 @@ namespace Portia.Lite
             "Executes the different logics on the Graph supplied and " +
             "specified concretely by the different Solvers.";
 
+
         public static string SetNodeIndices =>
             "A modification Task that assigns specific Index integer values to " +
             "existing graph Nodes for categorization.";
@@ -372,10 +368,6 @@ namespace Portia.Lite
             "The proprietary 'Sovereign Goo' wrapper that encapsulates a Feature, " +
             "carrying its full key-value pair dictionary.";
 
-        public static string EdgeJunctionGoo =>
-            "The proprietary 'Sovereign Goo' wrapper that encapsulates the result of an Edge' Junction boundary result, " +
-            "carrying its full geometric dictionary.";
-
         public static string Json =>
             "The universal, transaction-ready string representation of a graph element (Node or Edge), " +
             "allowing for seamless data exchange between Portia and external logic engines.";
@@ -389,32 +381,24 @@ namespace Portia.Lite
             "A collection of specific, complex logics " +
             "executed on the graph.";
 
-        public static string StartCap =>
-            "An Edge's resulting polyline section around its " +
-            "start node, spawned by the width- and rank-driven junction resolution.";
+        public static string GridCurves =>
+            "Globally defined curves that intersect the graph Edges to allocate grid spots.";
 
-        public static string EndCap =>
-            "An Edge's resulting polyline section around its " +
-            "end node, spawned by the width- and rank-driven junction resolution.";
+        public static string VoidCurves =>
+            "Globally defined curves that intersect the graph Edges to allocate " +
+            "void start and end spots. Supply them in pairs!";
 
-        public static string LeftSweep =>
-            "An Edge's resulting left-side polyline section parallel to its axis, " +
-            "spawned by the width- and rank-driven junction resolution.";
+        public static string RoomCurves =>
+            "Globally defined curves that intersect the graph Edges to allocate " +
+            "room start and end spots. Supply them in pairs!";
 
-        public static string RightSweep =>
-            "An Edge's resulting right-side polyline section parallel to its axis, " +
-            "spawned by the width- and rank-driven junction resolution.";
+        public static string JunctionSolver =>
+            "A specific Solver that uses Edge Width and Rank features to " +
+            "spawn boundaries for subsequent floor planning.";
 
-        public static string EdgeJunctionBoundary =>
-            "An Edge's resulting joined polyline around its entire curvature, " +
-            "spawned by the width- and rank-driven junction resolution.";
-
-        public static string StartState =>
-            "An Edge's resulting Rank-based dominance state compared to its " +
-            "neighbouring edges at its start node.";
-
-        public static string EndState =>
-            "An Edge's resulting Rank-based dominance state compared to its " +
-            "neighbouring edges at its end node.";
+        public static string SpotSolver =>
+            "A specific Solver that uses EdgeDivision features to " +
+            "spawn Spots along the Edges - usable for subsequent floor layout creation, " +
+            "parking grid generation and detailed structural beam planning.";
     }
 }

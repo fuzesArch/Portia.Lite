@@ -5,7 +5,7 @@ using Portia.Infrastructure.Conditions.Base;
 using Portia.Infrastructure.Conditions.Implementations;
 using Portia.Infrastructure.DocStrings;
 using Portia.Infrastructure.Helps;
-using Portia.Infrastructure.Primitives;
+using Portia.Infrastructure.Primitives.Enums;
 using Portia.Infrastructure.Validators;
 using Portia.Lite.Core.Primitives;
 using Rhino.Geometry;
@@ -32,21 +32,6 @@ namespace Portia.Lite.Components.DropDowns
             Properties.Resources.BaseLogo;
 
         private IConditionBase _condition;
-
-        //protected override void AddInputFields()
-        //{
-        //    InEnum(
-        //            nameof(NumericRelation),
-        //            Docs.NumericRelation + Environment.NewLine +
-        //            typeof(NumericRelation).ToEnumString(),
-        //            NumericCondition.DefRelation.ToString())
-        //        .InDouble(
-        //            nameof(NumericCondition.Value),
-        //            Docs.NumericValue);
-
-        //    SetInputParameterOptionality(0);
-        //    SetEnumDropDown<NumericRelation>(0);
-        //}
 
         protected override void AddOutputFields()
         {

@@ -112,68 +112,6 @@ namespace Portia.Lite.Components.DropDowns
                             GH_ParamAccess.item),
                         FeatureName.Active)
                 },
-                //{
-                //    FeatureMode.Curve, new ParameterStrategy(
-                //        new List<ParameterConfig>
-                //        {
-                //            new(
-                //                () => new Param_String(),
-                //                nameof(IFeature.Name),
-                //                "Feature Key".Add(Prefix.String),
-                //                GH_ParamAccess.item,
-                //                isOptional: true),
-                //            new(
-                //                () => new Param_Curve(),
-                //                nameof(CurveFeature.Value),
-                //                "Boundary Curve".Add(Prefix.Curve),
-                //                GH_ParamAccess.item)
-                //        },
-                //        ByCurve,
-                //        "Curve Feature")
-                //},
-                //{
-                //    FeatureMode.Profile, new ParameterStrategy(
-                //        new List<ParameterConfig>
-                //        {
-                //            new(
-                //                () => new Param_String(),
-                //                nameof(IFeature.Name),
-                //                "Feature Key".Add(Prefix.String),
-                //                GH_ParamAccess.item,
-                //                isOptional: true),
-                //            new(
-                //                () => new Param_Curve(),
-                //                nameof(ProfileFeature.Value),
-                //                "Profile Curve (1x1 Domain)".Add(Prefix.Curve),
-                //                GH_ParamAccess.item)
-                //        },
-                //        ByProfile,
-                //        "Profile Feature")
-                //},
-                //{
-                //    FeatureMode.Constraint, new ParameterStrategy(
-                //        new List<ParameterConfig>
-                //        {
-                //            new(
-                //                () => new Param_String(),
-                //                nameof(IFeature.Name),
-                //                "Feature Key".Add(Prefix.String),
-                //                GH_ParamAccess.item,
-                //                isOptional: true),
-                //            new(
-                //                () => new Param_String(),
-                //                nameof(ConstraintFeature.Value),
-                //                "Target ID / Name".Add(Prefix.String),
-                //                GH_ParamAccess.item),
-                //            new(
-                //                () => new Param_Number(),
-                //                nameof(ConstraintFeature.TargetDistance),
-                //                "Target Distance".Add(Prefix.Double),
-                //                GH_ParamAccess.item)
-                //        },
-                //        ByConstraint,
-                //        "Constraint Feature")
-                //}
             };
         }
     }
