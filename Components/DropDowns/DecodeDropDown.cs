@@ -89,6 +89,12 @@ namespace Portia.Lite.Components.DropDowns
                         .OutGenerics(
                             nameof(EdgeJunction.RightSweep),
                             Docs.RightSweep)
+                        .OutStrings(
+                            nameof(EdgeJunction.StartRankState),
+                            Docs.StartState)
+                        .OutStrings(
+                            nameof(EdgeJunction.EndRankState),
+                            Docs.EndState)
                         .OutGenerics(
                             nameof(EdgeJunction.Boundary),
                             Docs.EdgeJunctionBoundary);
@@ -213,6 +219,14 @@ namespace Portia.Lite.Components.DropDowns
 
             da.SetDataList(
                 4,
+                _edgeJunctionGoos.Select(x => x?.Value?.StartRankState));
+
+            da.SetDataList(
+                5,
+                _edgeJunctionGoos.Select(x => x?.Value?.EndRankState));
+
+            da.SetDataList(
+                6,
                 _edgeJunctionGoos.Select(x => x?.Value?.Boundary));
         }
 

@@ -408,5 +408,13 @@ namespace Portia.Lite
         public static string EdgeJunctionBoundary =>
             "An Edge's resulting joined polyline around its entire curvature, " +
             "spawned by the width- and rank-driven junction resolution.";
+
+        public static string StartState =>
+            "An Edge's resulting Rank-based dominance state compared to its " +
+            "neighbouring edges at its start node.";
+
+        public static string EndState =>
+            "An Edge's resulting Rank-based dominance state compared to its " +
+            "neighbouring edges at its end node.";
     }
 }
