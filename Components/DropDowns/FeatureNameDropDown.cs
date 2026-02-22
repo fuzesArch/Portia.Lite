@@ -34,27 +34,20 @@ namespace Portia.Lite.Components.DropDowns
         protected override void CommonOutputSetting(
             IGH_DataAccess da)
         {
-            string outputKey = CurrentMode switch
-            {
-                FeatureNameMode.Width => FeatureName.Width,
-                FeatureNameMode.Rank => FeatureName.Rank,
-                _ => CurrentMode.ToString()
-            };
-
             da.SetData(
                 0,
-                outputKey);
+                CurrentMode.ToString());
         }
 
         protected override Dictionary<FeatureNameMode, ParameterSetup>
             DefineSetup()
         {
-            var dict = new Dictionary<FeatureNameMode, ParameterSetup>();
+            var setups = new Dictionary<FeatureNameMode, ParameterSetup>();
 
             foreach (FeatureNameMode mode in Enum.GetValues(
                          typeof(FeatureNameMode)))
             {
-                dict.Add(
+                setups.Add(
                     mode,
                     new ParameterSetup(
                         new List<ParameterConfig>(),
@@ -64,7 +57,7 @@ namespace Portia.Lite.Components.DropDowns
                         Docs.FeatureName));
             }
 
-            return dict;
+            return setups;
         }
     }
 }

@@ -1,11 +1,10 @@
-﻿using Eto.Forms;
-using Grasshopper.Kernel;
+﻿using Grasshopper.Kernel;
 using Grasshopper.Kernel.Parameters;
 using Portia.Infrastructure.Components;
 using Portia.Infrastructure.DocStrings;
 using Portia.Infrastructure.Helps;
 using Portia.Infrastructure.Solvers.Base;
-using Portia.Infrastructure.Solvers.JunctionSolving;
+using Portia.Infrastructure.Solvers.BoundarySolving;
 using Portia.Infrastructure.Solvers.SpotSolving;
 using Portia.Infrastructure.Validators;
 using Portia.Lite.Core.Primitives;
@@ -55,7 +54,7 @@ namespace Portia.Lite.Components.DropDowns
         private void ByJunction(
             IGH_DataAccess da)
         {
-            _solver = new JunctionSolver();
+            _solver = new BoundarySolver();
         }
 
         private void BySpot(
@@ -79,10 +78,10 @@ namespace Portia.Lite.Components.DropDowns
             {
                 #if INTERNAL
                 {
-                    SolverMode.Junction, new ParameterSetup(
+                    SolverMode.Boundary, new ParameterSetup(
                         new List<ParameterConfig>(),
                         ByJunction,
-                        Docs.JunctionSolver)
+                        Docs.BoundarySolver)
                 },
                 {
                     SolverMode.Spot, new ParameterSetup(
@@ -110,7 +109,6 @@ namespace Portia.Lite.Components.DropDowns
                         BySpot,
                         Docs.SpotSolver)
                 }
-
                 #endif
             };
         }

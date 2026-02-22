@@ -164,7 +164,7 @@ namespace Portia.Lite
             Environment.NewLine +
             "0.0 / Perfect Symmetry: A cross(X) or a star where every force is perfectly cancelled out by an opposite one." +
             Environment.NewLine +
-            "Close to 0.0 /	Balanced Junction: A standard 'T1 junction or a straight line (180°). The vectors point in opposite directions, 'pulling' the node equally." +
+            "Close to 0.0 /	Balanced Boundary: A standard 'T1 junction or a straight line (180°). The vectors point in opposite directions, 'pulling' the node equally." +
             Environment.NewLine +
             "1.0 /	Unbalanced / Corner: A 90° corner with two edges.The vectors don't cancel out; they combine to point toward the 'outside' of the corner." +
             Environment.NewLine +
@@ -324,27 +324,35 @@ namespace Portia.Lite
             "Boundary Brep used to define the spatial volumes " +
             "for Node centroid containment checks.";
 
+        public static string StartRankState =>
+            "Defines the dominance rank of an edge's start area, " +
+            "defined by its neighbouring edge rank constellation.";
+
+        public static string EndRankState =>
+            "Defines the dominance rank of an edge's end area, " +
+            "defined by its neighbouring edge rank constellation.";
+
         public static string StrictlyIn =>
             "A boolean toggle that determines if elements lying exactly on the " +
             "Brep boundary surface are included in the selection or not.";
 
-        public static string Decode =>
-            "A helper component used to unlock the details of the different Portia elements. " +
+        public static string Unpack =>
+            "A helper component used to unlock a.k.a. decode the details of the different Portia elements. " +
             "Nodes, Edges, Graphs and the FeatureSets (of Nodes and Edges) can be deconstructed into " +
             "their constituent parts. The items passed around are wrapped in the " +
             "Grasshopper-native Goo equivalents - hence the Goo suffix everywhere.";
 
-        public static string DeconstructItem =>
+        public static string UnpackItem =>
             "A helper component used to unlock the details of a graph element (both Node or Edge), " +
             "extracting its identity, geometric content (Centroid or Curve), and its raw JSON format data. " +
             "Connect to Portia Nodes and Edges outputs!";
 
-        public static string DeconstructGraph =>
+        public static string UnpackGraph =>
             "A helper component used to unlock the details of a Portia graph, " +
             "extracting its Nodes and Edges, and its raw JSON format data. " +
             "Connect the outputs to item-related deconstruction components!";
 
-        public static string DeconstructFeature =>
+        public static string UnpackFeature =>
             "A helper component used to unlock the details of a Feature, hosted by an element (both Node or Edge), " +
             "extracting its Name key and Value pair";
 
@@ -368,6 +376,17 @@ namespace Portia.Lite
             "The proprietary 'Sovereign Goo' wrapper that encapsulates a Feature, " +
             "carrying its full key-value pair dictionary.";
 
+        public static string EdgeJunction =>
+            "A lightweight object containing the edge-related results of the junction solver logic.";
+
+        public static string EdgeJunctionGoo =>
+            "The proprietary 'Sovereign Goo' wrapper that encapsulates the results of an Edge " +
+            "created by the Boundary solver logic, carrying its full key-value pair dictionary.";
+
+        public static string SpotGoo =>
+            "The proprietary 'Sovereign Goo' wrapper that encapsulates the results of an Edge " +
+            "created by the Spot solver logic, carrying its full key-value pair dictionary.";
+
         public static string Json =>
             "The universal, transaction-ready string representation of a graph element (Node or Edge), " +
             "allowing for seamless data exchange between Portia and external logic engines.";
@@ -377,9 +396,6 @@ namespace Portia.Lite
 
         public static string Vector => "3D vector.";
 
-        public static string Solvers =>
-            "A collection of specific, complex logics " +
-            "executed on the graph.";
 
         public static string GridCurves =>
             "Globally defined curves that intersect the graph Edges to allocate grid spots.";
@@ -392,7 +408,11 @@ namespace Portia.Lite
             "Globally defined curves that intersect the graph Edges to allocate " +
             "room start and end spots. Supply them in pairs!";
 
-        public static string JunctionSolver =>
+        public static string Solvers =>
+            "A collection of specific, complex logics " +
+            "executed on the graph.";
+
+        public static string BoundarySolver =>
             "A specific Solver that uses Edge Width and Rank features to " +
             "spawn boundaries for subsequent floor planning.";
 
@@ -400,5 +420,17 @@ namespace Portia.Lite
             "A specific Solver that uses EdgeDivision features to " +
             "spawn Spots along the Edges - usable for subsequent floor layout creation, " +
             "parking grid generation and detailed structural beam planning.";
+
+        public static string Spot =>
+            "Spots are created by the SpotSolver logics: they are edge-bound point objects containing their " +
+            "parameter on the given edge curve, their logical type and point coordinate.";
+
+        public static string SpotPoint => "3D coordinate object.";
+
+        public static string SpotParameter =>
+            "Floating point number between 0 and 1, representing a relative position along a curve.";
+
+        public static string SpotType =>
+            "Predefined logical type of a spot, defined by its spot solver logic.";
     }
 }

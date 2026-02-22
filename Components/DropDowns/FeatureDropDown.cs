@@ -43,6 +43,16 @@ namespace Portia.Lite.Components.DropDowns
             IGH_DataAccess da)
         {
             _feature.Guard();
+
+            if (FeatureName.Outputs.Contains(_feature.Name))
+            {
+                AddRuntimeMessage(
+                    GH_RuntimeMessageLevel.Error,
+                    $"Access Denied: '{_feature.Name}' is a reserved Solver Output " +
+                    $"and cannot be injected manually.");
+                return;
+            }
+
             da.SetData(
                 0,
                 _feature.ToJson());
@@ -52,7 +62,7 @@ namespace Portia.Lite.Components.DropDowns
             new(
                 () => new Param_String(),
                 nameof(IFeature.Name),
-                Docs.Name.ByDefault(FeatureName.Width).Add(Prefix.String),
+                Docs.Name.ByDefault(FeatureName.EdgeWidth).Add(Prefix.String),
                 GH_ParamAccess.item,
                 isOptional: true);
 
@@ -92,7 +102,7 @@ namespace Portia.Lite.Components.DropDowns
                             nameof(NumericFeature.Value),
                             nameof(Prefix.Double),
                             GH_ParamAccess.item),
-                        FeatureName.Width)
+                        FeatureName.EdgeWidth)
                 },
                 {
                     FeatureMode.String, GenericSetup<StringFeature, string>(

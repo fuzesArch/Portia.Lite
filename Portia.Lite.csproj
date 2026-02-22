@@ -85,7 +85,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Components\DropDowns\DecodeDropDown.cs" />
+    <Compile Include="Components\DropDowns\UnpackDropDown.cs" />
     <Compile Include="Components\DropDowns\FeatureNameDropDown.cs" />
     <Compile Include="Components\DropDowns\SolverDropDown.cs" />
     <Compile Include="Components\DropDowns\FeatureDropDown.cs" />
@@ -98,7 +98,13 @@
     <Compile Include="Components\DropDowns\TaskDropDown.cs" />
     <Compile Include="Components\DropDowns\ConditionDropDown.cs" />
     <Compile Include="Components\ValueLists.cs" />
-    <Compile Include="Core\Primitives\Enums.cs" />
+    <Compile Include="Core\Primitives\ConditionMode.cs" />
+    <Compile Include="Core\Primitives\FeatureMode.cs" />
+    <Compile Include="Core\Primitives\FeatureNameMode.cs" />
+    <Compile Include="Core\Primitives\RuleMode.cs" />
+    <Compile Include="Core\Primitives\SolverMode.cs" />
+    <Compile Include="Core\Primitives\TaskType.cs" />
+    <Compile Include="Core\Primitives\UnpackMode.cs" />
     <Compile Include="Docs.cs" />
     <Compile Include="InfrastructurePriority.cs" />
     <Compile Include="LiteAssemblyInfo.cs" />

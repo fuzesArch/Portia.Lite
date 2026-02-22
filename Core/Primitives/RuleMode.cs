@@ -4,46 +4,6 @@
 
 namespace Portia.Lite.Core.Primitives
 {
-    public enum ConditionMode
-    {
-        Numeric,
-        String,
-        Vector,
-        Boundary
-    }
-
-    public enum FeatureNameMode
-    {
-        Width,
-        Rank,
-        EdgeDivision,
-    }
-
-    public enum FeatureMode
-    {
-        Numeric,
-        String,
-        Boolean,
-        Curve,
-        Profile,
-        Constraint
-    }
-
-    public enum SolverMode
-    {
-        Junction,
-        Spot
-    }
-
-    public enum DecodeMode
-    {
-        Node,
-        Edge,
-        Graph,
-        Feature,
-        EdgeJunction
-    }
-
     public enum RuleMode
     {
         [Category("Composite")]
@@ -108,50 +68,5 @@ namespace Portia.Lite.Core.Primitives
 
         [Category("Edges")]
         Edge_InBoundary,
-    }
-
-    public enum TaskType
-    {
-        [Category("Setup Graph")]
-        SetGraphByCurves,
-
-        [Category("Setup Graph")]
-        LoadGraph,
-
-        [Category("Setup Graph")]
-        AmalgamateGraph,
-
-        [Category("Setup")]
-        SetNodeIndices,
-
-        [Category("Setup")]
-        SetEdgeIndices,
-
-        [Category("Setup")]
-        SetNodeTypes,
-
-        [Category("Setup")]
-        SetEdgeTypes,
-
-        [Category("Setup")]
-        SetNodeFeatures,
-
-        [Category("Setup")]
-        SetEdgeFeatures,
-
-        [Category("Filter")]
-        FilterNodes,
-
-        [Category("Filter")]
-        FilterEdges,
-
-        [Category("Validate")]
-        VerifyNodes,
-
-        [Category("Validate")]
-        VerifyEdges,
-
-        [Category("Manipulate")]
-        Solve,
     }
 }
