@@ -5,12 +5,15 @@ using Portia.Infrastructure.DocStrings;
 using Portia.Infrastructure.Helps;
 using Portia.Infrastructure.Solvers.Base;
 using Portia.Infrastructure.Solvers.BoundarySolving;
+using Portia.Infrastructure.Solvers.SectorSolving;
 using Portia.Infrastructure.Solvers.SpotSolving;
+using Portia.Infrastructure.Solvers.ZoneSolving;
 using Portia.Infrastructure.Validators;
 using Portia.Lite.Core.Primitives;
 using Rhino.Geometry;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Portia.Lite.Components.DropDowns
 {
@@ -53,11 +56,6 @@ namespace Portia.Lite.Components.DropDowns
         }
 
         #if INTERNAL
-        private void ByJunction(
-            IGH_DataAccess da)
-        {
-            _solver = new BoundarySolver();
-        }
 
         private void BySpot(
             IGH_DataAccess da)
@@ -72,6 +70,21 @@ namespace Portia.Lite.Components.DropDowns
                 roomLines);
         }
 
+        private void ByZone(
+            IGH_DataAccess da)
+        {
+            var demands = new List<ZoneDemand>();
+
+            if (da.GetItems(
+                    0,
+                    out List<string> demandJsons))
+            {
+                demands = demandJsons.FromJson<ZoneDemand>().ToList();
+            }
+
+            _solver = new ZoneSolver { ZoneDemands = demands };
+        }
+
         #endif
 
         protected override Dictionary<SolverMode, ParameterSetup> DefineSetup()
@@ -82,7 +95,10 @@ namespace Portia.Lite.Components.DropDowns
                 {
                     SolverMode.Boundary, new ParameterSetup(
                         new List<ParameterConfig>(),
-                        ByJunction,
+                        _ =>
+                        {
+                            _solver = new BoundarySolver();
+                        },
                         Docs.BoundarySolver)
                 },
                 {
@@ -110,6 +126,28 @@ namespace Portia.Lite.Components.DropDowns
                         },
                         BySpot,
                         Docs.SpotSolver)
+                },
+                {
+                    SolverMode.Sector, new ParameterSetup(
+                        new List<ParameterConfig>(),
+                        _ =>
+                        {
+                            _solver = new SectorSolver();
+                        },
+                        Docs.SectorSolver)
+                },
+                {
+                    SolverMode.Zone, new ParameterSetup(
+                        new List<ParameterConfig>
+                        {
+                            new(
+                                () => new Param_String(),
+                                nameof(ZoneSolver.ZoneDemands),
+                                Docs.ZoneDemand.Add(Prefix.JsonList),
+                                GH_ParamAccess.list)
+                        },
+                        ByZone,
+                        Docs.ZoneSolver)
                 }
                 #endif
             };

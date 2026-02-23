@@ -4,10 +4,11 @@ using Portia.Infrastructure.Components;
 using Portia.Infrastructure.DocStrings;
 using Portia.Infrastructure.Features;
 using Portia.Infrastructure.Features.Base;
-using Portia.Infrastructure.Features.Implementations;
+using Portia.Infrastructure.Features.Implementations.Items;
 using Portia.Infrastructure.Helps;
 using Portia.Infrastructure.Validators;
 using Portia.Lite.Core.Primitives;
+using Rhino.Geometry;
 using System;
 using System.Collections.Generic;
 
@@ -58,6 +59,8 @@ namespace Portia.Lite.Components.DropDowns
             da.SetData(
                 0,
                 _feature.ToJson());
+
+            Message = GetFeatureDoc(CurrentMode);
         }
 
         protected static ParameterConfig NameParam() =>
@@ -70,16 +73,19 @@ namespace Portia.Lite.Components.DropDowns
 
         protected ParameterSetup GenericSetup<TFeature, TValue>(
             ParameterConfig valueParameter,
-            string defName)
+            string description)
             where TFeature : AbsFeature<TValue>, new()
         {
             return new ParameterSetup(
                 new List<ParameterConfig> { NameParam(), valueParameter },
                 da =>
                 {
-                    string name = da.GetOptionalItem(
-                        0,
-                        defName);
+                    if (!da.GetItem(
+                            0,
+                            out string name))
+                    {
+                        return;
+                    }
 
                     if (!da.GetItem(
                             1,
@@ -90,7 +96,7 @@ namespace Portia.Lite.Components.DropDowns
 
                     _feature = new TFeature { Name = name, Value = value };
                 },
-                Docs.Feature);
+                description);
         }
 
         protected override Dictionary<FeatureMode, ParameterSetup> DefineSetup()
@@ -104,7 +110,7 @@ namespace Portia.Lite.Components.DropDowns
                             nameof(NumericFeature.Value),
                             nameof(Prefix.Double),
                             GH_ParamAccess.item),
-                        FeatureName.EdgeWidth)
+                        Docs.NumericFeature)
                 },
                 {
                     FeatureMode.String, GenericSetup<StringFeature, string>(
@@ -113,7 +119,7 @@ namespace Portia.Lite.Components.DropDowns
                             nameof(StringFeature.Value),
                             nameof(Prefix.String),
                             GH_ParamAccess.item),
-                        FeatureName.GroupType)
+                        Docs.StringFeature)
                 },
                 {
                     FeatureMode.Boolean, GenericSetup<BooleanFeature, bool>(
@@ -122,8 +128,31 @@ namespace Portia.Lite.Components.DropDowns
                             nameof(BooleanFeature.Value),
                             nameof(Prefix.Boolean),
                             GH_ParamAccess.item),
-                        FeatureName.Active)
+                        Docs.BooleanFeature)
                 },
+                {
+                    FeatureMode.Geometry,
+                    GenericSetup<GeometryFeature, GeometryBase>(
+                        new ParameterConfig(
+                            () => new Param_Geometry(),
+                            nameof(GeometryFeature.Value),
+                            nameof(Prefix.Geometry),
+                            GH_ParamAccess.item),
+                        Docs.GeometryFeature)
+                }
+            };
+        }
+
+        private static string GetFeatureDoc(
+            FeatureMode mode)
+        {
+            return mode switch
+            {
+                FeatureMode.Numeric => Docs.NumericFeature,
+                FeatureMode.String => Docs.StringFeature,
+                FeatureMode.Boolean => Docs.BooleanFeature,
+                FeatureMode.Geometry => Docs.GeometryFeature,
+                _ => Docs.FeatureName
             };
         }
     }

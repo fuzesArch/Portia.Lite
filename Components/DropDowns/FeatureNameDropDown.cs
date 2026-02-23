@@ -39,6 +39,8 @@ namespace Portia.Lite.Components.DropDowns
             da.SetData(
                 0,
                 CurrentMode.ToString());
+
+            Message = GetFeatureDoc(CurrentMode);
         }
 
         protected override Dictionary<FeatureNameMode, ParameterSetup>
@@ -56,10 +58,34 @@ namespace Portia.Lite.Components.DropDowns
                         _ =>
                         {
                         },
-                        Docs.FeatureName));
+                        GetFeatureDoc(mode)));
             }
 
             return setups;
+        }
+
+        private static string GetFeatureDoc(
+            FeatureNameMode mode)
+        {
+            return mode switch
+            {
+                FeatureNameMode.EdgeWidth => Docs.EdgeWidth,
+                FeatureNameMode.EdgeRank => Docs.EdgeRank,
+                FeatureNameMode.EdgeGrid => Docs.EdgeGrid,
+                FeatureNameMode.EdgeStartCap => Docs.EdgeStartCap,
+                FeatureNameMode.EdgeEndCap => Docs.EdgeEndCap,
+                FeatureNameMode.EdgeBoundary => Docs.EdgeBoundary,
+                FeatureNameMode.StartRankState => Docs.StartRankState,
+                FeatureNameMode.EndRankState => Docs.EndRankState,
+                FeatureNameMode.SpotPoints => Docs.SpotPoints,
+                FeatureNameMode.SpotParameters => Docs.SpotParameters,
+                FeatureNameMode.SpotTypes => Docs.SpotTypes,
+                FeatureNameMode.SectorBoundaries => Docs.SectorBoundaries,
+                FeatureNameMode.SectorLines => Docs.SectorLines,
+                FeatureNameMode.ZoneCategories => Docs.ZoneCategories,
+
+                _ => Docs.FeatureName
+            };
         }
     }
 }

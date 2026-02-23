@@ -73,6 +73,8 @@ namespace Portia.Lite.Components.DropDowns
                             Docs.FeatureValue);
                     break;
             }
+
+            SimplifyOutputs();
         }
 
         private void SetGraphOutputs(

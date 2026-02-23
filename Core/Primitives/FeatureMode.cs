@@ -5,5 +5,6 @@
         Numeric,
         String,
         Boolean,
+        Geometry
     }
 }

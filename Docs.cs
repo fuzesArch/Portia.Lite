@@ -4,39 +4,13 @@ namespace Portia.Lite
 {
     public static class Docs
     {
-        public static string NumericRelation =>
-            "Numerical comparison logic (Equal, GreaterThan, ..) for filtering floating point numbers.";
-
-        public static string StringRelation =>
-            "Text-based filter (Contains, StartsWith, ..) used mostly for node / edge Type processes.";
-
-        public static string BooleanCondition =>
-            "Logical Boolean Toggle: If True, the rule captures elements that satisfy the condition. " +
-            "If False, the rule is inverted to capture elements that do not.";
-
-        public static string MatchAll =>
-            "Similarly to the Gate component, this Boolean operator only returns with True, if the given condition(s) is true " +
-            "for ALL elements that are evaluated. If its False, it is enough that ANY of the evaluated elements match the condition(s)";
-
-        public static string Gate =>
-            "Boolean operator (AND, OR) to combine multiple conditions into one filter. " +
-            "AND means that all conditions must be True, OR means that any of the conditions is enough to be True.";
-
-        public static string NumericValue =>
-            "The target numerical (double a.k.a. floating point number) value for mathematical filtering.";
-
-        public static string StringValue =>
-            "The target string value used for text-based filtering.";
-
-        public static string Origin =>
-            "Connect an existing Portia Graph to modify it, " +
-            "OR connect raw Curves to initialize a new Graph.";
+        #region CORE ENGINE & COMPONENTS
 
         public static string PortiaComponent =>
             "The core building block of the Portia ecosystem, " +
             "designed to manage complex graph logic with architectural data " +
             "through customizable Task inputs." + Environment.NewLine +
-            "Portia reorders the input Tasks in the following order (independent from the input order after" +
+            "Portia reorders the input Tasks in the following order (independent from the input order after " +
             "the first curve setting task):" + Environment.NewLine +
             Environment.NewLine +
             $"Foundation  /  {nameof(SetGraphByCurves)} & {nameof(LoadGraph)}" +
@@ -63,168 +37,62 @@ namespace Portia.Lite
             "You are also warmly invited to explore and contribute to the open-source core here:" +
             Environment.NewLine + "https://github.com/fuzesArch/Portia.Lite";
 
-        public static string Condition =>
-            "Defines a logical filter rule based on the relationship " +
-            "with a selection relation type and a specific target value.";
+        public static string Origin =>
+            "Connect an existing Portia Graph to modify it, " +
+            "OR connect raw Curves to initialize a new Graph.";
 
-        public static string DoubleCondition =>
-            "Defines a logical filter rule based on the relationship " +
-            "with a double-based selection relation type and a specific double target value.";
+        public static string Unpack =>
+            "A helper component used to unlock a.k.a. decode the details of the different Portia elements. " +
+            "Nodes, Edges, Graphs and the FeatureSets (of Nodes and Edges) can be deconstructed into " +
+            "their constituent parts. The items passed around are wrapped in the " +
+            "Grasshopper-native Goo equivalents - hence the Goo suffix everywhere.";
 
-        public static string VectorCondition =>
-            "Defines a logical filter rule based on the geometric relationship " +
-            "between two vectors.";
+        public static string UnpackItem =>
+            "A helper component used to unlock the details of a graph element (both Node or Edge), " +
+            "extracting its identity, geometric content (Centroid or Curve), and its raw JSON format data. " +
+            "Connect to Portia Nodes and Edges outputs!";
 
-        public static string StringCondition =>
-            "Defines a logical filter rule based on the relationship " +
-            "with a text-based relation type and a specific string target value.";
+        public static string UnpackGraph =>
+            "A helper component used to unlock the details of a Portia graph, " +
+            "extracting its Nodes and Edges, and its raw JSON format data. " +
+            "Connect the outputs to item-related deconstruction components!";
 
-        public static string BoundaryCondition =>
-            "Defines a logical filter based on the geometric relationship " +
-            "between points and boundaries, where a boundary is a closed Brep evaluated for point containment.";
+        public static string UnpackFeature =>
+            "A helper component used to unlock the details of a Feature, hosted by an element (both Node or Edge), " +
+            "extracting its Name key and Value pair";
 
-        public static string Feature =>
-            "Graph payload: a user-defined name-value pair (Feature) that gets " +
-            "added to the selected Nodes or Edges in order to enrich them for downstream Solver logics.";
+        #endregion
 
-        public static string FeatureName =>
-            "Graph payload: a user-defined name pair that defines the Feature that gets " +
-            "added to the selected Nodes or Edges in order to enrich them for downstream Solver logics..";
+        #region PRIMITIVES & GOO
 
-        public static string FeatureValue =>
-            "Node or Edge Feature payload: a user-defined value (numeric, boolean, etc.) " +
-            "that is stored by its Name in a Feature. ";
+        public static string Geometries =>
+            "The projected geometric representation of an element: a Node's Centroid or Edge's Curve.";
 
-        public static string NodeFeatures =>
-            "Graph payloads: user-defined name-value pairs that get " +
-            "added to the selected Nodes in order to enrich them.";
+        public static string Vector => "3D vector.";
 
-        public static string EdgeFeatures =>
-            "Graph payloads: user-defined name-value pairs that get " +
-            "added to the selected Edges in order to enrich them.";
+        public static string GraphItemGoo =>
+            "The proprietary 'Sovereign Goo' wrapper that encapsulates a graph item (Node or Edge), " +
+            "carrying its full topological intelligence and metadata through the network.";
 
-        public static string Identity =>
-            "Defines the primary identification rule for graph elements " +
-            "using either a numerical Index or a text-based Type.";
+        public static string GraphNodeGoo =>
+            "The proprietary 'Sovereign Goo' wrapper that encapsulates a graph Node, " +
+            "carrying its full topological intelligence and metadata through the network.";
 
-        public static string Index =>
-            "The specific numerical index used to identify and map " +
-            "a unique element (node or edge) within the graph structure.";
+        public static string GraphEdgeGoo =>
+            "The proprietary 'Sovereign Goo' wrapper that encapsulates a graph Edge, " +
+            "carrying its full topological intelligence and metadata through the network.";
 
-        public static string Type =>
-            "A user-defined text string used to categorize and map " +
-            "specific elements (nodes or edges) within the graph structure.";
+        public static string GraphGoo =>
+            "The proprietary 'Sovereign Goo' wrapper that encapsulates a graph (with its Nodes and Edges), " +
+            "carrying its full topological intelligence and metadata through the network.";
 
-        public static string Rule =>
-            "Defines a localized graph process that evaluates " +
-            "nodes or edges based on their geometric and topological behavior.";
+        public static string FeatureGoo =>
+            "The proprietary 'Sovereign Goo' wrapper that encapsulates a Feature, " +
+            "carrying its full key-value pair dictionary.";
 
-        public static string EdgeRules =>
-            "Defines a localized graph process that evaluates " +
-            "Edges based on their geometric and topological behavior.";
+        #endregion
 
-        public static string IndexRule =>
-            "Defines a localized graph process that evaluates both " +
-            "Nodes AND Edges based on their numerical Index.";
-
-        public static string TypeRule =>
-            "Defines a localized graph process that evaluates both " +
-            "Nodes AND Edges based on their text-based Type value.";
-
-        public static string NodeRules =>
-            "Defines a localized graph process that evaluates " +
-            "Nodes based on their geometric and topological behavior.";
-
-        public static string NodeAdjacentEdgeType =>
-            "A topological query that validates a Node based on the Type " +
-            "of its connected Edges. Useful for identifying hybrid structural junctions, or " +
-            "setting the Type of a Node based on its neighbour.";
-
-        public static string NodeAdjacentEdgeVectorSimilarity =>
-            "A topological query that validates a Node based on the outgoing vectors " +
-            "of its connected Edges. Useful for identifying hybrid structural junctions, or " +
-            "setting the Type of a Node based on its neighbouring Edge constellation.";
-
-        public static string NodeInBoundary =>
-            "A topological query that validates a Node based on its centroid's " +
-            "containment by the input boundary Breps. Useful to set initial Node Types " +
-            "or Indices for basic categorization.";
-
-        public static string EdgeInBoundary =>
-            "A topological query that validates an Edge based on its start or end point's " +
-            "containment by the input boundary Breps. Useful to set initial Edge Types " +
-            "or Indices for basic categorization.";
-
-        public static string NodeAdjacency =>
-            "A rule that evaluates a Node's direct neighbouring Edge count.";
-
-        public static string NodeProximity =>
-            "A rule that checks the spatial distance between Nodes " +
-            "regardless of direct edge connections.";
-
-        public static string NodeVectorScalarSum =>
-            "A rule that calculates the resultant force or orientation of a node " +
-            "by summing the directional vectors of all connected edges." +
-            Environment.NewLine +
-            "0.0 / Perfect Symmetry: A cross(X) or a star where every force is perfectly cancelled out by an opposite one." +
-            Environment.NewLine +
-            "Close to 0.0 /	Balanced Boundary: A standard 'T1 junction or a straight line (180°). The vectors point in opposite directions, 'pulling' the node equally." +
-            Environment.NewLine +
-            "1.0 /	Unbalanced / Corner: A 90° corner with two edges.The vectors don't cancel out; they combine to point toward the 'outside' of the corner." +
-            Environment.NewLine +
-            "High ( > 2.0) / Acute Bunching: Many edges all pointing in roughly the same direction.The node is 'heavily weighted' toward one side.";
-
-        public static string IsLeafNode =>
-            "A binary validation rule that identifies 'leaf' nodes—elements " +
-            "with only one connection—at the termination of a graph branch.";
-
-        public static string EdgeSimilarity =>
-            "A geometric rule that compares an Edge's start tangent vector to the input vectors by the input conditions.";
-
-        public static string EdgeCurveLength =>
-            "A rule that evaluates the physical length of an Edge' curve.";
-
-        public static string EdgeStartEndDistance =>
-            "A rule that evaluates the virtual length between the Start and End Node Centroids of an Edge.";
-
-        public static string StartDegree =>
-            "A rule that evaluates the direct neighbouring Edge count of an Edge's start Node.";
-
-        public static string EndDegree =>
-            "A rule that evaluates the direct neighbouring Edge count of an Edge's end Node.";
-
-        public static string EdgeStartIndex =>
-            "A rule that evaluates / captures an Edge based on the numerical Index " +
-            "of its start Node.";
-
-        public static string EdgeStartType =>
-            "A rule that evaluates / captures an Edge based on the text-based Type " +
-            "of its end Node.";
-
-        public static string EdgeEndIndex =>
-            "A rule that evaluates / captures an Edge based on the numerical Index " +
-            "of its end Node.";
-
-        public static string EdgeEndType =>
-            "A rule that evaluates / captures an Edge based on the text-based Type " +
-            "of its end Node.";
-
-        public static string IsLinearRule =>
-            "A binary validation rule that determines if an Edge is perfectly straight " +
-            "within document tolerance, distinguishing between linear members and curved geometry.";
-
-        public static string AllItemsRule =>
-            "A simple rule capturing all Nodes and Edges of the graph.";
-
-        public static string AllNodesRule =>
-            "A simple rule capturing all Nodes of the graph.";
-
-        public static string AllEdgesRule =>
-            "A simple rule capturing all Edges of the graph.";
-
-        public static string HasFeatureRule =>
-            "A simple boolean rule that captures a Node or an Edge if a certain Feature " +
-            "is present, defined by its Name.";
+        #region TASKS
 
         public static string Task =>
             "A specialized graph operation that executes " +
@@ -245,7 +113,6 @@ namespace Portia.Lite
         public static string Solve =>
             "Executes the different logics on the Graph supplied and " +
             "specified concretely by the different Solvers.";
-
 
         public static string SetNodeIndices =>
             "A modification Task that assigns specific Index integer values to " +
@@ -287,149 +154,160 @@ namespace Portia.Lite
             "A validation Task that checks Edges against selected logic rules " +
             "to ensure structural or topological integrity.";
 
-        public static string Curves =>
-            "The input geometric curves used to generate the " +
-            "base network topology for the Portia engine.";
+        #endregion
 
-        public static string InitialEdgeTypes =>
-            "The optional Type strings assigned to the Edges during the " +
-            "initial graph generation process, used for categorization.";
+        #region CONDITIONS
 
-        public static string Indices =>
-            "The specific integer-based Index values to be assigned to the " +
-            "elements that get captured by the current input Rule.";
+        public static string Condition =>
+            "Defines a logical filter rule based on the relationship " +
+            "with a selection relation type and a specific target value.";
 
-        public static string Types =>
-            "The specific text-based Type values to be assigned to the " +
-            "elements that get captured by the current input Rule.";
+        public static string DoubleCondition =>
+            "Defines a logical filter rule based on the relationship " +
+            "with a double-based selection relation type and a specific double target value.";
 
-        public static string NodeRulesToVerify =>
-            "The graph logic rules that verify the topological or " +
-            "geometric integrity of the Nodes that are captured " +
-            "by the input Node rules!";
+        public static string VectorCondition =>
+            "Defines a logical filter rule based on the geometric relationship " +
+            "between two vectors.";
 
-        public static string EdgeRulesToVerify =>
-            "The graph logic rules that verify the topological or " +
-            "geometric integrity of the Edges that are captured " +
-            "by the input Edge rules!";
+        public static string StringCondition =>
+            "Defines a logical filter rule based on the relationship " +
+            "with a text-based relation type and a specific string target value.";
 
-        public static string TargetNodeRules =>
-            "Rules defining the exact insertion points " +
-            "on the host Graph. (Must be Node Rules).";
+        public static string BoundaryCondition =>
+            "Defines a logical filter based on the geometric relationship " +
+            "between points and boundaries, where a boundary is a closed Brep evaluated for point containment.";
 
-        public static string AnchorNodeRules =>
-            "Rules defining the exact receiving connection points " +
-            "on the Payload Graph. (Must be Node Rules).";
+        public static string NumericRelation =>
+            "Numerical comparison logic (Equal, GreaterThan, ..) for filtering floating point numbers.";
 
+        public static string StringRelation =>
+            "Text-based filter (Contains, StartsWith, ..) used mostly for node / edge Type processes.";
 
-        public static string Name =>
-            "A unique identifier used to label logic results and " +
-            "dynamically name the corresponding Portia output fields for easy tracking.";
+        public static string BooleanCondition =>
+            "Logical Boolean Toggle: If True, the rule captures elements that satisfy the condition. " +
+            "If False, the rule is inverted to capture elements that do not.";
 
-        public static string AngleTolerance =>
-            "Allowed angle deviation between vectors IN DEGREES. Used during similarity comparison between " +
-            "outgoing Node vectors (constellations).";
+        public static string Gate =>
+            "Boolean operator (AND, OR) to combine multiple conditions into one filter. " +
+            "AND means that all conditions must be True, OR means that any of the conditions is enough to be True.";
 
-        public static string Bidirectional =>
-            "When enabled, the rule validates the connection regardless of edge direction, " +
-            "checking both start-to-end and end-to-start orientations.";
+        public static string MatchAll =>
+            "Similarly to the Gate component, this Boolean operator only returns with True, if the given condition(s) is true " +
+            "for ALL elements that are evaluated. If its False, it is enough that ANY of the evaluated elements match the condition(s)";
+
+        #endregion
+
+        #region RULES
+
+        public static string Rule =>
+            "Defines a localized graph process that evaluates nodes or edges based on their geometric and topological behavior.";
+
+        public static string EdgeRules =>
+            "Defines a localized graph process that evaluates Edges based on their geometric and topological behavior.";
+
+        public static string NodeRules =>
+            "Defines a localized graph process that evaluates Nodes based on their geometric and topological behavior.";
+
+        public static string IndexRule =>
+            "Defines a localized graph process that evaluates both Nodes AND Edges based on their numerical Index.";
+
+        public static string TypeRule =>
+            "Defines a localized graph process that evaluates both Nodes AND Edges based on their text-based Type value.";
 
         public static string CompositeRule =>
-            "A sophisticated rule rule that combines multiple rules " +
-            "using a boolean Gate logic in order to capture graph Nodes or Edges.";
+            "A sophisticated rule rule that combines multiple rules using a boolean Gate logic in order to capture graph Nodes or Edges.";
 
+        public static string AllItemsRule =>
+            "A simple rule capturing all Nodes and Edges of the graph.";
 
-        public static string Boundary =>
-            "Boundary Brep used to define the spatial volumes " +
-            "for Node centroid containment checks.";
+        public static string AllNodesRule =>
+            "A simple rule capturing all Nodes of the graph.";
 
-        public static string StartRankState =>
-            "Defines the dominance rank of an edge's start area, " +
-            "defined by its neighbouring edge rank constellation.";
+        public static string AllEdgesRule =>
+            "A simple rule capturing all Edges of the graph.";
 
-        public static string EndRankState =>
-            "Defines the dominance rank of an edge's end area, " +
-            "defined by its neighbouring edge rank constellation.";
+        public static string HasFeatureRule =>
+            "A simple boolean rule that captures a Node or an Edge if a certain Feature is present, defined by its Name.";
 
-        public static string StrictlyIn =>
-            "A boolean toggle that determines if elements lying exactly on the " +
-            "Brep boundary surface are included in the selection or not.";
+        public static string NodeAdjacentEdgeType =>
+            "A topological query that validates a Node based on the Type " +
+            "of its connected Edges. Useful for identifying hybrid structural junctions, or " +
+            "setting the Type of a Node based on its neighbour.";
 
-        public static string Unpack =>
-            "A helper component used to unlock a.k.a. decode the details of the different Portia elements. " +
-            "Nodes, Edges, Graphs and the FeatureSets (of Nodes and Edges) can be deconstructed into " +
-            "their constituent parts. The items passed around are wrapped in the " +
-            "Grasshopper-native Goo equivalents - hence the Goo suffix everywhere.";
+        public static string NodeAdjacentEdgeVectorSimilarity =>
+            "A topological query that validates a Node based on the outgoing vectors " +
+            "of its connected Edges. Useful for identifying hybrid structural junctions, or " +
+            "setting the Type of a Node based on its neighbouring Edge constellation.";
 
-        public static string UnpackItem =>
-            "A helper component used to unlock the details of a graph element (both Node or Edge), " +
-            "extracting its identity, geometric content (Centroid or Curve), and its raw JSON format data. " +
-            "Connect to Portia Nodes and Edges outputs!";
+        public static string NodeInBoundary =>
+            "A topological query that validates a Node based on its centroid's " +
+            "containment by the input boundary Breps. Useful to set initial Node Types " +
+            "or Indices for basic categorization.";
 
-        public static string UnpackGraph =>
-            "A helper component used to unlock the details of a Portia graph, " +
-            "extracting its Nodes and Edges, and its raw JSON format data. " +
-            "Connect the outputs to item-related deconstruction components!";
+        public static string EdgeInBoundary =>
+            "A topological query that validates an Edge based on its start or end point's " +
+            "containment by the input boundary Breps. Useful to set initial Edge Types " +
+            "or Indices for basic categorization.";
 
-        public static string UnpackFeature =>
-            "A helper component used to unlock the details of a Feature, hosted by an element (both Node or Edge), " +
-            "extracting its Name key and Value pair";
+        public static string NodeAdjacency =>
+            "A rule that evaluates a Node's direct neighbouring Edge count.";
 
-        public static string GraphItemGoo =>
-            "The proprietary 'Sovereign Goo' wrapper that encapsulates a graph item (Node or Edge), " +
-            "carrying its full topological intelligence and metadata through the network.";
+        public static string NodeProximity =>
+            "A rule that checks the spatial distance between Nodes " +
+            "regardless of direct edge connections.";
 
-        public static string GraphNodeGoo =>
-            "The proprietary 'Sovereign Goo' wrapper that encapsulates a graph Node, " +
-            "carrying its full topological intelligence and metadata through the network.";
+        public static string NodeVectorScalarSum =>
+            "A rule that calculates the resultant force or orientation of a node " +
+            "by summing the directional vectors of all connected edges." +
+            Environment.NewLine +
+            "0.0 / Perfect Symmetry: A cross(X) or a star where every force is perfectly cancelled out by an opposite one." +
+            Environment.NewLine +
+            "Close to 0.0 / Balanced Boundary: A standard 'T1 junction or a straight line (180°). The vectors point in opposite directions, 'pulling' the node equally." +
+            Environment.NewLine +
+            "1.0 / Unbalanced / Corner: A 90° corner with two edges.The vectors don't cancel out; they combine to point toward the 'outside' of the corner." +
+            Environment.NewLine +
+            "High ( > 2.0) / Acute Bunching: Many edges all pointing in roughly the same direction.The node is 'heavily weighted' toward one side.";
 
-        public static string GraphEdgeGoo =>
-            "The proprietary 'Sovereign Goo' wrapper that encapsulates a graph Edge, " +
-            "carrying its full topological intelligence and metadata through the network.";
+        public static string IsLeafNode =>
+            "A binary validation rule that identifies 'leaf' nodes—elements with only one connection—at the termination of a graph branch.";
 
-        public static string GraphGoo =>
-            "The proprietary 'Sovereign Goo' wrapper that encapsulates a graph (with its Nodes and Edges), " +
-            "carrying its full topological intelligence and metadata through the network.";
+        public static string EdgeSimilarity =>
+            "A geometric rule that compares an Edge's start tangent vector to the input vectors by the input conditions.";
 
-        public static string FeatureGoo =>
-            "The proprietary 'Sovereign Goo' wrapper that encapsulates a Feature, " +
-            "carrying its full key-value pair dictionary.";
+        public static string EdgeCurveLength =>
+            "A rule that evaluates the physical length of an Edge' curve.";
 
-        public static string EdgeJunction =>
-            "A lightweight object containing the edge-related results of the junction solver logic.";
+        public static string EdgeStartEndDistance =>
+            "A rule that evaluates the virtual length between the Start and End Node Centroids of an Edge.";
 
-        public static string EdgeJunctionGoo =>
-            "The proprietary 'Sovereign Goo' wrapper that encapsulates the results of an Edge " +
-            "created by the Boundary solver logic, carrying its full key-value pair dictionary.";
+        public static string StartDegree =>
+            "A rule that evaluates the direct neighbouring Edge count of an Edge's start Node.";
 
-        public static string SpotGoo =>
-            "The proprietary 'Sovereign Goo' wrapper that encapsulates the results of an Edge " +
-            "created by the Spot solver logic, carrying its full key-value pair dictionary.";
+        public static string EndDegree =>
+            "A rule that evaluates the direct neighbouring Edge count of an Edge's end Node.";
 
-        public static string Json =>
-            "The universal, transaction-ready string representation of a graph element (Node or Edge), " +
-            "allowing for seamless data exchange between Portia and external logic engines.";
+        public static string EdgeStartIndex =>
+            "A rule that evaluates / captures an Edge based on the numerical Index of its start Node.";
 
-        public static string Geometries =>
-            "The projected geometric representation of an element: a Node's Centroid or Edge's Curve.";
+        public static string EdgeStartType =>
+            "A rule that evaluates / captures an Edge based on the text-based Type of its start Node.";
 
-        public static string Vector => "3D vector.";
+        public static string EdgeEndIndex =>
+            "A rule that evaluates / captures an Edge based on the numerical Index of its end Node.";
 
+        public static string EdgeEndType =>
+            "A rule that evaluates / captures an Edge based on the text-based Type of its end Node.";
 
-        public static string GridCurves =>
-            "Globally defined curves that intersect the graph Edges to allocate grid spots.";
+        public static string IsLinearRule =>
+            "A binary validation rule that determines if an Edge is perfectly straight within document tolerance, distinguishing between linear members and curved geometry.";
 
-        public static string VoidCurves =>
-            "Globally defined curves that intersect the graph Edges to allocate " +
-            "void start and end spots. Supply them in pairs!";
+        #endregion
 
-        public static string RoomCurves =>
-            "Globally defined curves that intersect the graph Edges to allocate " +
-            "room start and end spots. Supply them in pairs!";
+        #region SOLVERS & ZONES
 
         public static string Solvers =>
-            "A collection of specific, complex logics " +
-            "executed on the graph.";
+            "A collection of specific, complex logics executed on the graph.";
 
         public static string BoundarySolver =>
             "A specific Solver that uses Edge Width and Rank features to " +
@@ -438,18 +316,191 @@ namespace Portia.Lite
         public static string SpotSolver =>
             "A specific Solver that uses EdgeDivision features to " +
             "spawn Spots along the Edges - usable for subsequent floor layout creation, " +
-            "parking grid generation and detailed structural beam planning.";
+            "parking grid generation and detailed structural beam planning. Grids spots are " +
+            "creatable by input grid lien intersections, whereas voids and rooms are created by " +
+            "injecting pairs of lines to control the downstream interim (lack of) sectors.";
 
-        public static string Spot =>
-            "Spots are created by the SpotSolver logics: they are edge-bound point objects containing their " +
-            "parameter on the given edge curve, their logical type and point coordinate.";
+        public static string SectorSolver =>
+            "A specific Solver that uses both the Edge boundaries and spots " +
+            "to spawn closed polylines (Sectors) that can be used for subsequent " +
+            "floor area allocation.";
 
-        public static string SpotPoint => "3D coordinate object.";
+        public static string ZoneSolver =>
+            "A specific Solver that uses the ranked Sectors created by the SectorSolver and " +
+            "maps them to input zone demands by a bipartite mapping algorithm, resulting in " +
+            "the allocation of category indices to the area-wise valid sectors.";
 
-        public static string SpotParameter =>
-            "Floating point number between 0 and 1, representing a relative position along a curve.";
+        public static string ZoneDemand =>
+            "A lightweight object that defines an area requirement for zone allocation.";
 
-        public static string SpotType =>
-            "Predefined logical type of a spot, defined by its spot solver logic.";
+        public static string ZoneCategory =>
+            "The user-defined integer ID for this zone type (e.g., 1 for Retail, 2 for Office).";
+
+        public static string ZoneTargetArea =>
+            "The ideal square meter floor plan area of a given zone.";
+
+        public static string ZoneTolerance =>
+            "The allowed percentage deviation of the zone's target area.";
+
+        #endregion
+
+        #region FEATURES
+
+        public static string Feature =>
+            "Graph payload: a user-defined name-value pair (Feature) that gets " +
+            "added to the selected Nodes or Edges in order to enrich them for downstream Solver logics.";
+
+        public static string FeatureName =>
+            "Graph payload: a user-defined name pair that defines the Feature that gets " +
+            "added to the selected Nodes or Edges in order to enrich them for downstream Solver logics.";
+
+        public static string FeatureValue =>
+            "Node or Edge Feature payload: a user-defined value (numeric, boolean, etc.) " +
+            "that is stored by its Name in a Feature. ";
+
+        public static string NodeFeatures =>
+            "Graph payloads: user-defined name-value pairs that get " +
+            "added to the selected Nodes in order to enrich them.";
+
+        public static string EdgeFeatures =>
+            "Graph payloads: user-defined name-value pairs that get " +
+            "added to the selected Edges in order to enrich them.";
+
+        public static string NumericFeature =>
+            "Injects a quantifiable numeric payload (double) to " +
+            "drive proportional logic or algorithmic thresholds.";
+
+        public static string StringFeature =>
+            "Assigns a text-based metadata tag or classification " +
+            "category for semantic filtering downstream.";
+
+        public static string BooleanFeature =>
+            "Embeds a binary true/false flag into the entity to " +
+            "control logic gates and execution paths.";
+
+        public static string GeometryFeature =>
+            "Attaches an immutable, deep-copied geometric payload " +
+            "for downstream spatial allocation or referencing (like a Curve, Surface, etc.).";
+
+        #endregion
+
+        #region FEATURE KEYS
+
+        public static string EdgeWidth =>
+            "Defines the absolute width of the Edge.";
+
+        public static string EdgeRank =>
+            "Defines the hierarchy rank of the Edge.";
+
+        public static string EdgeGrid =>
+            "Grid spacing for the internal Edge division.";
+
+        public static string EdgeStartCap =>
+            "The boolean cutter geometry at the Edge start.";
+
+        public static string EdgeEndCap =>
+            "The boolean cutter geometry at the Edge end.";
+
+        public static string EdgeBoundary =>
+            "The continuous closed boundary polygon around the Edge.";
+
+        public static string StartRankState =>
+            "The transition logic state at the Start Node.";
+
+        public static string EndRankState =>
+            "The transition logic state at the End Node.";
+
+        public static string SpotPoints =>
+            "List of 3D Points defining exact Spot locations.";
+
+        public static string SpotParameters =>
+            "List of curve parameters (t) corresponding to Spots.";
+
+        public static string SpotTypes =>
+            "List of classification types for each Spot.";
+
+        public static string SectorBoundaries =>
+            "Closed Polylines representing isolated spatial Sectors.";
+
+        public static string SectorLines =>
+            "Orthogonal line projections dividing the Sectors.";
+
+        public static string ZoneCategories =>
+            "Integer indices matching Sectors to Zone Demands.";
+
+        #endregion
+
+        #region PARAMETERS & INPUTS
+
+        public static string Identity =>
+            "Defines the primary identification rule for graph elements " +
+            "using either a numerical Index or a text-based Type.";
+
+        public static string Index =>
+            "The specific numerical index used to identify and map " +
+            "a unique element (node or edge) within the graph structure.";
+
+        public static string Type =>
+            "A user-defined text string used to categorize and map " +
+            "specific elements (nodes or edges) within the graph structure.";
+
+        public static string NumericValue =>
+            "The target numerical (double a.k.a. floating point number) value for mathematical filtering.";
+
+        public static string StringValue =>
+            "The target string value used for text-based filtering.";
+
+        public static string Curves =>
+            "The input geometric curves used to generate the base network topology for the Portia engine.";
+
+        public static string InitialEdgeTypes =>
+            "The optional Type strings assigned to the Edges during the initial graph generation process, used for categorization.";
+
+        public static string Indices =>
+            "The specific integer-based Index values to be assigned to the elements that get captured by the current input Rule.";
+
+        public static string Types =>
+            "The specific text-based Type values to be assigned to the elements that get captured by the current input Rule.";
+
+        public static string NodeRulesToVerify =>
+            "The graph logic rules that verify the topological or geometric integrity of the Nodes that are captured by the input Node rules!";
+
+        public static string EdgeRulesToVerify =>
+            "The graph logic rules that verify the topological or geometric integrity of the Edges that are captured by the input Edge rules!";
+
+        public static string TargetNodeRules =>
+            "Rules defining the exact insertion Nodes on the host Graph. (Must be Node Rules).";
+
+        public static string AnchorNodeRules =>
+            "Rules defining the exact receiving connection Nodes on the Payload Graph. (Must be Node Rules).";
+
+        public static string PayloadGraphGoo =>
+            "The extra Portia Graph (in its wrapped Goo form) to append to the host Graph.";
+
+        public static string Name =>
+            "A unique identifier used to label logic results and dynamically name the corresponding Portia output fields for easy tracking.";
+
+        public static string AngleTolerance =>
+            "Allowed angle deviation between vectors IN DEGREES. Used during similarity comparison between outgoing Node vectors (constellations).";
+
+        public static string Bidirectional =>
+            "When enabled, the rule validates the connection regardless of edge direction, checking both start-to-end and end-to-start orientations.";
+
+        public static string Boundary =>
+            "Boundary Brep used to define the spatial volumes for Node centroid containment checks.";
+
+        public static string StrictlyIn =>
+            "A boolean toggle that determines if elements lying exactly on the Brep boundary surface are included in the selection or not.";
+
+        public static string GridCurves =>
+            "Globally defined curves that intersect the graph Edges to allocate grid spots.";
+
+        public static string VoidCurves =>
+            "Globally defined curves that intersect the graph Edges to allocate void start and end spots. Supply them in pairs!";
+
+        public static string RoomCurves =>
+            "Globally defined curves that intersect the graph Edges to allocate room start and end spots. Supply them in pairs!";
+
+        #endregion
     }
 }

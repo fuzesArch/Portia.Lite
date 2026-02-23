@@ -36,20 +36,20 @@ namespace Portia.Lite.Components.Main
         protected override void AddInputFields()
         {
             InGeneric(
-                "MainGraph",
-                "The base Portia Graph to amalgamate into.");
+                nameof(Docs.GraphGoo),
+                Docs.GraphGoo);
 
             InStrings(
-                "TargetRules",
-                "Rules defining which Nodes in the MainGraph receive the Payload.");
+                nameof(Docs.TargetNodeRules),
+                Docs.TargetNodeRules);
 
             InStrings(
-                "AnchorRules",
-                "Rules defining the Anchor Node in the PayloadGraph.");
+                nameof(Docs.AnchorNodeRules),
+                Docs.AnchorNodeRules);
 
             InGeneric(
-                "PayloadGraph",
-                "The extra Portia Graph to append.");
+                nameof(Docs.PayloadGraphGoo),
+                Docs.PayloadGraphGoo);
         }
 
         protected override void AddOutputFields()
@@ -91,14 +91,14 @@ namespace Portia.Lite.Components.Main
             var targetRules = targetJsons.FromJson<IRule>().ToList();
             var anchorRules = anchorJsons.FromJson<IRule>().ToList();
 
-            var amalgamateTask = new AmalgamateGraph(
+            var task = new AmalgamateGraph(
                 targetRules,
                 anchorRules,
                 payloadGoo.Value);
 
-            amalgamateTask.Guard();
+            task.Guard();
 
-            GraphPipeline pipeline = new(new List<AbsTask> { amalgamateTask })
+            GraphPipeline pipeline = new(new List<AbsTask> { task })
             {
                 Graph = mainGoo.Value.Clone()
             };
@@ -106,7 +106,7 @@ namespace Portia.Lite.Components.Main
             pipeline.Execute(
                 da,
                 this,
-                amalgamateTask.Queries);
+                task.Queries);
 
             Message = pipeline.Graph.ComponentMessage();
         }

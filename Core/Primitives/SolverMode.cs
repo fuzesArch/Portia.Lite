@@ -3,6 +3,8 @@
     public enum SolverMode
     {
         Boundary,
-        Spot
+        Spot,
+        Sector,
+        Zone
     }
 }

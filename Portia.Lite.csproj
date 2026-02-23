@@ -98,6 +98,7 @@
     <Compile Include="Components\Main\PortiaComponent.cs" />
     <Compile Include="Components\DropDowns\TaskDropDown.cs" />
     <Compile Include="Components\DropDowns\ConditionDropDown.cs" />
+    <Compile Include="Components\SolverRelated\ZoneDemandComponent.cs" />
     <Compile Include="Components\ValueLists\DoubleRelationValueList.cs" />
     <Compile Include="Components\ValueLists\GateValueList.cs" />
     <Compile Include="Components\ValueLists\StringRelationValueList.cs" />

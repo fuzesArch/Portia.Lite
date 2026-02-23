@@ -14,10 +14,10 @@ namespace Portia.Lite.Core.Primitives
         EdgeGrid,
 
         [Category("Output")]
-        StartCap,
+        EdgeStartCap,
 
         [Category("Output")]
-        EndCap,
+        EdgeEndCap,
 
         [Category("Output")]
         EdgeBoundary,
@@ -36,5 +36,14 @@ namespace Portia.Lite.Core.Primitives
 
         [Category("Output")]
         SpotTypes,
+
+        [Category("Output")]
+        SectorBoundaries,
+
+        [Category("Output")]
+        SectorLines,
+
+        [Category("Output")]
+        ZoneCategories,
     }
 }
