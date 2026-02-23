@@ -34,9 +34,11 @@ namespace Portia.Lite.Components.DropDowns
                         4),
                 Docs.Task,
                 Naming.Tab,
-                Naming.Tab)
+                Naming.Logic)
         {
         }
+
+        public override GH_Exposure Exposure => GH_Exposure.tertiary;
 
         public override Guid ComponentGuid =>
             new("700c752f-a51e-4a2e-944a-a8941d1fc518");

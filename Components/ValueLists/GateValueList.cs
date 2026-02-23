@@ -1,4 +1,5 @@
-﻿using Portia.Infrastructure.Components;
+﻿using Grasshopper.Kernel;
+using Portia.Infrastructure.Components;
 using Portia.Infrastructure.Primitives.Enums;
 using System;
 
@@ -11,13 +12,16 @@ namespace Portia.Lite.Components.ValueLists
                 nameof(Gate),
                 Docs.Gate,
                 Naming.Tab,
-                Naming.Tab)
+                Naming.Primitives)
         {
         }
 
         public override Guid ComponentGuid =>
-            new Guid("825ca3c1-851c-4e8a-a566-38f9e082c1ba");
+            new("825ca3c1-851c-4e8a-a566-38f9e082c1ba");
 
-        public static GateValueList Create() => new GateValueList();
+        public static GateValueList Create() => new();
+
+        public override GH_Exposure Exposure => GH_Exposure.primary;
+
     }
 }

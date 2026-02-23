@@ -13,7 +13,7 @@ namespace Portia.Lite.Components.Goo
                 nameof(IFeature).Substring(1),
                 Docs.FeatureGoo,
                 Naming.Tab,
-                Naming.Tab,
+                Naming.Primitives,
                 GH_ParamAccess.item)
         {
         }

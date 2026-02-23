@@ -13,7 +13,7 @@ namespace Portia.Lite.Components.Goo
                 nameof(Graph),
                 Docs.GraphGoo,
                 Naming.Tab,
-                Naming.Tab,
+                Naming.Primitives,
                 GH_ParamAccess.item)
         {
         }

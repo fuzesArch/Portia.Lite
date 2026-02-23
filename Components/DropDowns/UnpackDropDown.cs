@@ -20,12 +20,14 @@ namespace Portia.Lite.Components.DropDowns
                 nameof(Docs.Unpack),
                 Docs.Unpack,
                 Naming.Tab,
-                Naming.Tab)
+                Naming.Logic)
         {
         }
 
         public override Guid ComponentGuid =>
             new("3f8622b2-9671-4164-a69b-cf0ea482b774");
+
+        public override GH_Exposure Exposure => GH_Exposure.quinary;
 
         protected override System.Drawing.Bitmap Icon =>
             Properties.Resources.BaseLogo;

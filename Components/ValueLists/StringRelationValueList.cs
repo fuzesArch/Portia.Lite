@@ -1,4 +1,5 @@
-﻿using Portia.Infrastructure.Components;
+﻿using Grasshopper.Kernel;
+using Portia.Infrastructure.Components;
 using Portia.Infrastructure.Primitives.Enums;
 using System;
 
@@ -11,14 +12,15 @@ namespace Portia.Lite.Components.ValueLists
                 nameof(StringRelation),
                 Docs.StringRelation,
                 Naming.Tab,
-                Naming.Tab)
+                Naming.Primitives)
         {
         }
 
         public override Guid ComponentGuid =>
-            new Guid("ee8ce3e3-013d-41c8-829e-8a160d8fb07a");
+            new("ee8ce3e3-013d-41c8-829e-8a160d8fb07a");
 
-        public static StringRelationValueList Create() =>
-            new StringRelationValueList();
+        public static StringRelationValueList Create() => new();
+
+        public override GH_Exposure Exposure => GH_Exposure.secondary;
     }
 }

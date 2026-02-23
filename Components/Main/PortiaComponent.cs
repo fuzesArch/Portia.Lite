@@ -23,12 +23,14 @@ namespace Portia.Lite.Components.Main
                 Naming.Tab.ToUpper(),
                 Docs.PortiaComponent,
                 Naming.Tab,
-                Naming.Tab)
+                Naming.Graph)
         {
         }
 
         public override Guid ComponentGuid =>
             new("ee1888f9-45c2-4c58-9d9e-b5eece9f5e94");
+
+        public override GH_Exposure Exposure => GH_Exposure.secondary;
 
         protected override System.Drawing.Bitmap Icon =>
             Properties.Resources.PortiaLogo;

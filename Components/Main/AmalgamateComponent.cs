@@ -2,7 +2,6 @@
 using Portia.Infrastructure.Components;
 using Portia.Infrastructure.Goo;
 using Portia.Infrastructure.GraphHelps;
-using Portia.Infrastructure.GraphItems;
 using Portia.Infrastructure.Graphs;
 using Portia.Infrastructure.Helps;
 using Portia.Infrastructure.Rules.Base;
@@ -22,9 +21,11 @@ namespace Portia.Lite.Components.Main
                 nameof(Docs.Amalgamate),
                 Docs.Amalgamate,
                 Naming.Tab,
-                Naming.Tab)
+                Naming.Graph)
         {
         }
+
+        public override GH_Exposure Exposure => GH_Exposure.primary;
 
         public override Guid ComponentGuid =>
             new("2304d560-440a-46a0-851f-d149be62a048");
