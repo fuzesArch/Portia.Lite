@@ -22,6 +22,5 @@ namespace Portia.Lite.Components.ValueLists
         public static GateValueList Create() => new();
 
         public override GH_Exposure Exposure => GH_Exposure.primary;
-
     }
 }
