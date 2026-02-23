@@ -7,6 +7,7 @@ using Portia.Infrastructure.DocStrings;
 using Portia.Infrastructure.Helps;
 using Portia.Infrastructure.Primitives.Enums;
 using Portia.Infrastructure.Validators;
+using Portia.Lite.Components.ValueLists;
 using Portia.Lite.Core.Primitives;
 using Rhino.Geometry;
 using System;

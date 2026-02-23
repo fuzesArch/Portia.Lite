@@ -7,6 +7,7 @@ using Portia.Infrastructure.DocStrings;
 using Portia.Infrastructure.Helps;
 using Portia.Infrastructure.Primitives.Enums;
 using Portia.Infrastructure.Rules.Base;
+using Portia.Infrastructure.Rules.BooleanBased;
 using Portia.Infrastructure.Rules.BoundaryBased;
 using Portia.Infrastructure.Rules.Composite;
 using Portia.Infrastructure.Rules.Numeric;
@@ -15,6 +16,7 @@ using Portia.Infrastructure.Rules.StringCollectionBased;
 using Portia.Infrastructure.Rules.VectorBased;
 using Portia.Infrastructure.Rules.VectorCollectionBased;
 using Portia.Infrastructure.Validators;
+using Portia.Lite.Components.ValueLists;
 using Portia.Lite.Core.Primitives;
 using Rhino.Geometry;
 using System;
@@ -359,11 +361,23 @@ namespace Portia.Lite.Components.DropDowns
             return new Dictionary<RuleMode, ParameterSetup>
             {
                 {
+                    RuleMode.AllItems,
+                    BooleanSetup<AllItemsRule>(Docs.AllItemsRule)
+                },
+                {
                     RuleMode.Composite,
                     CompositeSetup<CompositeRule>(Docs.CompositeRule)
                 },
+                {
+                    RuleMode.HasFeature,
+                    StringCollectionSetup<HasFeatureRule>(Docs.HasFeatureRule)
+                },
                 { RuleMode.IndexRule, NumericSetup<IndexRule>(Docs.IndexRule) },
                 { RuleMode.TypeRule, StringSetup<TypeRule>(Docs.TypeRule) },
+                {
+                    RuleMode.AllNodes,
+                    BooleanSetup<AllNodesRule>(Docs.AllNodesRule)
+                },
                 {
                     RuleMode.Node_Degree,
                     NumericSetup<NodeDegreeRule>(Docs.NodeAdjacency)
@@ -394,6 +408,10 @@ namespace Portia.Lite.Components.DropDowns
                 {
                     RuleMode.Node_InBoundary,
                     BoundarySetup<NodeInBoundaryRule>(Docs.NodeInBoundary)
+                },
+                {
+                    RuleMode.AllEdges,
+                    BooleanSetup<AllEdgesRule>(Docs.AllEdgesRule)
                 },
                 {
                     RuleMode.Edge_CurveLength,

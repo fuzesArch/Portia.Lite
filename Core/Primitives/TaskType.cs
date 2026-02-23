@@ -4,46 +4,37 @@ namespace Portia.Lite.Core.Primitives
 {
     public enum TaskType
     {
-        [Category("Setup Graph")]
-        SetGraphByCurves,
-
-        [Category("Setup Graph")]
-        LoadGraph,
-
-        [Category("Setup Graph")]
-        AmalgamateGraph,
-
-        [Category("Setup")]
+        [Category("Nodes")]
         SetNodeIndices,
 
-        [Category("Setup")]
+        [Category("Edges")]
         SetEdgeIndices,
 
-        [Category("Setup")]
+        [Category("Nodes")]
         SetNodeTypes,
 
-        [Category("Setup")]
+        [Category("Edges")]
         SetEdgeTypes,
 
-        [Category("Setup")]
+        [Category("Nodes")]
         SetNodeFeatures,
 
-        [Category("Setup")]
+        [Category("Edges")]
         SetEdgeFeatures,
 
-        [Category("Filter")]
+        [Category("Nodes")]
         FilterNodes,
 
-        [Category("Filter")]
+        [Category("Edges")]
         FilterEdges,
 
-        [Category("Validate")]
+        [Category("Nodes")]
         VerifyNodes,
 
-        [Category("Validate")]
+        [Category("Edges")]
         VerifyEdges,
 
-        [Category("Manipulate")]
+        [Category("Graph")]
         Solve,
     }
 }

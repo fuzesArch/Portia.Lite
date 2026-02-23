@@ -85,6 +85,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Components\Main\AmalgamateComponent.cs" />
     <Compile Include="Components\DropDowns\UnpackDropDown.cs" />
     <Compile Include="Components\DropDowns\FeatureNameDropDown.cs" />
     <Compile Include="Components\DropDowns\SolverDropDown.cs" />
@@ -94,10 +95,12 @@
     <Compile Include="Components\Goo\GraphItemGooParameter.cs" />
     <Compile Include="Components\Naming.cs" />
     <Compile Include="Components\DropDowns\RuleDropDown.cs" />
-    <Compile Include="Components\PortiaComponent.cs" />
+    <Compile Include="Components\Main\PortiaComponent.cs" />
     <Compile Include="Components\DropDowns\TaskDropDown.cs" />
     <Compile Include="Components\DropDowns\ConditionDropDown.cs" />
-    <Compile Include="Components\ValueLists.cs" />
+    <Compile Include="Components\ValueLists\DoubleRelationValueList.cs" />
+    <Compile Include="Components\ValueLists\GateValueList.cs" />
+    <Compile Include="Components\ValueLists\StringRelationValueList.cs" />
     <Compile Include="Core\Primitives\ConditionMode.cs" />
     <Compile Include="Core\Primitives\FeatureMode.cs" />
     <Compile Include="Core\Primitives\FeatureNameMode.cs" />

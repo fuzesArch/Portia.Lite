@@ -3,15 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Parameters;
+using Grasshopper.Kernel.Types;
 using Portia.Infrastructure.Components;
+using Portia.Infrastructure.Goo;
 using Portia.Infrastructure.GraphHelps;
 using Portia.Infrastructure.Graphs;
 using Portia.Infrastructure.Helps;
 using Portia.Infrastructure.Tasks.Base;
 using Portia.Infrastructure.Tasks.GraphSetting;
 using Portia.Infrastructure.Validators;
+using Rhino.Geometry;
 
-namespace Portia.Lite.Components
+namespace Portia.Lite.Components.Main
 {
     public class PortiaComponent : GenericBase, IGH_VariableParameterComponent
     {
@@ -30,16 +33,23 @@ namespace Portia.Lite.Components
         protected override System.Drawing.Bitmap Icon =>
             Properties.Resources.PortiaLogo;
 
-        private const int FixedInputCount = 0;
+        private const int FixedInputCount = 1;
         private static int LastFixedInputIndex => FixedInputCount - 1;
 
         private List<IGraphQuery> _queries = new();
 
         protected override void AddInputFields()
         {
+            InGenerics(
+                nameof(Docs.Origin),
+                Docs.Origin);
+
             InString(
                 nameof(AbsSetGraphTask).Substring(3),
                 "");
+
+            Params.Input[0].Optional = true;
+            Params.Input[1].Optional = true;
         }
 
         protected override void AddOutputFields()
@@ -53,7 +63,44 @@ namespace Portia.Lite.Components
             var tasks = new List<AbsTask>();
             bool redrawNeeded = false;
 
-            for (int index = 0; index < Params.Input.Count; index++)
+            var origin = new List<IGH_Goo>();
+
+            if (da.GetDataList(
+                    0,
+                    origin) && origin.Any())
+            {
+                if (origin.First() is GraphGoo { Value: not null } graphGoo)
+                {
+                    tasks.Add(new LoadGraph(graphGoo.Value));
+                }
+                else
+                {
+                    var curves = new List<Curve>();
+                    foreach (var goo in origin)
+                    {
+                        if (goo.CastTo(out Curve crv))
+                        {
+                            curves.Add(crv);
+                        }
+                    }
+
+                    if (curves.Any())
+                    {
+                        tasks.Add(new SetGraphByCurves(curves));
+                    }
+                }
+            }
+            else
+            {
+                AddRuntimeMessage(
+                    GH_RuntimeMessageLevel.Warning,
+                    "Connect a Graph or Curves to initialize.");
+                return;
+            }
+
+            for (int index = FixedInputCount;
+                 index < Params.Input.Count;
+                 index++)
             {
                 if (!da.GetItem(
                         index,
@@ -185,7 +232,8 @@ namespace Portia.Lite.Components
             GH_ParameterSide side,
             int index)
         {
-            return side == GH_ParameterSide.Input && 0 < index;
+            return side == GH_ParameterSide.Input &&
+                   LastFixedInputIndex < index;
         }
 
         public IGH_Param CreateParameter(
@@ -221,10 +269,9 @@ namespace Portia.Lite.Components
 
                 if (i == 0)
                 {
-                    param.Name = nameof(AbsSetGraphTask).Substring(3);
-                    param.NickName = nameof(AbsSetGraphTask).Substring(3);
-                    param.Description =
-                        $"Connect a {nameof(SetGraphByCurves)} or {nameof(LoadGraph)} Task JSON here.";
+                    param.Name = nameof(Docs.Origin);
+                    param.NickName = nameof(Docs.Origin);
+                    param.Description = Docs.Origin;
                 }
                 else
                 {

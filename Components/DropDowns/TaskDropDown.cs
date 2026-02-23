@@ -4,7 +4,6 @@ using Portia.Infrastructure.Components;
 using Portia.Infrastructure.DocStrings;
 using Portia.Infrastructure.Features.Base;
 using Portia.Infrastructure.Goo;
-using Portia.Infrastructure.Graphs;
 using Portia.Infrastructure.Helps;
 using Portia.Infrastructure.Rules.Base;
 using Portia.Infrastructure.Solvers.Base;
@@ -19,7 +18,6 @@ using Portia.Infrastructure.Tasks.Solving;
 using Portia.Infrastructure.Validators;
 using Portia.Lite.Components.Goo;
 using Portia.Lite.Core.Primitives;
-using Rhino.Geometry;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -79,40 +77,6 @@ namespace Portia.Lite.Components.DropDowns
 
             _rules = jsons.FromJson<IRule>().ToList();
         }
-
-        protected void BySetGraphByCurves(
-            IGH_DataAccess da)
-        {
-            if (!da.GetItems(
-                    0,
-                    out List<Curve> curves))
-            {
-                return;
-            }
-
-            var tags = da
-                .GetOptionalItems<string>(1)
-                .ByDefault(GraphIdentity.DefType)
-                .BoostTo(curves.Count);
-
-            _task = new SetGraphByCurves(
-                curves,
-                tags);
-        }
-
-        protected void ByLoadGraph(
-            IGH_DataAccess da)
-        {
-            if (!da.GetItem(
-                    0,
-                    out GraphGoo goo) || goo?.Value == null)
-            {
-                return;
-            }
-
-            _task = new LoadGraph(goo.Value);
-        }
-
 
         protected void BySetIndices<T>(
             IGH_DataAccess da)
@@ -286,7 +250,7 @@ namespace Portia.Lite.Components.DropDowns
         protected static ParameterConfig GraphParam() =>
             new(
                 () => new GraphParameter(),
-                nameof(Graph),
+                nameof(GraphGoo),
                 Docs.GraphGoo,
                 GH_ParamAccess.item);
 
@@ -294,37 +258,6 @@ namespace Portia.Lite.Components.DropDowns
         {
             return new Dictionary<TaskType, ParameterSetup>
             {
-                {
-                    TaskType.SetGraphByCurves, new ParameterSetup(
-                        new List<ParameterConfig>
-                        {
-                            new(
-                                () => new Param_Curve(),
-                                nameof(SetGraphByCurves.Curves),
-                                Docs.Curves.Add(Prefix.GeometryList),
-                                GH_ParamAccess.list),
-                            new(
-                                () => new Param_String(),
-                                nameof(SetGraphByCurves.Types),
-                                Docs
-                                    .InitialEdgeTypes
-                                    .ByDefault(GraphIdentity.DefType)
-                                    .Extend(
-                                        CoreDocStrings.Boost(
-                                            nameof(SetGraphByCurves.Curves)))
-                                    .Add(Prefix.StringList),
-                                GH_ParamAccess.list,
-                                isOptional: true)
-                        },
-                        BySetGraphByCurves,
-                        Docs.SetGraphByCurves)
-                },
-                {
-                    TaskType.LoadGraph, new ParameterSetup(
-                        new List<ParameterConfig> { GraphParam() },
-                        ByLoadGraph,
-                        Docs.LoadGraph)
-                },
                 {
                     TaskType.SetNodeIndices, new ParameterSetup(
                         new List<ParameterConfig>
@@ -335,15 +268,6 @@ namespace Portia.Lite.Components.DropDowns
                         Docs.SetNodeIndices)
                 },
                 {
-                    TaskType.SetEdgeIndices, new ParameterSetup(
-                        new List<ParameterConfig>
-                        {
-                            EdgeRulesParam(), IndicesParam()
-                        },
-                        BySetIndices<SetEdgeIndices>,
-                        Docs.SetEdgeIndices)
-                },
-                {
                     TaskType.SetNodeTypes, new ParameterSetup(
                         new List<ParameterConfig>
                         {
@@ -351,18 +275,6 @@ namespace Portia.Lite.Components.DropDowns
                         },
                         BySetTypes<SetNodeTypes>,
                         Docs.SetNodeTypes)
-                },
-                {
-                    TaskType.SetEdgeTypes, new ParameterSetup(
-                        new List<ParameterConfig>
-                        {
-                            EdgeRulesParam(),
-                            JsonsParam(
-                                nameof(Docs.NodeFeatures),
-                                Docs.SetNodeFeatures)
-                        },
-                        BySetTypes<SetEdgeTypes>,
-                        Docs.SetEdgeTypes)
                 },
                 {
                     TaskType.SetNodeFeatures, new ParameterSetup(
@@ -377,28 +289,10 @@ namespace Portia.Lite.Components.DropDowns
                         Docs.SetNodeFeatures)
                 },
                 {
-                    TaskType.SetEdgeFeatures, new ParameterSetup(
-                        new List<ParameterConfig>
-                        {
-                            EdgeRulesParam(),
-                            JsonsParam(
-                                nameof(Docs.EdgeFeatures),
-                                Docs.SetEdgeFeatures)
-                        },
-                        BySetFeatures<SetEdgeFeatures>,
-                        Docs.SetEdgeFeatures)
-                },
-                {
                     TaskType.FilterNodes, new ParameterSetup(
                         new List<ParameterConfig> { NodeRulesParam(), },
                         ByFilter<FilterNodes>,
                         Docs.FilterNodes)
-                },
-                {
-                    TaskType.FilterEdges, new ParameterSetup(
-                        new List<ParameterConfig> { EdgeRulesParam(), },
-                        ByFilter<FilterEdges>,
-                        Docs.FilterEdges)
                 },
                 {
                     TaskType.VerifyNodes, new ParameterSetup(
@@ -413,6 +307,45 @@ namespace Portia.Lite.Components.DropDowns
                         Docs.VerifyNodes)
                 },
                 {
+                    TaskType.SetEdgeIndices, new ParameterSetup(
+                        new List<ParameterConfig>
+                        {
+                            EdgeRulesParam(), IndicesParam()
+                        },
+                        BySetIndices<SetEdgeIndices>,
+                        Docs.SetEdgeIndices)
+                },
+                {
+                    TaskType.SetEdgeTypes, new ParameterSetup(
+                        new List<ParameterConfig>
+                        {
+                            EdgeRulesParam(),
+                            JsonsParam(
+                                nameof(Docs.NodeFeatures),
+                                Docs.SetNodeFeatures)
+                        },
+                        BySetTypes<SetEdgeTypes>,
+                        Docs.SetEdgeTypes)
+                },
+                {
+                    TaskType.SetEdgeFeatures, new ParameterSetup(
+                        new List<ParameterConfig>
+                        {
+                            EdgeRulesParam(),
+                            JsonsParam(
+                                nameof(Docs.EdgeFeatures),
+                                Docs.SetEdgeFeatures)
+                        },
+                        BySetFeatures<SetEdgeFeatures>,
+                        Docs.SetEdgeFeatures)
+                },
+                {
+                    TaskType.FilterEdges, new ParameterSetup(
+                        new List<ParameterConfig> { EdgeRulesParam(), },
+                        ByFilter<FilterEdges>,
+                        Docs.FilterEdges)
+                },
+                {
                     TaskType.VerifyEdges, new ParameterSetup(
                         new List<ParameterConfig>
                         {
@@ -423,21 +356,6 @@ namespace Portia.Lite.Components.DropDowns
                         },
                         ByVerify<VerifyEdges>,
                         Docs.VerifyEdges)
-                },
-                {
-                    TaskType.AmalgamateGraph, new ParameterSetup(
-                        new List<ParameterConfig>
-                        {
-                            JsonsParam(
-                                nameof(Docs.TargetNodeRules),
-                                Docs.TargetNodeRules),
-                            JsonsParam(
-                                nameof(Docs.AnchorNodeRules),
-                                Docs.AnchorNodeRules),
-                            GraphParam()
-                        },
-                        ByAmalgamation,
-                        Docs.Amalgamate)
                 },
                 {
                     TaskType.Solve, new ParameterSetup(

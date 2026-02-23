@@ -1,6 +1,4 @@
-﻿using Grasshopper;
-using Grasshopper.Kernel;
-using Portia.Infrastructure.GraphHelps;
+﻿using Grasshopper.Kernel;
 
 namespace Portia.Lite
 {
@@ -8,30 +6,7 @@ namespace Portia.Lite
     {
         public override GH_LoadingInstruction PriorityLoad()
         {
-            Instances.DocumentServer.DocumentAdded += OnDocumentAdded;
-
-            foreach (GH_Document doc in Instances.DocumentServer)
-            {
-                doc.SolutionStart -= OnSolutionStart;
-                doc.SolutionStart += OnSolutionStart;
-            }
-
             return GH_LoadingInstruction.Proceed;
-        }
-
-        private void OnDocumentAdded(
-            GH_DocumentServer sender,
-            GH_Document doc)
-        {
-            doc.SolutionStart -= OnSolutionStart;
-            doc.SolutionStart += OnSolutionStart;
-        }
-
-        private void OnSolutionStart(
-            object sender,
-            GH_SolutionEventArgs e)
-        {
-            GraphCache.Clear();
         }
     }
 }

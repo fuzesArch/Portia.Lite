@@ -28,6 +28,10 @@ namespace Portia.Lite
         public static string StringValue =>
             "The target string value used for text-based filtering.";
 
+        public static string Origin =>
+            "Connect an existing Portia Graph to modify it, " +
+            "OR connect raw Curves to initialize a new Graph.";
+
         public static string PortiaComponent =>
             "The core building block of the Portia ecosystem, " +
             "designed to manage complex graph logic with architectural data " +
@@ -209,6 +213,19 @@ namespace Portia.Lite
             "A binary validation rule that determines if an Edge is perfectly straight " +
             "within document tolerance, distinguishing between linear members and curved geometry.";
 
+        public static string AllItemsRule =>
+            "A simple rule capturing all Nodes and Edges of the graph.";
+
+        public static string AllNodesRule =>
+            "A simple rule capturing all Nodes of the graph.";
+
+        public static string AllEdgesRule =>
+            "A simple rule capturing all Edges of the graph.";
+
+        public static string HasFeatureRule =>
+            "A simple boolean rule that captures a Node or an Edge if a certain Feature " +
+            "is present, defined by its Name.";
+
         public static string Task =>
             "A specialized graph operation that executes " +
             "data modifications, queries or validation protocols by the Portia engine.";
@@ -304,6 +321,7 @@ namespace Portia.Lite
             "Rules defining the exact receiving connection points " +
             "on the Payload Graph. (Must be Node Rules).";
 
+
         public static string Name =>
             "A unique identifier used to label logic results and " +
             "dynamically name the corresponding Portia output fields for easy tracking.";
@@ -319,6 +337,7 @@ namespace Portia.Lite
         public static string CompositeRule =>
             "A sophisticated rule rule that combines multiple rules " +
             "using a boolean Gate logic in order to capture graph Nodes or Edges.";
+
 
         public static string Boundary =>
             "Boundary Brep used to define the spatial volumes " +

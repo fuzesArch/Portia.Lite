@@ -6,14 +6,23 @@ namespace Portia.Lite.Core.Primitives
 {
     public enum RuleMode
     {
-        [Category("Composite")]
-        Composite,
+        [Category("Universal: Nodes / Edges")]
+        AllItems,
 
         [Category("Universal: Nodes / Edges")]
         IndexRule,
 
         [Category("Universal: Nodes / Edges")]
         TypeRule,
+
+        [Category("Universal: Nodes / Edges")]
+        Composite,
+
+        [Category("Universal: Nodes / Edges")]
+        HasFeature,
+
+        [Category("Nodes")]
+        AllNodes,
 
         [Category("Nodes")]
         Node_Degree,
@@ -35,6 +44,9 @@ namespace Portia.Lite.Core.Primitives
 
         [Category("Nodes")]
         Node_InBoundary,
+
+        [Category("Edges")]
+        AllEdges,
 
         [Category("Edges")]
         Edge_CurveLength,
