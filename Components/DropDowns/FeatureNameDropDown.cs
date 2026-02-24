@@ -7,6 +7,7 @@ using System.Collections.Generic;
 
 namespace Portia.Lite.Components.DropDowns
 {
+    #if INTERNAL
     public class FeatureNameDropDown : AbsDropDownComponent<FeatureNameMode>
     {
         public FeatureNameDropDown()
@@ -88,4 +89,5 @@ namespace Portia.Lite.Components.DropDowns
             };
         }
     }
+    #endif
 }

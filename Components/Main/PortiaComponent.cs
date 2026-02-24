@@ -33,7 +33,7 @@ namespace Portia.Lite.Components.Main
         public override GH_Exposure Exposure => GH_Exposure.secondary;
 
         protected override System.Drawing.Bitmap Icon =>
-            Properties.Resources.PortiaLogo;
+            Properties.Resources.BaseLogo;
 
         private const int FixedInputCount = 1;
         private static int LastFixedInputIndex => FixedInputCount - 1;
@@ -227,7 +227,7 @@ namespace Portia.Lite.Components.Main
             int index)
         {
             return side == GH_ParameterSide.Input &&
-                   LastFixedInputIndex < index;
+                   index == Params.Input.Count;
         }
 
         public bool CanRemoveParameter(
@@ -235,8 +235,25 @@ namespace Portia.Lite.Components.Main
             int index)
         {
             return side == GH_ParameterSide.Input &&
-                   LastFixedInputIndex < index;
+                   index == Params.Input.Count - 1 &&
+                   index > LastFixedInputIndex;
         }
+
+        //public bool CanInsertParameter(
+        //    GH_ParameterSide side,
+        //    int index)
+        //{
+        //    return side == GH_ParameterSide.Input &&
+        //           LastFixedInputIndex < index;
+        //}
+
+        //public bool CanRemoveParameter(
+        //    GH_ParameterSide side,
+        //    int index)
+        //{
+        //    return side == GH_ParameterSide.Input &&
+        //           LastFixedInputIndex < index;
+        //}
 
         public IGH_Param CreateParameter(
             GH_ParameterSide side,

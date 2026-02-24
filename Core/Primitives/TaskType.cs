@@ -34,7 +34,9 @@ namespace Portia.Lite.Core.Primitives
         [Category("Edges")]
         VerifyEdges,
 
+        #if INTERNAL
         [Category("Graph")]
         Solve,
+        #endif
     }
 }

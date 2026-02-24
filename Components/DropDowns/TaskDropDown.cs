@@ -6,21 +6,23 @@ using Portia.Infrastructure.Features.Base;
 using Portia.Infrastructure.Goo;
 using Portia.Infrastructure.Helps;
 using Portia.Infrastructure.Rules.Base;
-using Portia.Infrastructure.Solvers.Base;
 using Portia.Infrastructure.Tasks.Base;
-using Portia.Infrastructure.Tasks.GraphSetting;
 using Portia.Infrastructure.Tasks.RuleBased.Filtering;
 using Portia.Infrastructure.Tasks.RuleBased.Setting.FeatureSetting;
 using Portia.Infrastructure.Tasks.RuleBased.Setting.IndexSetting;
 using Portia.Infrastructure.Tasks.RuleBased.Setting.TypeSetting;
 using Portia.Infrastructure.Tasks.RuleBased.Verification;
-using Portia.Infrastructure.Tasks.Solving;
 using Portia.Infrastructure.Validators;
 using Portia.Lite.Components.Goo;
 using Portia.Lite.Core.Primitives;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+
+#if INTERNAL
+using Portia.Infrastructure.Tasks.Solving;
+using Portia.Infrastructure.Solvers.Base;
+#endif
 
 namespace Portia.Lite.Components.DropDowns
 {
@@ -173,33 +175,7 @@ namespace Portia.Lite.Components.DropDowns
             };
         }
 
-        protected void ByAmalgamation(
-            IGH_DataAccess da)
-        {
-            SetRules(da);
-
-            if (_rules == null) { return; }
-
-            if (!da.GetItems(
-                    1,
-                    out List<string> anchorRuleJsons))
-            {
-                return;
-            }
-
-            if (!da.GetItem(
-                    2,
-                    out GraphGoo goo) || goo?.Value == null)
-            {
-                return;
-            }
-
-            _task = new AmalgamateGraph(
-                _rules,
-                anchorRuleJsons.FromJson<IRule>().ToList(),
-                goo.Value);
-        }
-
+        #if INTERNAL
         protected void BySolve(
             IGH_DataAccess da)
         {
@@ -215,6 +191,7 @@ namespace Portia.Lite.Components.DropDowns
                 Solvers = solverJsons.FromJson<ISolver>().ToList()
             };
         }
+        #endif
 
         protected static ParameterConfig JsonsParam(
             string name,
@@ -323,8 +300,8 @@ namespace Portia.Lite.Components.DropDowns
                         {
                             EdgeRulesParam(),
                             JsonsParam(
-                                nameof(Docs.NodeFeatures),
-                                Docs.SetNodeFeatures)
+                                nameof(Docs.SetEdgeTypes),
+                                Docs.SetEdgeTypes)
                         },
                         BySetTypes<SetEdgeTypes>,
                         Docs.SetEdgeTypes)
@@ -359,6 +336,7 @@ namespace Portia.Lite.Components.DropDowns
                         ByVerify<VerifyEdges>,
                         Docs.VerifyEdges)
                 },
+                #if INTERNAL
                 {
                     TaskType.Solve, new ParameterSetup(
                         new List<ParameterConfig>
@@ -370,6 +348,7 @@ namespace Portia.Lite.Components.DropDowns
                         BySolve,
                         Docs.Solve)
                 }
+                #endif
             };
         }
     }

@@ -3,20 +3,23 @@ using Grasshopper.Kernel.Parameters;
 using Portia.Infrastructure.Components;
 using Portia.Infrastructure.DocStrings;
 using Portia.Infrastructure.Helps;
-using Portia.Infrastructure.Solvers.Base;
-using Portia.Infrastructure.Solvers.BoundarySolving;
-using Portia.Infrastructure.Solvers.SectorSolving;
-using Portia.Infrastructure.Solvers.SpotSolving;
-using Portia.Infrastructure.Solvers.ZoneSolving;
 using Portia.Infrastructure.Validators;
 using Portia.Lite.Core.Primitives;
 using Rhino.Geometry;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+#if INTERNAL
+using Portia.Infrastructure.Solvers.Base;
+using Portia.Infrastructure.Solvers.BoundarySolving;
+using Portia.Infrastructure.Solvers.SectorSolving;
+using Portia.Infrastructure.Solvers.SpotSolving;
+using Portia.Infrastructure.Solvers.ZoneSolving;
+#endif
 
 namespace Portia.Lite.Components.DropDowns
 {
+    #if INTERNAL
     public class SolverDropDown : AbsDropDownComponent<SolverMode>
     {
         public SolverDropDown()
@@ -55,7 +58,6 @@ namespace Portia.Lite.Components.DropDowns
                 _solver.ToJson());
         }
 
-        #if INTERNAL
 
         private void BySpot(
             IGH_DataAccess da)
@@ -85,13 +87,11 @@ namespace Portia.Lite.Components.DropDowns
             _solver = new ZoneSolver { ZoneDemands = demands };
         }
 
-        #endif
 
         protected override Dictionary<SolverMode, ParameterSetup> DefineSetup()
         {
             return new Dictionary<SolverMode, ParameterSetup>
             {
-                #if INTERNAL
                 {
                     SolverMode.Boundary, new ParameterSetup(
                         new List<ParameterConfig>(),
@@ -149,8 +149,8 @@ namespace Portia.Lite.Components.DropDowns
                         ByZone,
                         Docs.ZoneSolver)
                 }
-                #endif
             };
         }
     }
+    #endif
 }

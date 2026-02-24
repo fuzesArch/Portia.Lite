@@ -1,11 +1,15 @@
 ﻿using Grasshopper.Kernel;
 using Portia.Infrastructure.Components;
 using Portia.Infrastructure.Helps;
-using Portia.Infrastructure.Solvers.ZoneSolving;
 using System;
+
+#if INTERNAL
+using Portia.Infrastructure.Solvers.ZoneSolving;
+#endif
 
 namespace Portia.Lite.Components.SolverRelated
 {
+    #if INTERNAL
     public class ZoneDemandComponent : GenericBase
     {
         public override Guid ComponentGuid =>
@@ -80,4 +84,5 @@ namespace Portia.Lite.Components.SolverRelated
                 demand.ToJson());
         }
     }
+    #endif
 }

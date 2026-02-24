@@ -43,13 +43,13 @@ namespace Portia.Lite.Components.Main
                 nameof(Docs.TargetNodeRules),
                 Docs.TargetNodeRules);
 
-            InStrings(
-                nameof(Docs.AnchorNodeRules),
-                Docs.AnchorNodeRules);
-
             InGeneric(
                 nameof(Docs.PayloadGraphGoo),
                 Docs.PayloadGraphGoo);
+
+            InStrings(
+                nameof(Docs.AnchorNodeRules),
+                Docs.AnchorNodeRules);
         }
 
         protected override void AddOutputFields()
@@ -74,19 +74,21 @@ namespace Portia.Lite.Components.Main
                 return;
             }
 
-            if (!da.GetItems(
+
+            if (!da.GetItem(
                     2,
+                    out GraphGoo payloadGoo) || payloadGoo?.Value == null)
+            {
+                return;
+            }
+
+            if (!da.GetItems(
+                    3,
                     out List<string> anchorJsons))
             {
                 return;
             }
 
-            if (!da.GetItem(
-                    3,
-                    out GraphGoo payloadGoo) || payloadGoo?.Value == null)
-            {
-                return;
-            }
 
             var targetRules = targetJsons.FromJson<IRule>().ToList();
             var anchorRules = anchorJsons.FromJson<IRule>().ToList();

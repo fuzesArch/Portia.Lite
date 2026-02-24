@@ -13,15 +13,17 @@ namespace Portia.Lite
             "Portia reorders the input Tasks in the following order (independent from the input order after " +
             "the first curve setting task):" + Environment.NewLine +
             Environment.NewLine +
-            $"Foundation  /  {nameof(SetGraphByCurves)} & {nameof(LoadGraph)}" +
+            $"IDENTITY  /  {nameof(SetNodeIndices)} & {nameof(SetEdgeIndices)}" +
             Environment.NewLine +
-            $"Identity  /  {nameof(SetNodeIndices)} & {nameof(SetEdgeIndices)}" +
+            $"TOPOLOGY  /  {nameof(SetNodeTypes)} & {nameof(SetEdgeTypes)}" +
             Environment.NewLine +
-            $"Topology  /  {nameof(SetNodeTypes)} & {nameof(SetEdgeTypes)}" +
+            $"FEATURE ADDITION  /  {nameof(SetNodeFeatures)} & {nameof(SetEdgeFeatures)}" +
             Environment.NewLine +
-            $"Selection  /  {nameof(FilterNodes)} & {nameof(FilterEdges)}" +
+            $"SELECTION  /  {nameof(FilterNodes)} & {nameof(FilterEdges)}" +
             Environment.NewLine +
-            $"Validation  /  {nameof(VerifyNodes)} & {nameof(VerifyEdges)}" +
+            $"VALIDATION  /  {nameof(VerifyNodes)} & {nameof(VerifyEdges)}" +
+            Environment.NewLine + $"MERGING  /  {nameof(Amalgamate)}" +
+            Environment.NewLine + $"ADDITIONAL PROCESSES  /  {nameof(Solve)}" +
             Environment.NewLine + Environment.NewLine + "•••" +
             Environment.NewLine + Environment.NewLine +
             "The PORTIA ecosystem is developed and maintained by Bálint Füzes of FUZES/ARCH." +
@@ -38,28 +40,29 @@ namespace Portia.Lite
             Environment.NewLine + "https://github.com/fuzesArch/Portia.Lite";
 
         public static string Origin =>
-            "Connect an existing Portia Graph to modify it, " +
-            "OR connect raw Curves to initialize a new Graph.";
+            "Connect an existing Portia Graph to modify, " +
+            "OR connect Curves to initialize a new Graph.";
 
         public static string Unpack =>
-            "A helper component used to unlock a.k.a. decode the details of the different Portia elements. " +
-            "Nodes, Edges, Graphs and the FeatureSets (of Nodes and Edges) can be deconstructed into " +
+            "A helper component used to unlock the details of the different Portia elements. " +
+            "Nodes, Edges, Graphs and the Features (of Nodes and Edges) can be deconstructed into " +
             "their constituent parts. The items passed around are wrapped in the " +
             "Grasshopper-native Goo equivalents - hence the Goo suffix everywhere.";
 
         public static string UnpackItem =>
             "A helper component used to unlock the details of a graph element (both Node or Edge), " +
-            "extracting its identity, geometric content (Centroid or Curve), and its raw JSON format data. " +
-            "Connect to Portia Nodes and Edges outputs!";
+            "extracting its identity, geometric content (Centroid or Curve) and attached Feature set. " +
+            "Connect to Portia GraphNodeGoo and GraphEdgeGoo outputs!";
 
         public static string UnpackGraph =>
             "A helper component used to unlock the details of a Portia graph, " +
-            "extracting its Nodes and Edges, and its raw JSON format data. " +
-            "Connect the outputs to item-related deconstruction components!";
+            "extracting its Nodes and Edges. Connect the goo outputs to " +
+            "item-related unpack components!";
 
         public static string UnpackFeature =>
-            "A helper component used to unlock the details of a Feature, hosted by an element (both Node or Edge), " +
-            "extracting its Name key and Value pair";
+            "A helper component used to unlock the details of a Feature, " +
+            "attached to an element (Node or Edge), extracting its Name key " +
+            "and Value value pair.";
 
         #endregion
 
@@ -107,7 +110,7 @@ namespace Portia.Lite
             "Graph Goo wrapper.";
 
         public static string Amalgamate =>
-            "Fuses an external Payload Graph into the " +
+            "Graph merging operation. Fuses an external Payload Graph into the " +
             "active Host Graph based on topological Target and Anchor matches.";
 
         public static string Solve =>
@@ -270,37 +273,48 @@ namespace Portia.Lite
             "High ( > 2.0) / Acute Bunching: Many edges all pointing in roughly the same direction.The node is 'heavily weighted' toward one side.";
 
         public static string IsLeafNode =>
-            "A binary validation rule that identifies 'leaf' nodes—elements with only one connection—at the termination of a graph branch.";
+            "A binary validation rule that identifies 'leaf' nodes—elements with only one " +
+            "connection—at the termination of a graph branch.";
 
         public static string EdgeSimilarity =>
-            "A geometric rule that compares an Edge's start tangent vector to the input vectors by the input conditions.";
+            "A geometric rule that compares an Edge's start tangent vector " +
+            "to the input vectors by the input conditions.";
 
         public static string EdgeCurveLength =>
             "A rule that evaluates the physical length of an Edge' curve.";
 
         public static string EdgeStartEndDistance =>
-            "A rule that evaluates the virtual length between the Start and End Node Centroids of an Edge.";
+            "A rule that evaluates the virtual length between the " +
+            "Start and End Node Centroids of an Edge.";
 
         public static string StartDegree =>
-            "A rule that evaluates the direct neighbouring Edge count of an Edge's start Node.";
+            "A rule that evaluates the direct neighbouring Edge " +
+            "count of an Edge's start Node.";
 
         public static string EndDegree =>
-            "A rule that evaluates the direct neighbouring Edge count of an Edge's end Node.";
+            "A rule that evaluates the direct neighbouring Edge " +
+            "count of an Edge's end Node.";
 
         public static string EdgeStartIndex =>
-            "A rule that evaluates / captures an Edge based on the numerical Index of its start Node.";
+            "A rule that evaluates / captures an Edge based " +
+            "on the numerical Index of its start Node.";
 
         public static string EdgeStartType =>
-            "A rule that evaluates / captures an Edge based on the text-based Type of its start Node.";
+            "A rule that evaluates / captures an Edge based " +
+            "on the text-based Type of its start Node.";
 
         public static string EdgeEndIndex =>
-            "A rule that evaluates / captures an Edge based on the numerical Index of its end Node.";
+            "A rule that evaluates / captures an Edge based " +
+            "on the numerical Index of its end Node.";
 
         public static string EdgeEndType =>
-            "A rule that evaluates / captures an Edge based on the text-based Type of its end Node.";
+            "A rule that evaluates / captures an Edge based " +
+            "on the text-based Type of its end Node.";
 
         public static string IsLinearRule =>
-            "A binary validation rule that determines if an Edge is perfectly straight within document tolerance, distinguishing between linear members and curved geometry.";
+            "A binary validation rule that determines if an Edge is " +
+            "perfectly straight within document tolerance, " +
+            "distinguishing between linear members and curved geometry.";
 
         #endregion
 
@@ -386,41 +400,36 @@ namespace Portia.Lite
 
         #region FEATURE KEYS
 
-        public static string EdgeWidth =>
-            "Defines the absolute width of the Edge.";
+        public static string EdgeWidth => "Sets the width of an Edge.";
 
-        public static string EdgeRank =>
-            "Defines the hierarchy rank of the Edge.";
+        public static string EdgeRank => "Sets the hierarchy rank of an Edge.";
 
-        public static string EdgeGrid =>
-            "Grid spacing for the internal Edge division.";
+        public static string EdgeGrid => "Grid distance for Edge division.";
 
         public static string EdgeStartCap =>
-            "The boolean cutter geometry at the Edge start.";
+            "Polyline geometry at the Edge start.";
 
-        public static string EdgeEndCap =>
-            "The boolean cutter geometry at the Edge end.";
+        public static string EdgeEndCap => "Polyline geometry at the Edge end.";
 
         public static string EdgeBoundary =>
-            "The continuous closed boundary polygon around the Edge.";
+            "Closed boundary polygon around an Edge.";
 
         public static string StartRankState =>
-            "The transition logic state at the Start Node.";
+            "Transition logic state at the Start Node.";
 
         public static string EndRankState =>
-            "The transition logic state at the End Node.";
+            "Transition logic state at the End Node.";
 
         public static string SpotPoints =>
-            "List of 3D Points defining exact Spot locations.";
+            "3D Points defining exact Spot coordinates.";
 
         public static string SpotParameters =>
-            "List of curve parameters (t) corresponding to Spots.";
+            "Curve parameters corresponding to Spots.";
 
-        public static string SpotTypes =>
-            "List of classification types for each Spot.";
+        public static string SpotTypes => "Classification types for each Spot.";
 
         public static string SectorBoundaries =>
-            "Closed Polylines representing isolated spatial Sectors.";
+            "Closed Polylines representing spatial Sectors.";
 
         public static string SectorLines =>
             "Orthogonal line projections dividing the Sectors.";
@@ -445,61 +454,68 @@ namespace Portia.Lite
             "specific elements (nodes or edges) within the graph structure.";
 
         public static string NumericValue =>
-            "The target numerical (double a.k.a. floating point number) value for mathematical filtering.";
+            "The target numerical (double a.k.a. floating point number) " +
+            "value for mathematical filtering.";
 
         public static string StringValue =>
             "The target string value used for text-based filtering.";
 
-        public static string Curves =>
-            "The input geometric curves used to generate the base network topology for the Portia engine.";
-
-        public static string InitialEdgeTypes =>
-            "The optional Type strings assigned to the Edges during the initial graph generation process, used for categorization.";
-
         public static string Indices =>
-            "The specific integer-based Index values to be assigned to the elements that get captured by the current input Rule.";
+            "The specific integer-based Index values to be assigned " +
+            "to the elements that get captured by the current input Rule.";
 
         public static string Types =>
-            "The specific text-based Type values to be assigned to the elements that get captured by the current input Rule.";
+            "The specific text-based Type values to be assigned " +
+            "to the elements that get captured by the current input Rule.";
 
         public static string NodeRulesToVerify =>
-            "The graph logic rules that verify the topological or geometric integrity of the Nodes that are captured by the input Node rules!";
+            "The graph logic rules that verify the topological or geometric " +
+            "integrity of the Nodes that are captured by the input Node rules!";
 
         public static string EdgeRulesToVerify =>
-            "The graph logic rules that verify the topological or geometric integrity of the Edges that are captured by the input Edge rules!";
+            "The graph logic rules that verify the topological or geometric " +
+            "integrity of the Edges that are captured by the input Edge rules!";
 
         public static string TargetNodeRules =>
-            "Rules defining the exact insertion Nodes on the host Graph. (Must be Node Rules).";
+            "Rules defining the exact insertion Nodes on the host Graph. " +
+            "(Must be Node Rules).";
 
         public static string AnchorNodeRules =>
-            "Rules defining the exact receiving connection Nodes on the Payload Graph. (Must be Node Rules).";
+            "Rules defining the exact receiving connection Nodes on the Payload Graph. " +
+            "(Must be Node Rules).";
 
         public static string PayloadGraphGoo =>
             "The extra Portia Graph (in its wrapped Goo form) to append to the host Graph.";
 
         public static string Name =>
-            "A unique identifier used to label logic results and dynamically name the corresponding Portia output fields for easy tracking.";
+            "A unique identifier used to label logic results and dynamically name the " +
+            "corresponding Portia output fields for easy tracking.";
 
         public static string AngleTolerance =>
-            "Allowed angle deviation between vectors IN DEGREES. Used during similarity comparison between outgoing Node vectors (constellations).";
+            "Allowed angle deviation between vectors IN DEGREES. Used during similarity " +
+            "comparison between outgoing Node vectors (constellations).";
 
         public static string Bidirectional =>
-            "When enabled, the rule validates the connection regardless of edge direction, checking both start-to-end and end-to-start orientations.";
+            "When enabled, the rule validates the connection regardless of edge direction, " +
+            "checking both start-to-end and end-to-start orientations.";
 
         public static string Boundary =>
             "Boundary Brep used to define the spatial volumes for Node centroid containment checks.";
 
         public static string StrictlyIn =>
-            "A boolean toggle that determines if elements lying exactly on the Brep boundary surface are included in the selection or not.";
+            "A boolean toggle that determines if elements lying exactly on the Brep " +
+            "boundary surface are included in the selection or not.";
 
         public static string GridCurves =>
             "Globally defined curves that intersect the graph Edges to allocate grid spots.";
 
         public static string VoidCurves =>
-            "Globally defined curves that intersect the graph Edges to allocate void start and end spots. Supply them in pairs!";
+            "Globally defined curves that intersect the graph Edges to allocate void " +
+            "start and end spots. Supply them in pairs!";
 
         public static string RoomCurves =>
-            "Globally defined curves that intersect the graph Edges to allocate room start and end spots. Supply them in pairs!";
+            "Globally defined curves that intersect the graph Edges to allocate room " +
+            "start and end spots. Supply them in pairs!";
 
         #endregion
     }

@@ -1,5 +1,6 @@
 ﻿namespace Portia.Lite.Core.Primitives
 {
+    #if INTERNAL
     public enum SolverMode
     {
         Boundary,
@@ -7,4 +8,5 @@
         Sector,
         Zone
     }
+    #endif
 }
