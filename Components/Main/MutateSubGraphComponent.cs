@@ -3,6 +3,7 @@ using Portia.Infrastructure.Components;
 using Portia.Infrastructure.DocStrings;
 using Portia.Infrastructure.Goo;
 using Portia.Infrastructure.GraphHelps;
+using Portia.Infrastructure.GraphItems;
 using Portia.Infrastructure.Graphs;
 using Portia.Infrastructure.Helps;
 using Portia.Infrastructure.Tasks.Base;
@@ -11,6 +12,7 @@ using Portia.Infrastructure.Validators;
 using Rhino.Geometry;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Portia.Lite.Components.Main
 {
@@ -43,12 +45,17 @@ namespace Portia.Lite.Components.Main
                 nameof(MutateSubGraph.SubGraph) + "Goo",
                 Docs.GraphGoo);
 
+
+            InGenerics(
+                nameof(MutateSubGraph.SubGraphPorts) + "Goos",
+                Docs.GraphItemGoo);
+
             InGeneric(
                 nameof(MutateSubGraph.NewGraph) + "Goo",
                 Docs.GraphGoo);
 
             InGeometries(
-                nameof(MutateSubGraph.NewPorts),
+                nameof(MutateSubGraph.NewGraphPorts),
                 Docs.ReplacementPortPoints.ByDefault(Prefix.PointList));
         }
 
@@ -69,36 +76,47 @@ namespace Portia.Lite.Components.Main
 
             if (!da.GetItem(
                     1,
-                    out GraphGoo targetGoo) || targetGoo?.Value == null)
-            {
-                return;
-            }
-
-            if (!da.GetItem(
-                    2,
-                    out GraphGoo replacementGoo) ||
-                replacementGoo?.Value == null)
+                    out GraphGoo subGraphGoo) || subGraphGoo?.Value == null)
             {
                 return;
             }
 
             if (!da.GetItems(
+                    2,
+                    out List<GraphItemGoo> subGraphPortGoos))
+            {
+                return;
+            }
+
+
+            if (!da.GetItem(
                     3,
+                    out GraphGoo newGoo) || newGoo?.Value == null)
+            {
+                return;
+            }
+
+            if (!da.GetItems(
+                    4,
                     out List<Point3d> points))
             {
                 return;
             }
 
-            var subGraph = targetGoo.Value.Clone();
-            var newGraph = replacementGoo.Value.Clone();
-            var newPorts = newGraph.GetNodesByPoints(points);
+            var subGraph = subGraphGoo.Value.Clone();
+            var subGraphPorts = subGraphPortGoos
+                .Select(x => x.Value.As<GraphNode>())
+                .ToList();
+
+            var newGraph = newGoo.Value.Clone();
+            var newGraphPorts = newGraph.GetNodesByPoints(points);
 
             var task = new MutateSubGraph
             {
                 SubGraph = subGraph,
+                SubGraphPorts = subGraphPorts,
                 NewGraph = newGraph,
-                NewPorts = newPorts,
-
+                NewGraphPorts = newGraphPorts,
             };
 
             task.Guard();
