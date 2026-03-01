@@ -1,5 +1,6 @@
 ﻿using Grasshopper.Kernel;
 using Portia.Infrastructure.Components;
+using Portia.Infrastructure.DocStrings;
 using Portia.Infrastructure.Goo;
 using Portia.Infrastructure.GraphHelps;
 using Portia.Infrastructure.Graphs;
@@ -7,6 +8,7 @@ using Portia.Infrastructure.Helps;
 using Portia.Infrastructure.Tasks.Base;
 using Portia.Infrastructure.Tasks.Isomorphism;
 using Portia.Infrastructure.Validators;
+using Rhino.Geometry;
 using System;
 using System.Collections.Generic;
 
@@ -38,12 +40,16 @@ namespace Portia.Lite.Components.Main
                 Docs.GraphGoo);
 
             InGeneric(
-                nameof(MutateSubGraph.TargetMatchGraph) + "Goo",
+                nameof(MutateSubGraph.SubGraph) + "Goo",
                 Docs.GraphGoo);
 
             InGeneric(
-                nameof(MutateSubGraph.ReplacementGraph) + "Goo",
+                nameof(MutateSubGraph.NewGraph) + "Goo",
                 Docs.GraphGoo);
+
+            InGeometries(
+                nameof(MutateSubGraph.NewPorts),
+                Docs.ReplacementPortPoints.ByDefault(Prefix.PointList));
         }
 
         protected override void AddOutputFields()
@@ -76,10 +82,23 @@ namespace Portia.Lite.Components.Main
                 return;
             }
 
+            if (!da.GetItems(
+                    3,
+                    out List<Point3d> points))
+            {
+                return;
+            }
+
+            var subGraph = targetGoo.Value.Clone();
+            var newGraph = replacementGoo.Value.Clone();
+            var newPorts = newGraph.GetNodesByPoints(points);
+
             var task = new MutateSubGraph
             {
-                TargetMatchGraph = targetGoo.Value,
-                ReplacementGraph = replacementGoo.Value,
+                SubGraph = subGraph,
+                NewGraph = newGraph,
+                NewPorts = newPorts,
+
             };
 
             task.Guard();

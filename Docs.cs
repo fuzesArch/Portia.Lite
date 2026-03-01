@@ -547,6 +547,9 @@ namespace Portia.Lite
             "Globally defined curves that intersect the graph Edges to allocate room " +
             "start and end spots. Supply them in pairs!";
 
+        public static string ReplacementPortPoints =>
+            "Points that extract nodes in their strict order from the host graph by centroid overlap.";
+
         #endregion
     }
 }
