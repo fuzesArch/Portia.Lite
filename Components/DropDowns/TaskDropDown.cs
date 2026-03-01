@@ -26,7 +26,7 @@ using Portia.Infrastructure.Solvers.Base;
 
 namespace Portia.Lite.Components.DropDowns
 {
-    public class TaskDropDown : AbsDropDownComponent<TaskType>
+    public class TaskDropDown : AbsDropDownComponent<TaskMode>
     {
         public TaskDropDown()
             : base(
@@ -233,12 +233,12 @@ namespace Portia.Lite.Components.DropDowns
                 Docs.GraphGoo,
                 GH_ParamAccess.item);
 
-        protected override Dictionary<TaskType, ParameterSetup> DefineSetup()
+        protected override Dictionary<TaskMode, ParameterSetup> DefineSetup()
         {
-            return new Dictionary<TaskType, ParameterSetup>
+            return new Dictionary<TaskMode, ParameterSetup>
             {
                 {
-                    TaskType.SetNodeIndices, new ParameterSetup(
+                    TaskMode.SetNodeIndices, new ParameterSetup(
                         new List<ParameterConfig>
                         {
                             NodeRulesParam(), IndicesParam()
@@ -247,7 +247,7 @@ namespace Portia.Lite.Components.DropDowns
                         Docs.SetNodeIndices)
                 },
                 {
-                    TaskType.SetNodeTypes, new ParameterSetup(
+                    TaskMode.SetNodeTypes, new ParameterSetup(
                         new List<ParameterConfig>
                         {
                             NodeRulesParam(), TypesParam()
@@ -256,7 +256,7 @@ namespace Portia.Lite.Components.DropDowns
                         Docs.SetNodeTypes)
                 },
                 {
-                    TaskType.SetNodeFeatures, new ParameterSetup(
+                    TaskMode.SetNodeFeatures, new ParameterSetup(
                         new List<ParameterConfig>
                         {
                             NodeRulesParam(),
@@ -268,13 +268,13 @@ namespace Portia.Lite.Components.DropDowns
                         Docs.SetNodeFeatures)
                 },
                 {
-                    TaskType.FilterNodes, new ParameterSetup(
+                    TaskMode.FilterNodes, new ParameterSetup(
                         new List<ParameterConfig> { NodeRulesParam(), },
                         ByFilter<FilterNodes>,
                         Docs.FilterNodes)
                 },
                 {
-                    TaskType.VerifyNodes, new ParameterSetup(
+                    TaskMode.VerifyNodes, new ParameterSetup(
                         new List<ParameterConfig>
                         {
                             NodeRulesParam(),
@@ -286,7 +286,7 @@ namespace Portia.Lite.Components.DropDowns
                         Docs.VerifyNodes)
                 },
                 {
-                    TaskType.SetEdgeIndices, new ParameterSetup(
+                    TaskMode.SetEdgeIndices, new ParameterSetup(
                         new List<ParameterConfig>
                         {
                             EdgeRulesParam(), IndicesParam()
@@ -295,7 +295,7 @@ namespace Portia.Lite.Components.DropDowns
                         Docs.SetEdgeIndices)
                 },
                 {
-                    TaskType.SetEdgeTypes, new ParameterSetup(
+                    TaskMode.SetEdgeTypes, new ParameterSetup(
                         new List<ParameterConfig>
                         {
                             EdgeRulesParam(),
@@ -307,7 +307,7 @@ namespace Portia.Lite.Components.DropDowns
                         Docs.SetEdgeTypes)
                 },
                 {
-                    TaskType.SetEdgeFeatures, new ParameterSetup(
+                    TaskMode.SetEdgeFeatures, new ParameterSetup(
                         new List<ParameterConfig>
                         {
                             EdgeRulesParam(),
@@ -319,13 +319,13 @@ namespace Portia.Lite.Components.DropDowns
                         Docs.SetEdgeFeatures)
                 },
                 {
-                    TaskType.FilterEdges, new ParameterSetup(
+                    TaskMode.FilterEdges, new ParameterSetup(
                         new List<ParameterConfig> { EdgeRulesParam(), },
                         ByFilter<FilterEdges>,
                         Docs.FilterEdges)
                 },
                 {
-                    TaskType.VerifyEdges, new ParameterSetup(
+                    TaskMode.VerifyEdges, new ParameterSetup(
                         new List<ParameterConfig>
                         {
                             EdgeRulesParam(),
@@ -338,7 +338,7 @@ namespace Portia.Lite.Components.DropDowns
                 },
                 #if INTERNAL
                 {
-                    TaskType.Solve, new ParameterSetup(
+                    TaskMode.Solve, new ParameterSetup(
                         new List<ParameterConfig>
                         {
                             JsonsParam(

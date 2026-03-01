@@ -157,6 +157,14 @@ namespace Portia.Lite
             "A validation Task that checks Edges against selected logic rules " +
             "to ensure structural or topological integrity.";
 
+        public static string MatchSubGraph =>
+            "A retrieval (query) Task that extracts similar graphs from the " +
+            "main graph based on isomorphic pattern matching.";
+
+        public static string MutateSubGraph =>
+            "A graph manipulation Task that replaces isomorphically similar subgraphs " +
+            "on the main host graph with new subgraphs.";
+
         #endregion
 
         #region CONDITIONS
@@ -316,6 +324,24 @@ namespace Portia.Lite
             "perfectly straight within document tolerance, " +
             "distinguishing between linear members and curved geometry.";
 
+        public static string SubGraphMatchNodeFilters =>
+            "Rules to isolate specific nodes in the Pattern Graph.";
+
+        public static string SubGraphMatchEdgeFilters =>
+            "Rules to isolate specific edges in the Pattern Graph.";
+
+        public static string SubGraphMatchNodeRules =>
+            "Constraints applied to the Host nodes mapped to the filtered Pattern nodes.";
+
+        public static string SubGraphMatchEdgeRules =>
+            "Constraints applied to the Host edges mapped to the filtered Pattern edges.";
+
+        public static string SubGraphMatchTypes =>
+            "Boolean value to enforce exact Type matching between the Edges of the host and pattern graph.";
+
+        public static string SubGraphMatchIndices =>
+            "Boolean value to enforce exact Index matching between the Edges of the host and pattern graph.";
+
         #endregion
 
         #region SOLVERS & ZONES
@@ -395,6 +421,10 @@ namespace Portia.Lite
         public static string GeometryFeature =>
             "Attaches an immutable, deep-copied geometric payload " +
             "for downstream spatial allocation or referencing (like a Curve, Surface, etc.).";
+
+        public static string RuleFeature =>
+            "Embeds an Rule as a Feature and attaches it to Nodes or Edges. " +
+            "Used primarily for Isomorphism Matching constraints.";
 
         #endregion
 

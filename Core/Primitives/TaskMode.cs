@@ -2,7 +2,7 @@
 
 namespace Portia.Lite.Core.Primitives
 {
-    public enum TaskType
+    public enum TaskMode
     {
         [Category("Nodes")]
         SetNodeIndices,

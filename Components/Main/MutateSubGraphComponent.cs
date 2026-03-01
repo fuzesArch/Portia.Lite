@@ -4,31 +4,29 @@ using Portia.Infrastructure.Goo;
 using Portia.Infrastructure.GraphHelps;
 using Portia.Infrastructure.Graphs;
 using Portia.Infrastructure.Helps;
-using Portia.Infrastructure.Rules.Base;
 using Portia.Infrastructure.Tasks.Base;
-using Portia.Infrastructure.Tasks.GraphSetting;
+using Portia.Infrastructure.Tasks.Isomorphism;
 using Portia.Infrastructure.Validators;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Portia.Lite.Components.Main
 {
-    public class AmalgamateComponent : GenericBase
+    public class MutateSubGraphComponent : GenericBase
     {
-        public AmalgamateComponent()
+        public MutateSubGraphComponent()
             : base(
-                nameof(Docs.Amalgamate),
-                Docs.Amalgamate,
+                nameof(MutateSubGraph),
+                Docs.MutateSubGraph,
                 Naming.Tab,
                 Naming.Graph)
         {
         }
 
-        public override GH_Exposure Exposure => GH_Exposure.secondary;
+        public override GH_Exposure Exposure => GH_Exposure.tertiary;
 
         public override Guid ComponentGuid =>
-            new("2304d560-440a-46a0-851f-d149be62a048");
+            new("04263052-5cc3-47ba-96df-f8b91d274acd");
 
         protected override System.Drawing.Bitmap Icon =>
             Properties.Resources.BaseLogo;
@@ -39,22 +37,18 @@ namespace Portia.Lite.Components.Main
                 nameof(Docs.GraphGoo),
                 Docs.GraphGoo);
 
-            InStrings(
-                nameof(Docs.TargetNodeRules),
-                Docs.TargetNodeRules);
+            InGeneric(
+                nameof(MutateSubGraph.TargetMatchGraph) + "Goo",
+                Docs.GraphGoo);
 
             InGeneric(
-                nameof(Docs.PayloadGraphGoo),
-                Docs.PayloadGraphGoo);
-
-            InStrings(
-                nameof(Docs.AnchorNodeRules),
-                Docs.AnchorNodeRules);
+                nameof(MutateSubGraph.ReplacementGraph) + "Goo",
+                Docs.GraphGoo);
         }
 
         protected override void AddOutputFields()
         {
-            new AmalgamateGraph().RegisterOutputs(Params);
+            new MutateSubGraph().RegisterOutputs(Params);
         }
 
         protected override void Solve(
@@ -67,36 +61,26 @@ namespace Portia.Lite.Components.Main
                 return;
             }
 
-            if (!da.GetItems(
+            if (!da.GetItem(
                     1,
-                    out List<string> targetJsons))
+                    out GraphGoo targetGoo) || targetGoo?.Value == null)
             {
                 return;
             }
-
 
             if (!da.GetItem(
                     2,
-                    out GraphGoo payloadGoo) || payloadGoo?.Value == null)
+                    out GraphGoo replacementGoo) ||
+                replacementGoo?.Value == null)
             {
                 return;
             }
 
-            if (!da.GetItems(
-                    3,
-                    out List<string> anchorJsons))
+            var task = new MutateSubGraph
             {
-                return;
-            }
-
-
-            var targetRules = targetJsons.FromJson<IRule>().ToList();
-            var anchorRules = anchorJsons.FromJson<IRule>().ToList();
-
-            var task = new AmalgamateGraph(
-                targetRules,
-                anchorRules,
-                payloadGoo.Value);
+                TargetMatchGraph = targetGoo.Value,
+                ReplacementGraph = replacementGoo.Value,
+            };
 
             task.Guard();
 
@@ -110,7 +94,8 @@ namespace Portia.Lite.Components.Main
                 this,
                 task.Queries);
 
-            Message = pipeline.Graph.ComponentMessage();
+            Message = pipeline.Graph.ComponentMessage() ??
+                      task.ComponentMessage();
         }
     }
 }

@@ -5,6 +5,6 @@
         Numeric,
         String,
         Vector,
-        Boundary
+        Boundary,
     }
 }

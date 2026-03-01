@@ -93,6 +93,8 @@
     <Compile Include="Components\Goo\FeatureGooParameter.cs" />
     <Compile Include="Components\Goo\GraphGooParameter.cs" />
     <Compile Include="Components\Goo\GraphItemGooParameter.cs" />
+    <Compile Include="Components\Main\MutateSubGraphComponent.cs" />
+    <Compile Include="Components\Main\MatchSubgraphComponent.cs" />
     <Compile Include="Components\Naming.cs" />
     <Compile Include="Components\DropDowns\RuleDropDown.cs" />
     <Compile Include="Components\Main\PortiaComponent.cs" />
@@ -107,7 +109,7 @@
     <Compile Include="Core\Primitives\FeatureNameMode.cs" />
     <Compile Include="Core\Primitives\RuleMode.cs" />
     <Compile Include="Core\Primitives\SolverMode.cs" />
-    <Compile Include="Core\Primitives\TaskType.cs" />
+    <Compile Include="Core\Primitives\TaskMode.cs" />
     <Compile Include="Core\Primitives\UnpackMode.cs" />
     <Compile Include="Docs.cs" />
     <Compile Include="InfrastructurePriority.cs" />
