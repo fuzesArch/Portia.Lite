@@ -14,6 +14,7 @@ using System.Linq;
 
 namespace Portia.Lite.Components.Main
 {
+    #if INTERNAL
     public class MatchSubgraphComponent : GenericBase
     {
         public MatchSubgraphComponent()
@@ -134,4 +135,5 @@ namespace Portia.Lite.Components.Main
                       task.ComponentMessage();
         }
     }
+    #endif
 }

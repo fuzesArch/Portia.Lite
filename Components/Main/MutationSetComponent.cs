@@ -15,6 +15,7 @@ using System.Linq;
 
 namespace Portia.Lite.Components.Main
 {
+    #if INTERNAL
     public class MutationSetComponent : GenericBase
     {
         public MutationSetComponent()
@@ -143,4 +144,5 @@ namespace Portia.Lite.Components.Main
                 new MutationSetGoo(mutationSet));
         }
     }
+    #endif
 }

@@ -13,6 +13,7 @@ using System.Linq;
 
 namespace Portia.Lite.Components.Main
 {
+    #if INTERNAL
     public class MutateSubGraphComponent : GenericBase
     {
         public MutateSubGraphComponent()
@@ -91,4 +92,5 @@ namespace Portia.Lite.Components.Main
                       task.ComponentMessage();
         }
     }
+    #endif
 }
