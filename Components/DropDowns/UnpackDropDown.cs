@@ -170,7 +170,7 @@ namespace Portia.Lite.Components.DropDowns
                         new List<ParameterConfig>
                         {
                             new(
-                                () => new GraphParameter(),
+                                () => new GraphGooParameter(),
                                 nameof(GraphGoo),
                                 Docs.GraphGoo.Add(Prefix.GraphGoo),
                                 GH_ParamAccess.item)

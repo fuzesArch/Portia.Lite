@@ -85,6 +85,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Components\Goo\MutationSetGooParameter.cs" />
     <Compile Include="Components\Main\AmalgamateComponent.cs" />
     <Compile Include="Components\DropDowns\UnpackDropDown.cs" />
     <Compile Include="Components\DropDowns\FeatureNameDropDown.cs" />
@@ -95,6 +96,7 @@
     <Compile Include="Components\Goo\GraphItemGooParameter.cs" />
     <Compile Include="Components\Main\MutateSubGraphComponent.cs" />
     <Compile Include="Components\Main\MatchSubgraphComponent.cs" />
+    <Compile Include="Components\Main\MutationSetComponent.cs" />
     <Compile Include="Components\Naming.cs" />
     <Compile Include="Components\DropDowns\RuleDropDown.cs" />
     <Compile Include="Components\Main\PortiaComponent.cs" />

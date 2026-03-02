@@ -73,6 +73,9 @@ namespace Portia.Lite
 
         public static string Vector => "3D vector.";
 
+        public static string PayloadGraphGoo =>
+            "The extra Portia Graph (in its wrapped Goo form) to append to the host Graph.";
+
         public static string GraphItemGoo =>
             "The proprietary 'Sovereign Goo' wrapper that encapsulates a graph item (Node or Edge), " +
             "carrying its full topological intelligence and metadata through the network.";
@@ -92,6 +95,10 @@ namespace Portia.Lite
         public static string FeatureGoo =>
             "The proprietary 'Sovereign Goo' wrapper that encapsulates a Feature, " +
             "carrying its full key-value pair dictionary.";
+
+        public static string MutationSetGoo =>
+            "The proprietary 'Sovereign Goo' wrapper that encapsulates a Mutation set, " +
+            "meaning a full package of target and replacement graph with the connection port nodes.";
 
         #endregion
 
@@ -161,9 +168,10 @@ namespace Portia.Lite
             "A retrieval (query) Task that extracts similar graphs from the " +
             "main graph based on isomorphic pattern matching.";
 
-        public static string MutateSubGraph =>
+        public static string MutateSubGraphs =>
             "A graph manipulation Task that replaces isomorphically similar subgraphs " +
-            "on the main host graph with new subgraphs.";
+            "on the main host graph with new subgraphs. The target and replacement graph instances " +
+            "with the ports are grouped into Mutation Sets";
 
         #endregion
 
@@ -514,9 +522,6 @@ namespace Portia.Lite
             "Rules defining the exact receiving connection Nodes on the Payload Graph. " +
             "(Must be Node Rules).";
 
-        public static string PayloadGraphGoo =>
-            "The extra Portia Graph (in its wrapped Goo form) to append to the host Graph.";
-
         public static string Name =>
             "A unique identifier used to label logic results and dynamically name the " +
             "corresponding Portia output fields for easy tracking.";
@@ -549,6 +554,10 @@ namespace Portia.Lite
 
         public static string ReplacementPortPoints =>
             "Points that extract nodes in their strict order from the host graph by centroid overlap.";
+
+        public static string MutationSets =>
+            "Compiles target subgraphs and a replacement graph with port node references " +
+            "into a rewrite rule.";
 
         #endregion
     }

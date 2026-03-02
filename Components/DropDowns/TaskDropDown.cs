@@ -228,7 +228,7 @@ namespace Portia.Lite.Components.DropDowns
 
         protected static ParameterConfig GraphParam() =>
             new(
-                () => new GraphParameter(),
+                () => new GraphGooParameter(),
                 nameof(GraphGoo),
                 Docs.GraphGoo,
                 GH_ParamAccess.item);

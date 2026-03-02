@@ -1,15 +1,12 @@
 ﻿using Grasshopper.Kernel;
 using Portia.Infrastructure.Components;
-using Portia.Infrastructure.DocStrings;
 using Portia.Infrastructure.Goo;
 using Portia.Infrastructure.GraphHelps;
-using Portia.Infrastructure.GraphItems;
 using Portia.Infrastructure.Graphs;
 using Portia.Infrastructure.Helps;
 using Portia.Infrastructure.Tasks.Base;
 using Portia.Infrastructure.Tasks.Isomorphism;
 using Portia.Infrastructure.Validators;
-using Rhino.Geometry;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,8 +17,8 @@ namespace Portia.Lite.Components.Main
     {
         public MutateSubGraphComponent()
             : base(
-                nameof(MutateSubGraph),
-                Docs.MutateSubGraph,
+                nameof(MutateSubGraphs),
+                Docs.MutateSubGraphs,
                 Naming.Tab,
                 Naming.Graph)
         {
@@ -38,30 +35,22 @@ namespace Portia.Lite.Components.Main
         protected override void AddInputFields()
         {
             InGeneric(
-                nameof(Docs.GraphGoo),
+                "Host" + nameof(Docs.GraphGoo),
                 Docs.GraphGoo);
 
-            InGeneric(
-                nameof(MutateSubGraph.SubGraph) + "Goo",
-                Docs.GraphGoo);
-
-
-            InGenerics(
-                nameof(MutateSubGraph.SubGraphPorts) + "Goos",
-                Docs.GraphItemGoo);
-
-            InGeneric(
-                nameof(MutateSubGraph.NewGraph) + "Goo",
-                Docs.GraphGoo);
-
-            InGeometries(
-                nameof(MutateSubGraph.NewGraphPorts),
-                Docs.ReplacementPortPoints.ByDefault(Prefix.PointList));
+            Params.RegisterInputParam(
+                new Goo.MutationSetParameter
+                {
+                    Name = nameof(MutateSubGraphs.MutationSets),
+                    NickName = nameof(MutateSubGraphs.MutationSets),
+                    Description = Docs.MutationSetGoo,
+                    Access = GH_ParamAccess.list
+                });
         }
 
         protected override void AddOutputFields()
         {
-            new MutateSubGraph().RegisterOutputs(Params);
+            new MutateSubGraphs().RegisterOutputs(Params);
         }
 
         protected override void Solve(
@@ -74,49 +63,16 @@ namespace Portia.Lite.Components.Main
                 return;
             }
 
-            if (!da.GetItem(
+            if (!da.GetItems(
                     1,
-                    out GraphGoo subGraphGoo) || subGraphGoo?.Value == null)
+                    out List<MutationSetGoo> setGoos))
             {
                 return;
             }
 
-            if (!da.GetItems(
-                    2,
-                    out List<GraphItemGoo> subGraphPortGoos))
+            var task = new MutateSubGraphs
             {
-                return;
-            }
-
-
-            if (!da.GetItem(
-                    3,
-                    out GraphGoo newGoo) || newGoo?.Value == null)
-            {
-                return;
-            }
-
-            if (!da.GetItems(
-                    4,
-                    out List<Point3d> points))
-            {
-                return;
-            }
-
-            var subGraph = subGraphGoo.Value.Clone();
-            var subGraphPorts = subGraphPortGoos
-                .Select(x => x.Value.As<GraphNode>())
-                .ToList();
-
-            var newGraph = newGoo.Value.Clone();
-            var newGraphPorts = newGraph.GetNodesByPoints(points);
-
-            var task = new MutateSubGraph
-            {
-                SubGraph = subGraph,
-                SubGraphPorts = subGraphPorts,
-                NewGraph = newGraph,
-                NewGraphPorts = newGraphPorts,
+                MutationSets = setGoos.Select(g => g.Value).ToList()
             };
 
             task.Guard();
