@@ -553,7 +553,7 @@ namespace Portia.Lite
             "start and end spots. Supply them in pairs!";
 
         public static string ReplacementPortPoints =>
-            "Points that extract nodes in their strict order from the host graph by centroid overlap.";
+            "Points that extract nodes in their strict order from a graph by centroid overlap.";
 
         public static string MutationSets =>
             "Compiles target subgraphs and a replacement graph with port node references " +

@@ -4,8 +4,10 @@ using Portia.Infrastructure.Components;
 using Portia.Infrastructure.Goo;
 using Portia.Infrastructure.GraphHelps;
 using Portia.Infrastructure.GraphItems;
+using Portia.Infrastructure.Graphs;
 using Portia.Infrastructure.Helps;
 using Portia.Infrastructure.Tasks.Isomorphism;
+using Portia.Lite.Components.Goo;
 using Rhino.Geometry;
 using System;
 using System.Collections.Generic;
@@ -35,34 +37,41 @@ namespace Portia.Lite.Components.Main
         protected override void AddInputFields()
         {
             InGenerics(
-                "TargetSubGraphs",
+                nameof(MutationSet.Targets),
                 "The list of isolated Match SubGraphs.");
 
-            var portsParam = new Goo.GraphItemGooParameter
-            {
-                Name = "TargetPorts",
-                NickName = "TP",
-                Description =
-                    "DataTree of Port Nodes matching the TargetSubGraphs.",
-                Access = GH_ParamAccess.tree
-            };
-            Params.RegisterInputParam(portsParam);
+            Params.RegisterInputParam(
+                new GraphItemGooParameter
+                {
+                    Name =
+                        nameof(MutationSet.Targets) + " / " +
+                        nameof(PortGraph.Ports),
+                    NickName =
+                        nameof(MutationSet.Targets) + " / " +
+                        nameof(PortGraph.Ports),
+                    Description =
+                        "DataTree of Port Nodes matching the TargetSubGraphs.",
+                    Access = GH_ParamAccess.tree
+                });
 
             InGeneric(
-                "ReplacementGraph",
+                nameof(MutationSet.Replacement),
                 "The new Graph template to inject.");
+
             InGeometries(
-                "ReplacementPortPoints",
-                "List of points identifying the ports on the Replacement Graph.");
+                nameof(Docs.ReplacementPortPoints),
+                Docs.ReplacementPortPoints);
         }
 
         protected override void AddOutputFields()
         {
-            var param = new Goo.MutationSetParameter();
-            param.Name = "MutationSet";
-            param.NickName = "MS";
-            param.Description = "The packaged mutation rule.";
-            Params.RegisterOutputParam(param);
+            Params.RegisterOutputParam(
+                new MutationSetParameter
+                {
+                    Name = nameof(MutationSet),
+                    NickName = nameof(MutationSet),
+                    Description = Docs.MutationSets
+                });
         }
 
         protected override void Solve(
@@ -77,7 +86,7 @@ namespace Portia.Lite.Components.Main
 
             if (!da.GetDataTree(
                     1,
-                    out GH_Structure<GraphItemGoo> targetPortsTree))
+                    out GH_Structure<GraphItemGoo> targetPortTree))
             {
                 return;
             }
@@ -96,30 +105,37 @@ namespace Portia.Lite.Components.Main
                 return;
             }
 
-            if (targetGoos.Count != targetPortsTree.Branches.Count)
+            Graph newGraph = newGoo.Value.Clone();
+            List<GraphNode> newPorts = newGraph.GetNodesBy(points);
+
+            MutationSet mutationSet = new()
+            {
+                Replacement = new PortGraph(
+                    newGraph,
+                    newPorts),
+            };
+
+            if (targetGoos.Count != targetPortTree.Branches.Count)
             {
                 AddRuntimeMessage(
                     GH_RuntimeMessageLevel.Error,
-                    "The number of Target SubGraphs must equal the number " +
-                    "of branches in the Target Ports tree.");
+                    "Mismatch! The number of Target SubGraphs must exactly match " +
+                    "the number of branches in the Target Ports tree.");
                 return;
             }
 
-            var mutationSet = new MutationSet
+            for (int i = 0; i < targetGoos.Count; i++)
             {
-                TargetSubGraphs =
-                    targetGoos.Select(g => g.Value.Clone()).ToList(),
-                ReplacementGraph = newGoo.Value.Clone(),
-                ReplacementPortPoints = points
-            };
-
-            // Map the DataTree branches into the List<List<GraphNode>>
-            foreach (var branch in targetPortsTree.Branches)
-            {
-                var portList = branch
+                var graph = targetGoos[i].Value.Clone();
+                var ports = targetPortTree
+                    .Branches[i]
                     .Select(item => item.Value.As<GraphNode>())
                     .ToList();
-                mutationSet.TargetPortLists.Add(portList);
+
+                mutationSet.Targets.Add(
+                    new PortGraph(
+                        graph,
+                        ports));
             }
 
             da.SetData(
