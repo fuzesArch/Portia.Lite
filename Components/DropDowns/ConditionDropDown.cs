@@ -138,6 +138,19 @@ namespace Portia.Lite.Components.DropDowns
                 strictlyIn);
         }
 
+        private void ByIntersection(
+            IGH_DataAccess da)
+        {
+            if (!da.GetItem(
+                    0,
+                    out Brep cutter))
+            {
+                return;
+            }
+
+            _condition = new IntersectionCondition(cutter);
+        }
+
         protected override Dictionary<ConditionMode, ParameterSetup>
             DefineSetup()
         {
@@ -233,6 +246,19 @@ namespace Portia.Lite.Components.DropDowns
                         },
                         ByBoundary,
                         Docs.BoundaryCondition)
+                },
+                {
+                    ConditionMode.Intersection, new ParameterSetup(
+                        new List<ParameterConfig>
+                        {
+                            new(
+                                () => new Param_Brep(),
+                                nameof(IntersectionCondition.Cutter),
+                                Docs.Cutter.Add(Prefix.Brep),
+                                GH_ParamAccess.item),
+                        },
+                        ByIntersection,
+                        Docs.IntersectionCondition)
                 },
             };
         }

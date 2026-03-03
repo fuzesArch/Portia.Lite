@@ -6,5 +6,6 @@
         String,
         Vector,
         Boundary,
+        Intersection,
     }
 }

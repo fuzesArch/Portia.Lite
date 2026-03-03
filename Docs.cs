@@ -197,6 +197,11 @@ namespace Portia.Lite
             "Defines a logical filter based on the geometric relationship " +
             "between points and boundaries, where a boundary is a closed Brep evaluated for point containment.";
 
+
+        public static string IntersectionCondition =>
+            "Defines a logical filter based on the geometric relationship " +
+            "between edges and a cutter Brep, where the edge is evaluated on its intersection with the Cutter.";
+
         public static string NumericRelation =>
             "Numerical comparison logic (Equal, GreaterThan, ..) for filtering floating point numbers.";
 
@@ -268,6 +273,9 @@ namespace Portia.Lite
             "A topological query that validates an Edge based on its start or end point's " +
             "containment by the input boundary Breps. Useful to set initial Edge Types " +
             "or Indices for basic categorization.";
+
+        public static string EdgeIntersection =>
+            "A topological query that validates an Edge based on its intersections with an input Brep.";
 
         public static string NodeAdjacency =>
             "A rule that evaluates a Node's direct neighbouring Edge count.";
@@ -540,6 +548,9 @@ namespace Portia.Lite
         public static string StrictlyIn =>
             "A boolean toggle that determines if elements lying exactly on the Brep " +
             "boundary surface are included in the selection or not.";
+
+        public static string Cutter =>
+            "Brep evaluated against Edge curves for filtering and type setting.";
 
         public static string GridCurves =>
             "Globally defined curves that intersect the graph Edges to allocate grid spots.";

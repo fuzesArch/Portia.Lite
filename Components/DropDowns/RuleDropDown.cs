@@ -10,6 +10,7 @@ using Portia.Infrastructure.Rules.Base;
 using Portia.Infrastructure.Rules.BooleanBased;
 using Portia.Infrastructure.Rules.BoundaryBased;
 using Portia.Infrastructure.Rules.Composite;
+using Portia.Infrastructure.Rules.IntersectionBased;
 using Portia.Infrastructure.Rules.Numeric;
 using Portia.Infrastructure.Rules.StringBased;
 using Portia.Infrastructure.Rules.StringCollectionBased;
@@ -163,6 +164,13 @@ namespace Portia.Lite.Components.DropDowns
                 Docs.BoundaryCondition.Add(Prefix.JsonList),
                 GH_ParamAccess.list);
 
+        protected static ParameterConfig IntersectionConditionsParam() =>
+            new(
+                () => new Param_String(),
+                nameof(IntersectionCondition) + "s",
+                Docs.IntersectionCondition.Add(Prefix.JsonList),
+                GH_ParamAccess.list);
+
         protected static ParameterConfig RuleParam() =>
             new(
                 () => new Param_String(),
@@ -262,6 +270,15 @@ namespace Portia.Lite.Components.DropDowns
         {
             return GenericSetup<TRule, GeometryBase, BoundaryCondition>(
                 BoundaryConditionsParam(),
+                description);
+        }
+
+        protected ParameterSetup IntersectionSetup<TRule>(
+            string description)
+            where TRule : AbsIntersectionRule, new()
+        {
+            return GenericSetup<TRule, GeometryBase, IntersectionCondition>(
+                IntersectionConditionsParam(),
                 description);
         }
 
@@ -459,6 +476,11 @@ namespace Portia.Lite.Components.DropDowns
                 {
                     RuleMode.Edge_InBoundary,
                     BoundarySetup<EdgeInBoundaryRule>(Docs.EdgeInBoundary)
+                },
+                {
+                    RuleMode.Edge_Intersection,
+                    IntersectionSetup<EdgeIntersectionRule>(
+                        Docs.EdgeIntersection)
                 },
             };
         }

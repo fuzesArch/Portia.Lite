@@ -80,5 +80,8 @@ namespace Portia.Lite.Core.Primitives
 
         [Category("Edges")]
         Edge_InBoundary,
+
+        [Category("Edges")]
+        Edge_Intersection,
     }
 }
