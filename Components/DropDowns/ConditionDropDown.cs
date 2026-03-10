@@ -61,17 +61,86 @@ namespace Portia.Lite.Components.DropDowns
                 (int)NumericCondition.DefRelation);
 
             integer.ValidateEnum<NumericRelation>();
+            var relation = (NumericRelation)integer;
 
             if (!da.GetItem(
                     1,
-                    out double value))
+                    out Grasshopper.Kernel.Types.IGH_Goo gooValue))
             {
                 return;
             }
 
-            _condition = new NumericCondition(
-                (NumericRelation)integer,
-                value);
+            if (relation == NumericRelation.InDomain)
+            {
+                if (gooValue.CastTo(out Interval domain))
+                {
+                    _condition = new NumericCondition(domain);
+                    return;
+                }
+
+                AddRuntimeMessage(
+                    GH_RuntimeMessageLevel.Error,
+                    "The 'InDomain' relation strictly requires a Domain (Interval) input.");
+            }
+            else
+            {
+                if (gooValue.CastTo(out double value))
+                {
+                    _condition = new NumericCondition(
+                        relation,
+                        value);
+                    return;
+                }
+
+                AddRuntimeMessage(
+                    GH_RuntimeMessageLevel.Error,
+                    $"The '{relation}' relation strictly requires a Number (Double) input.");
+            }
+        }
+
+        private void ByNumericDomain(
+            IGH_DataAccess da)
+        {
+            int integer = da.GetOptionalItem(
+                0,
+                (int)NumericCondition.DefRelation);
+
+            integer.ValidateEnum<NumericRelation>();
+            var relation = (NumericRelation)integer;
+
+            if (!da.GetItem(
+                    1,
+                    out Grasshopper.Kernel.Types.IGH_Goo gooValue))
+            {
+                return;
+            }
+
+            if (relation == NumericRelation.InDomain)
+            {
+                if (gooValue.CastTo(out Interval domain))
+                {
+                    _condition = new NumericCondition(domain);
+                    return;
+                }
+
+                AddRuntimeMessage(
+                    GH_RuntimeMessageLevel.Error,
+                    "The 'InDomain' relation strictly requires a Domain (Interval) input.");
+            }
+            else
+            {
+                if (gooValue.CastTo(out double value))
+                {
+                    _condition = new NumericCondition(
+                        relation,
+                        value);
+                    return;
+                }
+
+                AddRuntimeMessage(
+                    GH_RuntimeMessageLevel.Error,
+                    $"The '{relation}' relation strictly requires a Number (Double) input.");
+            }
         }
 
         private void ByVectorAngle(
@@ -167,7 +236,7 @@ namespace Portia.Lite.Components.DropDowns
                                 GH_ParamAccess.item,
                                 listFactory: DoubleRelationValueList.Create),
                             new(
-                                () => new Param_Number(),
+                                () => new Param_GenericObject(),
                                 nameof(Docs.NumericValue),
                                 Docs.NumericValue.Add(Prefix.Double),
                                 GH_ParamAccess.item)
@@ -259,7 +328,7 @@ namespace Portia.Lite.Components.DropDowns
                         },
                         ByIntersection,
                         Docs.IntersectionCondition)
-                },
+                }
             };
         }
     }

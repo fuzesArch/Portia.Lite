@@ -6,12 +6,15 @@ using Portia.Infrastructure.GraphHelps;
 using Portia.Infrastructure.GraphItems;
 using Portia.Infrastructure.Graphs;
 using Portia.Infrastructure.Helps;
-using Portia.Infrastructure.Tasks.Isomorphism;
 using Portia.Lite.Components.Goo;
 using Rhino.Geometry;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+
+#if INTERNAL
+using Portia.Infrastructure.Tasks.Isomorphism;
+#endif
 
 namespace Portia.Lite.Components.Main
 {

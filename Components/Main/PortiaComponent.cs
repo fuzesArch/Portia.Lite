@@ -133,14 +133,10 @@ namespace Portia.Lite.Components.Main
                 OnDisplayExpired(true);
             }
 
-            var orderedTasks = tasks
-                .OrderBy(GraphMaps.GetExecutionOrderOrCrash)
-                .ToList();
-
-            var pipeline = new GraphPipeline(orderedTasks);
+            var pipeline = new GraphPipeline(tasks);
             pipeline.Guard();
 
-            foreach (var task in orderedTasks)
+            foreach (var task in tasks)
             {
                 task.Guard();
             }

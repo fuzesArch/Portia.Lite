@@ -1,10 +1,13 @@
 ﻿using Grasshopper.Kernel;
 using Portia.Infrastructure.Goo;
-using Portia.Infrastructure.Tasks.Isomorphism;
 using System;
+#if INTERNAL
+using Portia.Infrastructure.Tasks.Isomorphism;
+#endif
 
 namespace Portia.Lite.Components.Goo
 {
+    #if INTERNAL
     public class MutationSetParameter : GH_Param<MutationSetGoo>
     {
         public MutationSetParameter()
@@ -23,4 +26,5 @@ namespace Portia.Lite.Components.Goo
 
         public override GH_Exposure Exposure => GH_Exposure.hidden;
     }
+    #endif
 }

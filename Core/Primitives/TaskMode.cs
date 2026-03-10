@@ -38,5 +38,11 @@ namespace Portia.Lite.Core.Primitives
         [Category("Graph")]
         Solve,
         #endif
+
+        [Category("TEMPORARY")]
+        SetNodeTypesByIndex,
+
+        [Category("TEMPORARY")]
+        SetEdgeTypesByIndex,
     }
 }

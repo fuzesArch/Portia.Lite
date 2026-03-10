@@ -12,6 +12,7 @@ using Portia.Infrastructure.Tasks.RuleBased.Setting.FeatureSetting;
 using Portia.Infrastructure.Tasks.RuleBased.Setting.IndexSetting;
 using Portia.Infrastructure.Tasks.RuleBased.Setting.TypeSetting;
 using Portia.Infrastructure.Tasks.RuleBased.Verification;
+using Portia.Infrastructure.Tasks.TypeSettingByIndex;
 using Portia.Infrastructure.Validators;
 using Portia.Lite.Components.Goo;
 using Portia.Lite.Core.Primitives;
@@ -193,6 +194,20 @@ namespace Portia.Lite.Components.DropDowns
         }
         #endif
 
+        protected void BySetTypesByIndex<T>(
+            IGH_DataAccess da)
+            where T : AbsSetTypesByIndexTask, new()
+        {
+            if (!da.GetItems(
+                    0,
+                    out List<string> types))
+            {
+                return;
+            }
+
+            _task = new T { Types = types };
+        }
+
         protected static ParameterConfig JsonsParam(
             string name,
             string description) =>
@@ -347,8 +362,20 @@ namespace Portia.Lite.Components.DropDowns
                         },
                         BySolve,
                         Docs.Solve)
-                }
+                },
                 #endif
+                {
+                    TaskMode.SetNodeTypesByIndex, new ParameterSetup(
+                        new List<ParameterConfig> { TypesParam() },
+                        BySetTypesByIndex<SetNodeTypesByIndex>,
+                        Docs.SetNodeTypesByIndex)
+                },
+                {
+                    TaskMode.SetEdgeTypesByIndex, new ParameterSetup(
+                        new List<ParameterConfig> { TypesParam() },
+                        BySetTypesByIndex<SetEdgeTypesByIndex>,
+                        Docs.SetEdgeTypesByIndex)
+                }
             };
         }
     }

@@ -6,11 +6,13 @@ using Portia.Infrastructure.Graphs;
 using Portia.Infrastructure.Helps;
 using Portia.Infrastructure.Rules.Base;
 using Portia.Infrastructure.Tasks.Base;
-using Portia.Infrastructure.Tasks.Isomorphism;
 using Portia.Infrastructure.Validators;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+#if INTERNAL
+using Portia.Infrastructure.Tasks.Isomorphism;
+#endif
 
 namespace Portia.Lite.Components.Main
 {

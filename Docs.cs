@@ -164,6 +164,12 @@ namespace Portia.Lite
             "A validation Task that checks Edges against selected logic rules " +
             "to ensure structural or topological integrity.";
 
+        public static string SetNodeTypesByIndex =>
+            "A modification Task that assigns Type values to Nodes in the order of the Index values.";
+
+        public static string SetEdgeTypesByIndex =>
+            "A modification Task that assigns Type values to Edges in the order of the Index values.";
+
         public static string MatchSubGraph =>
             "A retrieval (query) Task that extracts similar graphs from the " +
             "main graph based on isomorphic pattern matching.";
@@ -211,6 +217,9 @@ namespace Portia.Lite
         public static string BooleanCondition =>
             "Logical Boolean Toggle: If True, the rule captures elements that satisfy the condition. " +
             "If False, the rule is inverted to capture elements that do not.";
+
+        public static string DomainCondition =>
+            "Numerical comparison logic for filtering floating point numbers that are inside a given Domain.";
 
         public static string Gate =>
             "Boolean operator (AND, OR) to combine multiple conditions into one filter. " +
@@ -498,6 +507,9 @@ namespace Portia.Lite
         public static string Type =>
             "A user-defined text string used to categorize and map " +
             "specific elements (nodes or edges) within the graph structure.";
+
+        public static string Domain =>
+            "A Grasshopper-native domain interval between two floating point numbers.";
 
         public static string NumericValue =>
             "The target numerical (double a.k.a. floating point number) " +
