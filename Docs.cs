@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace Portia.Lite
 {
@@ -163,6 +163,10 @@ namespace Portia.Lite
         public static string VerifyEdges =>
             "A validation Task that checks Edges against selected logic rules " +
             "to ensure structural or topological integrity.";
+
+        public static string AddNodes =>
+            "A graph topology Task that inserts new Nodes onto selected Edges by splitting their curves " +
+            "at normalized parameters (0-1). Parameters must be strictly between 0.0 and 1.0 (0 and 1 forbidden).";
 
         public static string SetNodeTypesByIndex =>
             "A modification Task that assigns Type values to Nodes in the order of the Index values.";
@@ -480,6 +484,9 @@ namespace Portia.Lite
 
         public static string SpotParameters =>
             "Curve parameters corresponding to Spots.";
+
+        public static string EdgeParameters =>
+            "Normalized edge parameters between 0.0 and 1.0, where 0 and 1 are forbidden.";
 
         public static string SpotTypes => "Classification types for each Spot.";
 

@@ -1,4 +1,4 @@
-﻿using Portia.Infrastructure.Primitives;
+using Portia.Infrastructure.Primitives;
 
 namespace Portia.Lite.Core.Primitives
 {
@@ -44,5 +44,8 @@ namespace Portia.Lite.Core.Primitives
 
         [Category("TEMPORARY")]
         SetEdgeTypesByIndex,
+
+        [Category("Edges")]
+        AddNodes,
     }
 }

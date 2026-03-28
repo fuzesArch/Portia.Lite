@@ -1,9 +1,10 @@
-﻿using Grasshopper.Kernel;
+using Grasshopper.Kernel;
 using Grasshopper.Kernel.Parameters;
 using Portia.Infrastructure.Components;
 using Portia.Infrastructure.DocStrings;
 using Portia.Infrastructure.Features.Base;
 using Portia.Infrastructure.Goo;
+using Portia.Infrastructure.Graphs;
 using Portia.Infrastructure.Helps;
 using Portia.Infrastructure.Rules.Base;
 using Portia.Infrastructure.Tasks.Base;
@@ -12,6 +13,7 @@ using Portia.Infrastructure.Tasks.RuleBased.Setting.FeatureSetting;
 using Portia.Infrastructure.Tasks.RuleBased.Setting.IndexSetting;
 using Portia.Infrastructure.Tasks.RuleBased.Setting.TypeSetting;
 using Portia.Infrastructure.Tasks.RuleBased.Verification;
+using Portia.Infrastructure.Tasks.RuleBased.Addition;
 using Portia.Infrastructure.Tasks.TypeSettingByIndex;
 using Portia.Infrastructure.Validators;
 using Portia.Lite.Components.Goo;
@@ -176,6 +178,32 @@ namespace Portia.Lite.Components.DropDowns
             };
         }
 
+        protected void ByAddNodesToEdges(
+            IGH_DataAccess da)
+        {
+            SetRules(da);
+
+            if (_rules == null) { return; }
+
+            if (!da.GetItems(
+                    1,
+                    out List<double> parameters))
+            {
+                return;
+            }
+
+            string nodeType = da.GetOptionalItem(
+                2,
+                GraphIdentity.DefType);
+
+            _task = new AddNodesToEdges
+            {
+                Rules = _rules,
+                Parameters = parameters.OrderBy(p => p).ToList(),
+                NodeType = nodeType
+            };
+        }
+
         #if INTERNAL
         protected void BySolve(
             IGH_DataAccess da)
@@ -241,12 +269,20 @@ namespace Portia.Lite.Components.DropDowns
                 Docs.Types.Add(Prefix.StringList),
                 GH_ParamAccess.list);
 
-        protected static ParameterConfig GraphParam() =>
+        protected static ParameterConfig ParametersParam() =>
             new(
-                () => new GraphGooParameter(),
-                nameof(GraphGoo),
-                Docs.GraphGoo,
-                GH_ParamAccess.item);
+                () => new Param_Number(),
+                nameof(AddNodesToEdges.Parameters),
+                Docs.EdgeParameters.Add(Prefix.DoubleList),
+                GH_ParamAccess.list);
+
+        protected static ParameterConfig OptionalNodeTypeParam() =>
+            new(
+                () => new Param_String(),
+                nameof(AddNodesToEdges.NodeType),
+                Docs.Type.Add(Prefix.String).ByDefault(GraphIdentity.DefType),
+                GH_ParamAccess.item,
+                isOptional: true);
 
         protected override Dictionary<TaskMode, ParameterSetup> DefineSetup()
         {
@@ -351,6 +387,7 @@ namespace Portia.Lite.Components.DropDowns
                         ByVerify<VerifyEdges>,
                         Docs.VerifyEdges)
                 },
+
                 #if INTERNAL
                 {
                     TaskMode.Solve, new ParameterSetup(
@@ -375,7 +412,18 @@ namespace Portia.Lite.Components.DropDowns
                         new List<ParameterConfig> { TypesParam() },
                         BySetTypesByIndex<SetEdgeTypesByIndex>,
                         Docs.SetEdgeTypesByIndex)
-                }
+                },
+                {
+                    TaskMode.AddNodes, new ParameterSetup(
+                        new List<ParameterConfig>
+                        {
+                            EdgeRulesParam(),
+                            ParametersParam(),
+                            OptionalNodeTypeParam(),
+                        },
+                        ByAddNodesToEdges,
+                        Docs.AddNodes)
+                },
             };
         }
     }
