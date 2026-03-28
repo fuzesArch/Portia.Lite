@@ -7,6 +7,7 @@ using Portia.Infrastructure.Goo;
 using Portia.Infrastructure.Graphs;
 using Portia.Infrastructure.Helps;
 using Portia.Infrastructure.Rules.Base;
+using Portia.Infrastructure.Tasks.AI;
 using Portia.Infrastructure.Tasks.Base;
 using Portia.Infrastructure.Tasks.RuleBased.Filtering;
 using Portia.Infrastructure.Tasks.RuleBased.Setting.FeatureSetting;
@@ -236,6 +237,19 @@ namespace Portia.Lite.Components.DropDowns
             _task = new T { Types = types };
         }
 
+        protected void ByPrompt(
+            IGH_DataAccess da)
+        {
+            if (!da.GetItem(
+                    0,
+                    out string prompt))
+            {
+                return;
+            }
+
+            _task = new PromptTask { Prompt = prompt };
+        }
+
         protected static ParameterConfig JsonsParam(
             string name,
             string description) =>
@@ -283,6 +297,13 @@ namespace Portia.Lite.Components.DropDowns
                 Docs.Type.Add(Prefix.String).ByDefault(GraphIdentity.DefType),
                 GH_ParamAccess.item,
                 isOptional: true);
+
+        protected static ParameterConfig PromptParam() =>
+            new(
+                () => new Param_String(),
+                nameof(PromptTask.Prompt),
+                "AI prompt to translate into tasks.",
+                GH_ParamAccess.item);
 
         protected override Dictionary<TaskMode, ParameterSetup> DefineSetup()
         {
@@ -423,6 +444,12 @@ namespace Portia.Lite.Components.DropDowns
                         },
                         ByAddNodesToEdges,
                         Docs.AddNodes)
+                },
+                {
+                    TaskMode.Prompt, new ParameterSetup(
+                        new List<ParameterConfig> { PromptParam() },
+                        ByPrompt,
+                        "AI-driven prompt task")
                 },
             };
         }

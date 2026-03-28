@@ -160,6 +160,7 @@ namespace Portia.Lite.Components.Main
                 this,
                 requiredQueries);
 
+            pipeline.Graph.Log.ExposeToComponent(this);
             Message = pipeline.Graph.ComponentMessage();
         }
 

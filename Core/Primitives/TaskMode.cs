@@ -47,5 +47,8 @@ namespace Portia.Lite.Core.Primitives
 
         [Category("Edges")]
         AddNodes,
+
+        [Category("AI")]
+        Prompt,
     }
 }
