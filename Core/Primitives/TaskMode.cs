@@ -46,7 +46,10 @@ namespace Portia.Lite.Core.Primitives
         SetEdgeTypesByIndex,
 
         [Category("Edges")]
-        AddNodes,
+        AddNodesToEdges,
+
+        [Category("Edges")]
+        AddEdges,
 
         [Category("AI")]
         Prompt,

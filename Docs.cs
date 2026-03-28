@@ -164,9 +164,18 @@ namespace Portia.Lite
             "A validation Task that checks Edges against selected logic rules " +
             "to ensure structural or topological integrity.";
 
-        public static string AddNodes =>
+        public static string AddNodesToEdges =>
             "A graph topology Task that inserts new Nodes onto selected Edges by splitting their curves " +
             "at normalized parameters (0-1). Parameters must be strictly between 0.0 and 1.0 (0 and 1 forbidden).";
+
+        public static string AddEdges =>
+            "A graph topology Task that inserts new straight Curve edges between Rule-selected start and end nodes." +
+            "Currently all start nodes connect to all end nodes.";
+
+        public static string PromptTask =>
+            "An AI-based Task that calls a web-based AI, packages a description of the graph architecture, adds the user's prompt" +
+            " and executes the behaviour that the user asked for. It is specifically to recreate the experience of manually passing " +
+            "the Tasks to Portia, only faster. It's in test mode!";
 
         public static string SetNodeTypesByIndex =>
             "A modification Task that assigns Type values to Nodes in the order of the Index values.";

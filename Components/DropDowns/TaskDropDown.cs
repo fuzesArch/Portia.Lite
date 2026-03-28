@@ -205,6 +205,36 @@ namespace Portia.Lite.Components.DropDowns
             };
         }
 
+        protected void ByAddEdges(
+            IGH_DataAccess da)
+        {
+            if (!da.GetItem(
+                    0,
+                    out string startRuleJson))
+            {
+                return;
+            }
+
+            if (!da.GetItem(
+                    1,
+                    out string endRuleJson))
+            {
+                return;
+            }
+
+            string edgeType = da.GetOptionalItem(
+                2,
+                GraphIdentity.DefType);
+
+            _task = new AddEdges
+            {
+                StartNodeRule = startRuleJson.FromJson<INodeEvaluator>(),
+                EndNodeRule = endRuleJson.FromJson<INodeEvaluator>(),
+                EdgeType = edgeType
+            };
+        }
+
+
         #if INTERNAL
         protected void BySolve(
             IGH_DataAccess da)
@@ -290,13 +320,23 @@ namespace Portia.Lite.Components.DropDowns
                 Docs.EdgeParameters.Add(Prefix.DoubleList),
                 GH_ParamAccess.list);
 
-        protected static ParameterConfig OptionalNodeTypeParam() =>
+        protected static ParameterConfig OptionalTypeParam(
+            string name) =>
             new(
                 () => new Param_String(),
-                nameof(AddNodesToEdges.NodeType),
+                name,
                 Docs.Type.Add(Prefix.String).ByDefault(GraphIdentity.DefType),
                 GH_ParamAccess.item,
                 isOptional: true);
+
+        protected static ParameterConfig NodeRuleParam(
+            string name,
+            string description) =>
+            new(
+                () => new Param_String(),
+                name,
+                description.Add(Prefix.Json),
+                GH_ParamAccess.item);
 
         protected static ParameterConfig PromptParam() =>
             new(
@@ -435,21 +475,37 @@ namespace Portia.Lite.Components.DropDowns
                         Docs.SetEdgeTypesByIndex)
                 },
                 {
-                    TaskMode.AddNodes, new ParameterSetup(
+                    TaskMode.AddNodesToEdges, new ParameterSetup(
                         new List<ParameterConfig>
                         {
                             EdgeRulesParam(),
                             ParametersParam(),
-                            OptionalNodeTypeParam(),
+                            OptionalTypeParam(
+                                nameof(AddNodesToEdges.NodeType)),
                         },
                         ByAddNodesToEdges,
-                        Docs.AddNodes)
+                        Docs.AddNodesToEdges)
+                },
+                {
+                    TaskMode.AddEdges, new ParameterSetup(
+                        new List<ParameterConfig>
+                        {
+                            NodeRuleParam(
+                                nameof(AddEdges.StartNodeRule),
+                                Docs.Rule),
+                            NodeRuleParam(
+                                nameof(AddEdges.EndNodeRule),
+                                Docs.Rule),
+                            OptionalTypeParam(nameof(AddEdges.EdgeType))
+                        },
+                        ByAddEdges,
+                        Docs.AddEdges)
                 },
                 {
                     TaskMode.Prompt, new ParameterSetup(
                         new List<ParameterConfig> { PromptParam() },
                         ByPrompt,
-                        "AI-driven prompt task")
+                        Docs.PromptTask)
                 },
             };
         }
