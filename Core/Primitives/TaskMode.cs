@@ -52,6 +52,6 @@ namespace Portia.Lite.Core.Primitives
         AddEdges,
 
         [Category("AI")]
-        Prompt,
+        AiResponse,
     }
 }

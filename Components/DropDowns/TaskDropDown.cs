@@ -267,17 +267,17 @@ namespace Portia.Lite.Components.DropDowns
             _task = new T { Types = types };
         }
 
-        protected void ByPrompt(
+        protected void ByAiResponse(
             IGH_DataAccess da)
         {
             if (!da.GetItem(
                     0,
-                    out string prompt))
+                    out string aiResponse))
             {
                 return;
             }
 
-            _task = new PromptTask { Prompt = prompt };
+            _task = new AiResponseTask { AiResponse = aiResponse };
         }
 
         protected static ParameterConfig JsonsParam(
@@ -338,11 +338,11 @@ namespace Portia.Lite.Components.DropDowns
                 description.Add(Prefix.Json),
                 GH_ParamAccess.item);
 
-        protected static ParameterConfig PromptParam() =>
+        protected static ParameterConfig AiResponseParam() =>
             new(
                 () => new Param_String(),
-                nameof(PromptTask.Prompt),
-                "AI prompt to translate into tasks.",
+                nameof(AiResponseTask.AiResponse),
+                "AI response to translate into tasks.",
                 GH_ParamAccess.item);
 
         protected override Dictionary<TaskMode, ParameterSetup> DefineSetup()
@@ -502,10 +502,10 @@ namespace Portia.Lite.Components.DropDowns
                         Docs.AddEdges)
                 },
                 {
-                    TaskMode.Prompt, new ParameterSetup(
-                        new List<ParameterConfig> { PromptParam() },
-                        ByPrompt,
-                        Docs.PromptTask)
+                    TaskMode.AiResponse, new ParameterSetup(
+                        new List<ParameterConfig> { AiResponseParam() },
+                        ByAiResponse,
+                        Docs.AiResponseTask)
                 },
             };
         }
