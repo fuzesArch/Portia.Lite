@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Grasshopper.GUI.Canvas;
 using Grasshopper.Kernel;
+using Grasshopper.Kernel.Attributes;
 using Grasshopper.Kernel.Parameters;
 using Grasshopper.Kernel.Types;
 using Portia.Infrastructure.Components;
@@ -13,6 +15,7 @@ using Portia.Infrastructure.Tasks.Base;
 using Portia.Infrastructure.Tasks.GraphSetting;
 using Portia.Infrastructure.Validators;
 using Rhino.Geometry;
+using System.Drawing;
 
 namespace Portia.Lite.Components.Main
 {
@@ -32,8 +35,12 @@ namespace Portia.Lite.Components.Main
 
         public override GH_Exposure Exposure => GH_Exposure.primary;
 
-        protected override System.Drawing.Bitmap Icon =>
-            Properties.Resources.BaseLogo;
+        public override void CreateAttributes()
+        {
+            m_attributes = new PortiaComponentAttributes(this);
+        }
+
+        protected override Bitmap Icon => Properties.Resources.WhiteLogo;
 
         private const int FixedInputCount = 1;
         private static int LastFixedInputIndex => FixedInputCount - 1;
@@ -295,6 +302,45 @@ namespace Portia.Lite.Components.Main
                     param.NickName = $"Task_{i}";
                     param.Description = "Connect a JSON Task here.";
                 }
+            }
+        }
+    }
+
+    public class PortiaComponentAttributes : GH_ComponentAttributes
+    {
+        public PortiaComponentAttributes(
+            IGH_Component component)
+            : base(component)
+        {
+        }
+
+        protected override void Render(
+            GH_Canvas canvas,
+            Graphics graphics,
+            GH_CanvasChannel channel)
+        {
+            if (channel == GH_CanvasChannel.Objects)
+            {
+                GH_PaletteStyle style = GH_Skin.palette_normal_standard;
+
+                GH_Skin.palette_normal_standard = new GH_PaletteStyle(
+                    Color.Black,
+                    Color.Black,
+                    Color.PapayaWhip);
+
+                base.Render(
+                    canvas,
+                    graphics,
+                    channel);
+
+                GH_Skin.palette_normal_standard = style;
+            }
+            else
+            {
+                base.Render(
+                    canvas,
+                    graphics,
+                    channel);
             }
         }
     }
