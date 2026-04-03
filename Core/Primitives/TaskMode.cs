@@ -11,6 +11,12 @@ namespace Portia.Lite.Core.Primitives
         SetEdgeIndices,
 
         [Category("Nodes")]
+        SetNodeTypesByIndex,
+
+        [Category("Edges")]
+        SetEdgeTypesByIndex,
+
+        [Category("Nodes")]
         SetNodeTypes,
 
         [Category("Edges")]
@@ -34,22 +40,23 @@ namespace Portia.Lite.Core.Primitives
         [Category("Edges")]
         VerifyEdges,
 
+        [Category("Nodes")]
+        RemoveNodes,
+
+        [Category("Edges")]
+        RemoveEdges,
+
         #if INTERNAL
         [Category("Graph")]
         Solve,
-        #endif
 
-        [Category("TEMPORARY")]
-        SetNodeTypesByIndex,
 
-        [Category("TEMPORARY")]
-        SetEdgeTypesByIndex,
-
-        [Category("Edges")]
+        [Category("Addition")]
         AddNodesToEdges,
 
-        [Category("Edges")]
+        [Category("Addition")]
         AddEdges,
+        #endif
 
         [Category("AI")]
         AiResponse,

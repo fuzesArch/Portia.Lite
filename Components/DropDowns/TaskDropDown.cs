@@ -9,15 +9,16 @@ using Portia.Infrastructure.Helps;
 using Portia.Infrastructure.Rules.Base;
 using Portia.Infrastructure.Tasks.AI;
 using Portia.Infrastructure.Tasks.Base;
+using Portia.Infrastructure.Tasks.RuleBased;
 using Portia.Infrastructure.Tasks.RuleBased.Filtering;
 using Portia.Infrastructure.Tasks.RuleBased.Setting.FeatureSetting;
 using Portia.Infrastructure.Tasks.RuleBased.Setting.IndexSetting;
 using Portia.Infrastructure.Tasks.RuleBased.Setting.TypeSetting;
 using Portia.Infrastructure.Tasks.RuleBased.Verification;
 using Portia.Infrastructure.Tasks.RuleBased.Addition;
+using Portia.Infrastructure.Tasks.RuleBased.Removal;
 using Portia.Infrastructure.Tasks.TypeSettingByIndex;
 using Portia.Infrastructure.Validators;
-using Portia.Lite.Components.Goo;
 using Portia.Lite.Core.Primitives;
 using System;
 using System.Collections.Generic;
@@ -145,9 +146,9 @@ namespace Portia.Lite.Components.DropDowns
             };
         }
 
-        protected void ByFilter<T>(
+        protected void ByGetByRules<T>(
             IGH_DataAccess da)
-            where T : AbsFilterTask, new()
+            where T : AbsGetByRulesTask, new()
         {
             SetRules(da);
 
@@ -382,7 +383,7 @@ namespace Portia.Lite.Components.DropDowns
                 {
                     TaskMode.FilterNodes, new ParameterSetup(
                         new List<ParameterConfig> { NodeRulesParam(), },
-                        ByFilter<FilterNodes>,
+                        ByGetByRules<FilterNodes>,
                         Docs.FilterNodes)
                 },
                 {
@@ -433,7 +434,7 @@ namespace Portia.Lite.Components.DropDowns
                 {
                     TaskMode.FilterEdges, new ParameterSetup(
                         new List<ParameterConfig> { EdgeRulesParam(), },
-                        ByFilter<FilterEdges>,
+                        ByGetByRules<FilterEdges>,
                         Docs.FilterEdges)
                 },
                 {
@@ -448,7 +449,18 @@ namespace Portia.Lite.Components.DropDowns
                         ByVerify<VerifyEdges>,
                         Docs.VerifyEdges)
                 },
-
+                {
+                    TaskMode.RemoveNodes, new ParameterSetup(
+                        new List<ParameterConfig> { NodeRulesParam(), },
+                        ByGetByRules<RemoveNodes>,
+                        Docs.RemoveNodes)
+                },
+                {
+                    TaskMode.RemoveEdges, new ParameterSetup(
+                        new List<ParameterConfig> { EdgeRulesParam(), },
+                        ByGetByRules<RemoveEdges>,
+                        Docs.RemoveEdges)
+                },
                 #if INTERNAL
                 {
                     TaskMode.Solve, new ParameterSetup(

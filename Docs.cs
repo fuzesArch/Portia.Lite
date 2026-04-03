@@ -152,6 +152,12 @@ namespace Portia.Lite
             "A retrieval (query) Task that extracts Node identity values and geometry data " +
             "from the graph for downstream modeling.";
 
+        public static string RemoveNodes =>
+            "A removal Task that deletes Nodes from the graph based on Rule-based selection.";
+
+        public static string RemoveEdges =>
+            "A removal Task that deletes Edges from the graph based on Rule-based selection.";
+
         public static string FilterEdges =>
             "A retrieval (query) Task that extracts Edge identity values and geometry data " +
             "from the graph for downstream modeling.";
