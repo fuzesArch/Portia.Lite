@@ -113,6 +113,7 @@
     <Compile Include="Core\Primitives\SolverMode.cs" />
     <Compile Include="Core\Primitives\TaskMode.cs" />
     <Compile Include="Core\Primitives\UnpackMode.cs" />
+    <Compile Include="Components\TemporaryHelps\AiContextComponent.cs" />
     <Compile Include="Docs.cs" />
     <Compile Include="InfrastructurePriority.cs" />
     <Compile Include="LiteAssemblyInfo.cs" />
@@ -149,6 +150,7 @@
   <ItemGroup>
     <None Include="Resources\CanvaWhiteDrawn.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\RhinoCommon.8.27.26019.16021\build\net48\RhinoCommon.targets" Condition="Exists('..\packages\RhinoCommon.8.27.26019.16021\build\net48\RhinoCommon.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

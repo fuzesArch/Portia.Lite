@@ -100,6 +100,9 @@ namespace Portia.Lite
             "The proprietary 'Sovereign Goo' wrapper that encapsulates a Mutation set, " +
             "meaning a full package of target and replacement graph with the connection port nodes.";
 
+        public static string AiContext =>
+            "A little component that is exposing the instructions to feed to any AI as the context of prompting.";
+
         #endregion
 
         #region TASKS
@@ -302,6 +305,10 @@ namespace Portia.Lite
 
         public static string EdgeIntersection =>
             "A topological query that validates an Edge based on its intersections with an input Brep.";
+
+        public static string IsLeafEdge =>
+            "A topological query that validates an Edge based on its 'leafness' meaning " +
+            "either its start or end point must be a leaf node.";
 
         public static string NodeAdjacency =>
             "A rule that evaluates a Node's direct neighbouring Edge count.";

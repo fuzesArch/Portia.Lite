@@ -83,5 +83,8 @@ namespace Portia.Lite.Core.Primitives
 
         [Category("Edges")]
         Edge_Intersection,
+
+        [Category("Edges")]
+        Edge_IsLeaf,
     }
 }

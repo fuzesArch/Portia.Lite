@@ -482,6 +482,10 @@ namespace Portia.Lite.Components.DropDowns
                     IntersectionSetup<EdgeIntersectionRule>(
                         Docs.EdgeIntersection)
                 },
+                {
+                    RuleMode.Edge_IsLeaf,
+                    BooleanSetup<IsLeafEdgeRule>(Docs.IsLeafEdge)
+                },
             };
         }
     }
