@@ -199,6 +199,11 @@ namespace Portia.Lite
             "on the main host graph with new subgraphs. The target and replacement graph instances " +
             "with the ports are grouped into Mutation Sets";
 
+        public static string Blossom =>
+            "A graph manipulation Task that enriches graph nodes spatially. It replaces nodes with " +
+            "by pushing the centroid outwards along the direction of every adjacent edge with the requested radius, " +
+            "plus connects them around with new edges. The edges can have their Types set optionally.";
+
         #endregion
 
         #region CONDITIONS

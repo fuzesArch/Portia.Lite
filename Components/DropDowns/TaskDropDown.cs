@@ -15,6 +15,7 @@ using Portia.Infrastructure.Tasks.RuleBased.Setting.IndexSetting;
 using Portia.Infrastructure.Tasks.RuleBased.Setting.TypeSetting;
 using Portia.Infrastructure.Tasks.RuleBased.Verification;
 using Portia.Infrastructure.Tasks.RuleBased.Addition;
+using Portia.Infrastructure.Tasks.RuleBased.Blossom;
 using Portia.Infrastructure.Tasks.RuleBased.Removal;
 using Portia.Infrastructure.Tasks.TypeSettingByIndex;
 using Portia.Infrastructure.Validators;
@@ -280,6 +281,31 @@ namespace Portia.Lite.Components.DropDowns
             _task = new AiResponseTask { AiResponse = aiResponse };
         }
 
+        protected void ByBlossom(
+            IGH_DataAccess da)
+        {
+            SetRules(da);
+
+            if (_rules == null) { return; }
+
+            if (!da.GetItem(
+                    1,
+                    out double radius))
+            {
+                return;
+            }
+
+            string edgeType = da.GetOptionalItem(
+                2,
+                GraphIdentity.DefType);
+
+            _task = new BlossomTask
+            {
+                Rules = _rules, Radius = radius, EdgeType = edgeType
+            };
+        }
+
+
         protected static ParameterConfig JsonsParam(
             string name,
             string description) =>
@@ -517,6 +543,21 @@ namespace Portia.Lite.Components.DropDowns
                         new List<ParameterConfig> { AiResponseParam() },
                         ByAiResponse,
                         Docs.AiResponseTask)
+                },
+                {
+                    TaskMode.Blossom, new ParameterSetup(
+                        new List<ParameterConfig>
+                        {
+                            NodeRulesParam(),
+                            new(
+                                () => new Param_Number(),
+                                nameof(BlossomTask.Radius),
+                                Docs.Blossom.Add(Prefix.Double),
+                                GH_ParamAccess.item),
+                            OptionalTypeParam(nameof(BlossomTask.EdgeType))
+                        },
+                        ByBlossom,
+                        Docs.Blossom)
                 },
             };
         }

@@ -46,15 +46,17 @@ namespace Portia.Lite.Core.Primitives
         [Category("Edges")]
         RemoveEdges,
 
+        [Category("Blossom")]
+        Blossom,
+
         #if INTERNAL
         [Category("Graph")]
         Solve,
 
-
-        [Category("Addition")]
+        [Category("Nodes")]
         AddNodesToEdges,
 
-        [Category("Addition")]
+        [Category("Edges")]
         AddEdges,
         #endif
 
