@@ -66,9 +66,31 @@ namespace Portia.Lite.Components.Main
             new SetGraphByCurves().RegisterOutputs(Params);
         }
 
+        private Graph _cachedGraph;
+        private List<IGraphQuery> _cachedQueries;
+
         protected override void Solve(
             IGH_DataAccess da)
         {
+            // If we have a cached graph, outputs were just updated
+            // by the callback — skip execution, push results, clear cache
+            if (_cachedGraph != null && _cachedQueries != null)
+            {
+                GraphPipeline.SetComponentOutputs(
+                    da,
+                    this,
+                    _cachedGraph,
+                    _cachedQueries);
+
+                Message = _cachedGraph.ComponentMessage();
+
+                _cachedGraph = null;
+                _cachedQueries = null;
+                return;
+            }
+
+            // --- Fresh execution starts here ---
+
             var tasks = new List<AbsTask>();
             bool redrawNeeded = false;
 
@@ -131,7 +153,7 @@ namespace Portia.Lite.Components.Main
 
                 param.Name = name;
                 param.NickName = name;
-                param.Description = task.Description;
+                param.Description = name;
                 redrawNeeded = true;
             }
 
@@ -148,12 +170,15 @@ namespace Portia.Lite.Components.Main
                 task.Guard();
             }
 
-            var requiredQueries =
-                pipeline.Tasks.SelectMany(x => x.Queries).ToList();
+            // Execute all tasks, accumulate queries during execution
+            var accumulatedQueries = new List<IGraphQuery>();
+            pipeline.ExecuteTasks(accumulatedQueries);
 
-            if (OutputsMismatch(requiredQueries))
+            if (OutputsMismatch(accumulatedQueries))
             {
-                _queries = requiredQueries;
+                _cachedGraph = pipeline.Graph;
+                _cachedQueries = accumulatedQueries;
+                _queries = accumulatedQueries;
 
                 OnPingDocument()
                     .ScheduleSolution(
@@ -162,14 +187,121 @@ namespace Portia.Lite.Components.Main
                 return;
             }
 
-            pipeline.Execute(
+            // Outputs already match — push results directly
+            GraphPipeline.SetComponentOutputs(
                 da,
                 this,
-                requiredQueries);
+                pipeline.Graph,
+                accumulatedQueries);
 
             pipeline.Graph.Log.ExposeToComponent(this);
             Message = pipeline.Graph.ComponentMessage();
         }
+
+        //protected override void Solve(
+        //    IGH_DataAccess da)
+        //{
+        //    var tasks = new List<AbsTask>();
+        //    bool redrawNeeded = false;
+
+        //    var origin = new List<IGH_Goo>();
+
+        //    if (da.GetDataList(
+        //            0,
+        //            origin) && origin.Any())
+        //    {
+        //        if (origin.First() is GraphGoo { Value: not null } graphGoo)
+        //        {
+        //            tasks.Add(new LoadGraph(graphGoo.Value));
+        //        }
+        //        else
+        //        {
+        //            var curves = new List<Curve>();
+        //            foreach (var goo in origin)
+        //            {
+        //                if (goo.CastTo(out Curve crv))
+        //                {
+        //                    curves.Add(crv);
+        //                }
+        //            }
+
+        //            if (curves.Any())
+        //            {
+        //                tasks.Add(new SetGraphByCurves(curves));
+        //            }
+        //        }
+        //    }
+        //    else
+        //    {
+        //        AddRuntimeMessage(
+        //            GH_RuntimeMessageLevel.Warning,
+        //            "Connect a Graph or Curves to initialize.");
+        //        return;
+        //    }
+
+        //    for (int index = FixedInputCount;
+        //         index < Params.Input.Count;
+        //         index++)
+        //    {
+        //        if (!da.GetItem(
+        //                index,
+        //                out string json) || string.IsNullOrWhiteSpace(json))
+        //        {
+        //            continue;
+        //        }
+
+        //        var task = json.FromJson<AbsTask>();
+        //        tasks.Add(task);
+
+        //        string name = task.GetType().Name;
+        //        var param = Params.Input[index];
+
+        //        if (param.Name == name)
+        //        {
+        //            continue;
+        //        }
+
+        //        param.Name = name;
+        //        param.NickName = name;
+        //        param.Description = task.Description;
+        //        redrawNeeded = true;
+        //    }
+
+        //    if (redrawNeeded)
+        //    {
+        //        OnDisplayExpired(true);
+        //    }
+
+        //    var pipeline = new GraphPipeline(tasks);
+        //    pipeline.Guard();
+
+        //    foreach (var task in tasks)
+        //    {
+        //        task.Guard();
+        //    }
+
+        //    var requiredQueries =
+        //        pipeline.Tasks.SelectMany(x => x.Queries).ToList();
+
+        //    if (OutputsMismatch(requiredQueries))
+        //    {
+        //        _queries = requiredQueries;
+
+        //        OnPingDocument()
+        //            .ScheduleSolution(
+        //                2,
+        //                UpdateOutputsCallback);
+        //        return;
+        //    }
+
+        //    pipeline.Execute(
+        //        da,
+        //        this,
+        //        requiredQueries);
+
+        //    pipeline.Graph.Log.ExposeToComponent(this);
+        //    Message = pipeline.Graph.ComponentMessage();
+        //}
 
         private bool OutputsMismatch(
             List<IGraphQuery> required)
