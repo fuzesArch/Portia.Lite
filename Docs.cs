@@ -10,9 +10,8 @@ namespace Portia.Lite
             "The core building block of the Portia ecosystem, " +
             "designed to manage complex graph logic with architectural data " +
             "through customizable Task inputs." + Environment.NewLine +
-            "Portia reorders the input Tasks in the following order (independent from the input order after " +
-            "the first curve setting task):" + Environment.NewLine +
-            Environment.NewLine +
+            "Your main Task categories are the following (run by your input order):" +
+            Environment.NewLine + Environment.NewLine +
             $"IDENTITY  /  {nameof(SetNodeIndices)} & {nameof(SetEdgeIndices)}" +
             Environment.NewLine +
             $"TOPOLOGY  /  {nameof(SetNodeTypes)} & {nameof(SetEdgeTypes)}" +

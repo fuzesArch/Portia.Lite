@@ -52,16 +52,6 @@ namespace Portia.Lite.Components.DropDowns
         private string _name;
         private IRule _rule;
 
-        public override void AddedToDocument(
-            GH_Document document)
-        {
-            base.AddedToDocument(document);
-
-            new GateValueList().AddAsSource(
-                this,
-                1);
-        }
-
         protected override void AddOutputFields()
         {
             OutJson(
