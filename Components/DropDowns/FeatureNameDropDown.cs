@@ -1,5 +1,6 @@
 ﻿using Grasshopper.Kernel;
 using Portia.Infrastructure.Components;
+using Portia.Infrastructure.DocStrings;
 using Portia.Infrastructure.Features;
 using Portia.Lite.Core.Primitives;
 using System;
