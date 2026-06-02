@@ -1,16 +1,12 @@
-﻿using Grasshopper.Kernel;
-using Portia.Infrastructure.Components;
-using Portia.Infrastructure.Primitives.Enums;
+﻿using Portia.Infrastructure.Components.ValueLists;
 using System;
 
 namespace Portia.Lite.Components.ValueLists
 {
-    public class GateValueList : AbsValueList<Gate>
+    public class GateValueList : AbsGateValueList
     {
         public GateValueList()
             : base(
-                nameof(Gate),
-                Docs.Gate,
                 Naming.Tab,
                 Naming.Primitives)
         {
@@ -20,7 +16,5 @@ namespace Portia.Lite.Components.ValueLists
             new("825ca3c1-851c-4e8a-a566-38f9e082c1ba");
 
         public static GateValueList Create() => new();
-
-        public override GH_Exposure Exposure => GH_Exposure.primary;
     }
 }

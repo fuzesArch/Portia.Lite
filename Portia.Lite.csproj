@@ -114,7 +114,6 @@
     <Compile Include="Core\Primitives\TaskMode.cs" />
     <Compile Include="Core\Primitives\UnpackMode.cs" />
     <Compile Include="Components\TemporaryHelps\AiContextComponent.cs" />
-    <Compile Include="Docs.cs" />
     <Compile Include="InfrastructurePriority.cs" />
     <Compile Include="LiteAssemblyInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -7,6 +7,7 @@ using Grasshopper.Kernel.Attributes;
 using Grasshopper.Kernel.Parameters;
 using Grasshopper.Kernel.Types;
 using Portia.Infrastructure.Components;
+using Portia.Infrastructure.DocStrings;
 using Portia.Infrastructure.Goo;
 using Portia.Infrastructure.GraphHelps;
 using Portia.Infrastructure.Graphs;
