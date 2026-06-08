@@ -306,15 +306,6 @@ namespace Portia.Lite.Components.DropDowns
         }
 
 
-        protected static ParameterConfig JsonsParam(
-            string name,
-            string description) =>
-            new(
-                () => new Param_String(),
-                name,
-                description.Add(Prefix.JsonList),
-                GH_ParamAccess.list);
-
         protected static ParameterConfig NodeRulesParam() =>
             JsonsParam(
                 nameof(Docs.NodeRules),

@@ -19,7 +19,10 @@ namespace Portia.Lite.Components.DropDowns
     {
         public ConditionDropDown()
             : base(
-                nameof(NumericCondition).Substring(7),
+                nameof(ConditionDropDown)
+                    .Substring(
+                        0,
+                        9),
                 Docs.Condition,
                 Naming.Tab,
                 Naming.Logic)
