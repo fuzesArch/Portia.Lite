@@ -17,7 +17,6 @@ using Portia.Infrastructure.Rules.StringCollectionBased;
 using Portia.Infrastructure.Rules.VectorBased;
 using Portia.Infrastructure.Rules.VectorCollectionBased;
 using Portia.Infrastructure.Validators;
-using Portia.Lite.Components.ValueLists;
 using Portia.Lite.Core.Primitives;
 using Rhino.Geometry;
 using System;
