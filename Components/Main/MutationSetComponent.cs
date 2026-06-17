@@ -1,13 +1,13 @@
 ﻿using Grasshopper.Kernel;
 using Grasshopper.Kernel.Data;
 using Portia.Infrastructure.Components;
+using Portia.Infrastructure.Components.Goo;
 using Portia.Infrastructure.DocStrings;
 using Portia.Infrastructure.Goo;
 using Portia.Infrastructure.GraphHelps;
 using Portia.Infrastructure.GraphItems;
 using Portia.Infrastructure.Graphs;
 using Portia.Infrastructure.Helps;
-using Portia.Lite.Components.Goo;
 using Rhino.Geometry;
 using System;
 using System.Collections.Generic;
@@ -71,7 +71,7 @@ namespace Portia.Lite.Components.Main
         protected override void AddOutputFields()
         {
             Params.RegisterOutputParam(
-                new MutationSetParameter
+                new MutationSetGooParameter
                 {
                     Name = nameof(MutationSet),
                     NickName = nameof(MutationSet),

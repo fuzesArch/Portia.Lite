@@ -1,5 +1,6 @@
 ﻿using Grasshopper.Kernel;
 using Portia.Infrastructure.Components;
+using Portia.Infrastructure.Components.Goo;
 using Portia.Infrastructure.DocStrings;
 using Portia.Infrastructure.Goo;
 using Portia.Infrastructure.GraphHelps;
@@ -44,7 +45,7 @@ namespace Portia.Lite.Components.Main
                 Docs.GraphGoo);
 
             Params.RegisterInputParam(
-                new Goo.MutationSetParameter
+                new MutationSetGooParameter
                 {
                     Name = nameof(MutateSubGraphs.MutationSets),
                     NickName = nameof(MutateSubGraphs.MutationSets),

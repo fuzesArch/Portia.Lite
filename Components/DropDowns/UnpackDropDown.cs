@@ -1,11 +1,11 @@
 ﻿using Grasshopper.Kernel;
 using Portia.Infrastructure.Components;
+using Portia.Infrastructure.Components.Goo;
 using Portia.Infrastructure.DocStrings;
 using Portia.Infrastructure.Features.Base;
 using Portia.Infrastructure.Goo;
 using Portia.Infrastructure.GraphHelps;
 using Portia.Infrastructure.Helps;
-using Portia.Lite.Components.Goo;
 using Portia.Lite.Core.Primitives;
 using System;
 using System.Collections.Generic;
