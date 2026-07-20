@@ -62,9 +62,9 @@ namespace Portia.Lite.Components.DropDowns
         private void BySpot(
             IGH_DataAccess da)
         {
-            var gridLines = da.GetOptionalItems<Curve>(0);
-            var voidLines = da.GetOptionalItems<Curve>(1);
-            var roomLines = da.GetOptionalItems<Curve>(2);
+            List<Curve> gridLines = da.GetOptionalItems<Curve>(0);
+            List<Curve> voidLines = da.GetOptionalItems<Curve>(1);
+            List<Curve> roomLines = da.GetOptionalItems<Curve>(2);
 
             _solver = new SpotSolver(
                 gridLines,
@@ -75,7 +75,7 @@ namespace Portia.Lite.Components.DropDowns
         private void ByZone(
             IGH_DataAccess da)
         {
-            var demands = new List<ZoneDemand>();
+            List<ZoneDemand> demands = new List<ZoneDemand>();
 
             if (da.GetItems(
                     0,

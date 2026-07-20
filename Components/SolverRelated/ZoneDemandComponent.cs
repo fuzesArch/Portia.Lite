@@ -75,7 +75,7 @@ namespace Portia.Lite.Components.SolverRelated
                 2,
                 ZoneDemand.DefTolerance);
 
-            var demand = new ZoneDemand(
+            ZoneDemand demand = new ZoneDemand(
                 category,
                 targetArea,
                 tolerance);

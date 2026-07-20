@@ -48,7 +48,7 @@ namespace Portia.Lite.Components.DropDowns
         protected override Dictionary<FeatureNameMode, ParameterSetup>
             DefineSetup()
         {
-            var setups = new Dictionary<FeatureNameMode, ParameterSetup>();
+            Dictionary<FeatureNameMode, ParameterSetup> setups = new Dictionary<FeatureNameMode, ParameterSetup>();
 
             foreach (FeatureNameMode mode in Enum.GetValues(
                          typeof(FeatureNameMode)))

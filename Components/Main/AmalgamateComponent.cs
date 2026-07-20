@@ -15,103 +15,98 @@ using System.Linq;
 
 namespace Portia.Lite.Components.Main
 {
-    public class AmalgamateComponent : GenericBase
-    {
-        public AmalgamateComponent()
-            : base(
-                nameof(Docs.Amalgamate),
-                Docs.Amalgamate,
-                Naming.Tab,
-                Naming.Graph)
-        {
-        }
+   public class AmalgamateComponent : GenericBase
+   {
+      public AmalgamateComponent() : base(
+         nameof(Docs.Amalgamate),
+         Docs.Amalgamate,
+         Naming.Tab,
+         Naming.Graph)
+      { }
 
-        public override GH_Exposure Exposure => GH_Exposure.secondary;
+      public override GH_Exposure Exposure =>
+            GH_Exposure.secondary;
 
-        public override Guid ComponentGuid =>
+      public override Guid ComponentGuid =>
             new("2304d560-440a-46a0-851f-d149be62a048");
 
-        protected override System.Drawing.Bitmap Icon =>
+      protected override System.Drawing.Bitmap Icon =>
             Properties.Resources.BaseLogo;
 
-        protected override void AddInputFields()
-        {
-            InGeneric(
-                nameof(Docs.GraphGoo),
-                Docs.GraphGoo);
+      protected override void AddInputFields()
+      {
+         InGeneric(nameof(Docs.GraphGoo),
+            Docs.GraphGoo);
 
-            InStrings(
-                nameof(Docs.TargetNodeRules),
-                Docs.TargetNodeRules);
+         InStrings(nameof(Docs.TargetNodeRules),
+            Docs.TargetNodeRules);
 
-            InGeneric(
-                nameof(Docs.PayloadGraphGoo),
-                Docs.PayloadGraphGoo);
+         InGeneric(nameof(Docs.PayloadGraphGoo),
+            Docs.PayloadGraphGoo);
 
-            InStrings(
-                nameof(Docs.AnchorNodeRules),
-                Docs.AnchorNodeRules);
-        }
+         InStrings(nameof(Docs.AnchorNodeRules),
+            Docs.AnchorNodeRules);
+      }
 
-        protected override void AddOutputFields()
-        {
-            new AmalgamateGraph().RegisterOutputs(Params);
-        }
+      protected override void AddOutputFields()
+      {
+         new AmalgamateGraph().RegisterOutputs(Params);
+      }
 
-        protected override void Solve(
-            IGH_DataAccess da)
-        {
-            if (!da.GetItem(
-                    0,
-                    out GraphGoo mainGoo) || mainGoo?.Value == null)
-            {
-                return;
-            }
+      protected override void Solve(
+         IGH_DataAccess da)
+      {
+         if (!da.GetItem(0,
+            out GraphGoo mainGoo) || mainGoo?.Value == null)
+         {
+            return;
+         }
 
-            if (!da.GetItems(
-                    1,
-                    out List<string> targetJsons))
-            {
-                return;
-            }
+         if (!da.GetItems(1,
+            out List<string> targetJsons))
+         {
+            return;
+         }
 
+         if (!da.GetItem(2,
+               out GraphGoo payloadGoo) ||
+            payloadGoo?.Value == null)
+         {
+            return;
+         }
 
-            if (!da.GetItem(
-                    2,
-                    out GraphGoo payloadGoo) || payloadGoo?.Value == null)
-            {
-                return;
-            }
+         if (!da.GetItems(3,
+            out List<string> anchorJsons))
+         {
+            return;
+         }
 
-            if (!da.GetItems(
-                    3,
-                    out List<string> anchorJsons))
-            {
-                return;
-            }
+         List<IRule> targetRules = targetJsons
+                                  .FromJson<IRule>()
+                                  .ToList();
 
+         List<IRule> anchorRules = anchorJsons
+                                  .FromJson<IRule>()
+                                  .ToList();
 
-            var targetRules = targetJsons.FromJson<IRule>().ToList();
-            var anchorRules = anchorJsons.FromJson<IRule>().ToList();
+         AmalgamateGraph task = new AmalgamateGraph(
+            targetRules,
+            anchorRules,
+            payloadGoo.Value);
 
-            var task = new AmalgamateGraph(
-                targetRules,
-                anchorRules,
-                payloadGoo.Value);
+         task.Guard();
 
-            task.Guard();
+         GraphPipeline pipeline =
+               new(new List<AbsTask> { task })
+               {
+                  Graph = mainGoo.Value.Clone()
+               };
 
-            GraphPipeline pipeline = new(new List<AbsTask> { task })
-            {
-                Graph = mainGoo.Value.Clone()
-            };
+         pipeline.Execute(da,
+            this,
+            task.Queries);
 
-            pipeline.Execute(
-                da,
-                this,
-                task.Queries);
-
-            Message = pipeline.Graph.ComponentMessage();
-        }
-    }
+         Message = pipeline.Graph.ComponentMessage();
+      }
+   }
 }

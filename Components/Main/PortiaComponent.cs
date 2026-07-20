@@ -20,461 +20,470 @@ using System.Drawing;
 
 namespace Portia.Lite.Components.Main
 {
-    public class PortiaComponent : GenericBase, IGH_VariableParameterComponent
-    {
-        public PortiaComponent()
-            : base(
-                Naming.Tab.ToUpper(),
-                Docs.PortiaComponent,
-                Naming.Tab,
-                Naming.Graph)
-        {
-        }
+   public class PortiaComponent : GenericBase,
+                                  IGH_VariableParameterComponent
+   {
+      public PortiaComponent() : base(Naming.Tab.ToUpper(),
+         Docs.PortiaComponent,
+         Naming.Tab,
+         Naming.Graph)
+      { }
 
-        public override Guid ComponentGuid =>
+      public override Guid ComponentGuid =>
             new("ee1888f9-45c2-4c58-9d9e-b5eece9f5e94");
 
-        public override GH_Exposure Exposure => GH_Exposure.primary;
+      public override GH_Exposure Exposure =>
+            GH_Exposure.primary;
 
-        public override void CreateAttributes()
-        {
-            m_attributes = new PortiaComponentAttributes(this);
-        }
+      public override void CreateAttributes()
+      {
+         m_attributes = new PortiaComponentAttributes(this);
+      }
 
-        protected override Bitmap Icon => Properties.Resources.WhiteLogo;
+      protected override Bitmap Icon =>
+            Properties.Resources.WhiteLogo;
 
-        private const int FixedInputCount = 1;
-        private static int LastFixedInputIndex => FixedInputCount - 1;
+      private const int FixedInputCount = 1;
 
-        private List<IGraphQuery> _queries = new();
+      private static int LastFixedInputIndex =>
+            FixedInputCount - 1;
 
-        protected override void AddInputFields()
-        {
-            InGenerics(
-                nameof(Docs.Origin),
-                Docs.Origin);
+      private List<IGraphQuery> _queries = new();
 
-            InString(
-                nameof(AbsSetGraphTask).Substring(3),
-                "");
+      protected override void AddInputFields()
+      {
+         InGenerics(nameof(Docs.Origin),
+            Docs.Origin);
 
-            Params.Input[0].Optional = true;
-            Params.Input[1].Optional = true;
-        }
+         InString(nameof(AbsSetGraphTask)
+                 .Substring(3),
+            "");
 
-        protected override void AddOutputFields()
-        {
-            new SetGraphByCurves().RegisterOutputs(Params);
-        }
+         Params.Input[0].Optional = true;
+         Params.Input[1].Optional = true;
+      }
 
-        private Graph _cachedGraph;
-        private List<IGraphQuery> _cachedQueries;
+      protected override void AddOutputFields()
+      {
+         new SetGraphByCurves().RegisterOutputs(Params);
+      }
 
-        protected override void Solve(
-            IGH_DataAccess da)
-        {
-            // If we have a cached graph, outputs were just updated
-            // by the callback — skip execution, push results, clear cache
-            if (_cachedGraph != null && _cachedQueries != null)
+      private Graph _cachedGraph;
+      private List<IGraphQuery> _cachedQueries;
+
+      protected override void Solve(
+         IGH_DataAccess da)
+      {
+         // If we have a cached graph, outputs were just updated
+         // by the callback — skip execution, push results, clear cache
+         if (_cachedGraph != null && _cachedQueries != null)
+         {
+            GraphPipeline.SetComponentOutputs(da,
+               this,
+               _cachedGraph,
+               _cachedQueries);
+
+            Message = _cachedGraph.ComponentMessage();
+
+            _cachedGraph = null;
+            _cachedQueries = null;
+
+            return;
+         }
+
+         // --- Fresh execution starts here ---
+
+         List<AbsTask> tasks = new List<AbsTask>();
+         bool redrawNeeded = false;
+
+         List<IGH_Goo> origin = new List<IGH_Goo>();
+
+         if (da.GetDataList(0,
+            origin) && origin.Any())
+         {
+            if (origin.First() is GraphGoo
             {
-                GraphPipeline.SetComponentOutputs(
-                    da,
-                    this,
-                    _cachedGraph,
-                    _cachedQueries);
-
-                Message = _cachedGraph.ComponentMessage();
-
-                _cachedGraph = null;
-                _cachedQueries = null;
-                return;
-            }
-
-            // --- Fresh execution starts here ---
-
-            var tasks = new List<AbsTask>();
-            bool redrawNeeded = false;
-
-            var origin = new List<IGH_Goo>();
-
-            if (da.GetDataList(
-                    0,
-                    origin) && origin.Any())
+               Value: not null
+            } graphGoo)
             {
-                if (origin.First() is GraphGoo { Value: not null } graphGoo)
-                {
-                    tasks.Add(new LoadGraph(graphGoo.Value));
-                }
-                else
-                {
-                    var curves = new List<Curve>();
-                    foreach (var goo in origin)
-                    {
-                        if (goo.CastTo(out Curve crv))
-                        {
-                            curves.Add(crv);
-                        }
-                    }
-
-                    if (curves.Any())
-                    {
-                        tasks.Add(new SetGraphByCurves(curves));
-                    }
-                }
+               tasks.Add(new LoadGraph(graphGoo.Value));
             }
             else
             {
-                AddRuntimeMessage(
-                    GH_RuntimeMessageLevel.Warning,
-                    "Connect a Graph or Curves to initialize.");
-                return;
+               List<Curve> curves = new List<Curve>();
+
+               foreach (IGH_Goo goo in origin)
+               {
+                  if (goo.CastTo(out Curve crv))
+                  {
+                     curves.Add(crv);
+                  }
+               }
+
+               if (curves.Any())
+               {
+                  tasks.Add(new SetGraphByCurves(curves));
+               }
+            }
+         }
+         else
+         {
+            AddRuntimeMessage(
+               GH_RuntimeMessageLevel.Warning,
+               "Connect a Graph or Curves to initialize.");
+
+            return;
+         }
+
+         for (int index = FixedInputCount;
+            index < Params.Input.Count;
+            index++)
+         {
+            if (!da.GetItem(index,
+                  out string json) ||
+               string.IsNullOrWhiteSpace(json))
+            {
+               continue;
             }
 
-            for (int index = FixedInputCount;
-                 index < Params.Input.Count;
-                 index++)
+            AbsTask task = json.FromJson<AbsTask>();
+            tasks.Add(task);
+
+            string name = task.GetType()
+                              .Name;
+
+            IGH_Param param = Params.Input[index];
+
+            if (param.Name == name)
             {
-                if (!da.GetItem(
-                        index,
-                        out string json) || string.IsNullOrWhiteSpace(json))
-                {
-                    continue;
-                }
-
-                var task = json.FromJson<AbsTask>();
-                tasks.Add(task);
-
-                string name = task.GetType().Name;
-                var param = Params.Input[index];
-
-                if (param.Name == name)
-                {
-                    continue;
-                }
-
-                param.Name = name;
-                param.NickName = name;
-                param.Description = name;
-                redrawNeeded = true;
+               continue;
             }
 
-            if (redrawNeeded)
-            {
-                OnDisplayExpired(true);
-            }
+            param.Name = name;
+            param.NickName = name;
+            param.Description = name;
+            redrawNeeded = true;
+         }
 
-            var pipeline = new GraphPipeline(tasks);
-            pipeline.Guard();
+         if (redrawNeeded)
+         {
+            OnDisplayExpired(true);
+         }
 
-            foreach (var task in tasks)
-            {
-                task.Guard();
-            }
+         GraphPipeline pipeline = new GraphPipeline(tasks);
+         pipeline.Guard();
 
-            // Execute all tasks, accumulate queries during execution
-            var accumulatedQueries = new List<IGraphQuery>();
-            pipeline.ExecuteTasks(accumulatedQueries);
+         foreach (AbsTask task in tasks)
+         {
+            task.Guard();
+         }
 
-            if (OutputsMismatch(accumulatedQueries))
-            {
-                _cachedGraph = pipeline.Graph;
-                _cachedQueries = accumulatedQueries;
-                _queries = accumulatedQueries;
+         // Execute all tasks, accumulate queries during execution
+         List<IGraphQuery> accumulatedQueries =
+               new List<IGraphQuery>();
 
-                OnPingDocument()
-                    .ScheduleSolution(
-                        2,
-                        UpdateOutputsCallback);
-                return;
-            }
+         pipeline.ExecuteTasks(accumulatedQueries);
 
-            // Outputs already match — push results directly
-            GraphPipeline.SetComponentOutputs(
-                da,
-                this,
-                pipeline.Graph,
-                accumulatedQueries);
+         if (OutputsMismatch(accumulatedQueries))
+         {
+            _cachedGraph = pipeline.Graph;
+            _cachedQueries = accumulatedQueries;
+            _queries = accumulatedQueries;
 
-            pipeline.Graph.Log.ExposeToComponent(this);
-            Message = pipeline.Graph.ComponentMessage();
-        }
+            OnPingDocument()
+                 .ScheduleSolution(2,
+                     UpdateOutputsCallback);
 
-        //protected override void Solve(
-        //    IGH_DataAccess da)
-        //{
-        //    var tasks = new List<AbsTask>();
-        //    bool redrawNeeded = false;
+            return;
+         }
 
-        //    var origin = new List<IGH_Goo>();
+         // Outputs already match — push results directly
+         GraphPipeline.SetComponentOutputs(da,
+            this,
+            pipeline.Graph,
+            accumulatedQueries);
 
-        //    if (da.GetDataList(
-        //            0,
-        //            origin) && origin.Any())
-        //    {
-        //        if (origin.First() is GraphGoo { Value: not null } graphGoo)
-        //        {
-        //            tasks.Add(new LoadGraph(graphGoo.Value));
-        //        }
-        //        else
-        //        {
-        //            var curves = new List<Curve>();
-        //            foreach (var goo in origin)
-        //            {
-        //                if (goo.CastTo(out Curve crv))
-        //                {
-        //                    curves.Add(crv);
-        //                }
-        //            }
+         pipeline.Graph.Log.ExposeToComponent(this);
+         Message = pipeline.Graph.ComponentMessage();
+      }
 
-        //            if (curves.Any())
-        //            {
-        //                tasks.Add(new SetGraphByCurves(curves));
-        //            }
-        //        }
-        //    }
-        //    else
-        //    {
-        //        AddRuntimeMessage(
-        //            GH_RuntimeMessageLevel.Warning,
-        //            "Connect a Graph or Curves to initialize.");
-        //        return;
-        //    }
+      //protected override void Solve(
+      //    IGH_DataAccess da)
+      //{
+      //    var tasks = new List<AbsTask>();
+      //    bool redrawNeeded = false;
 
-        //    for (int index = FixedInputCount;
-        //         index < Params.Input.Count;
-        //         index++)
-        //    {
-        //        if (!da.GetItem(
-        //                index,
-        //                out string json) || string.IsNullOrWhiteSpace(json))
-        //        {
-        //            continue;
-        //        }
+      //    var origin = new List<IGH_Goo>();
 
-        //        var task = json.FromJson<AbsTask>();
-        //        tasks.Add(task);
+      //    if (da.GetDataList(
+      //            0,
+      //            origin) && origin.Any())
+      //    {
+      //        if (origin.First() is GraphGoo { Value: not null } graphGoo)
+      //        {
+      //            tasks.Add(new LoadGraph(graphGoo.Value));
+      //        }
+      //        else
+      //        {
+      //            var curves = new List<Curve>();
+      //            foreach (var goo in origin)
+      //            {
+      //                if (goo.CastTo(out Curve crv))
+      //                {
+      //                    curves.Add(crv);
+      //                }
+      //            }
 
-        //        string name = task.GetType().Name;
-        //        var param = Params.Input[index];
+      //            if (curves.Any())
+      //            {
+      //                tasks.Add(new SetGraphByCurves(curves));
+      //            }
+      //        }
+      //    }
+      //    else
+      //    {
+      //        AddRuntimeMessage(
+      //            GH_RuntimeMessageLevel.Warning,
+      //            "Connect a Graph or Curves to initialize.");
+      //        return;
+      //    }
 
-        //        if (param.Name == name)
-        //        {
-        //            continue;
-        //        }
+      //    for (int index = FixedInputCount;
+      //         index < Params.Input.Count;
+      //         index++)
+      //    {
+      //        if (!da.GetItem(
+      //                index,
+      //                out string json) || string.IsNullOrWhiteSpace(json))
+      //        {
+      //            continue;
+      //        }
 
-        //        param.Name = name;
-        //        param.NickName = name;
-        //        param.Description = task.Description;
-        //        redrawNeeded = true;
-        //    }
+      //        var task = json.FromJson<AbsTask>();
+      //        tasks.Add(task);
 
-        //    if (redrawNeeded)
-        //    {
-        //        OnDisplayExpired(true);
-        //    }
+      //        string name = task.GetType().Name;
+      //        var param = Params.Input[index];
 
-        //    var pipeline = new GraphPipeline(tasks);
-        //    pipeline.Guard();
+      //        if (param.Name == name)
+      //        {
+      //            continue;
+      //        }
 
-        //    foreach (var task in tasks)
-        //    {
-        //        task.Guard();
-        //    }
+      //        param.Name = name;
+      //        param.NickName = name;
+      //        param.Description = task.Description;
+      //        redrawNeeded = true;
+      //    }
 
-        //    var requiredQueries =
-        //        pipeline.Tasks.SelectMany(x => x.Queries).ToList();
+      //    if (redrawNeeded)
+      //    {
+      //        OnDisplayExpired(true);
+      //    }
 
-        //    if (OutputsMismatch(requiredQueries))
-        //    {
-        //        _queries = requiredQueries;
+      //    var pipeline = new GraphPipeline(tasks);
+      //    pipeline.Guard();
 
-        //        OnPingDocument()
-        //            .ScheduleSolution(
-        //                2,
-        //                UpdateOutputsCallback);
-        //        return;
-        //    }
+      //    foreach (var task in tasks)
+      //    {
+      //        task.Guard();
+      //    }
 
-        //    pipeline.Execute(
-        //        da,
-        //        this,
-        //        requiredQueries);
+      //    var requiredQueries =
+      //        pipeline.Tasks.SelectMany(x => x.Queries).ToList();
 
-        //    pipeline.Graph.Log.ExposeToComponent(this);
-        //    Message = pipeline.Graph.ComponentMessage();
-        //}
+      //    if (OutputsMismatch(requiredQueries))
+      //    {
+      //        _queries = requiredQueries;
 
-        private bool OutputsMismatch(
-            List<IGraphQuery> required)
-        {
-            if (Params.Output.Count != required.Count)
-            {
-                return true;
-            }
+      //        OnPingDocument()
+      //            .ScheduleSolution(
+      //                2,
+      //                UpdateOutputsCallback);
+      //        return;
+      //    }
 
-            for (int i = 0; i < required.Count; i++)
-            {
-                if (Params.Output[i].Name != required[i].Name)
-                {
-                    return true;
-                }
-            }
+      //    pipeline.Execute(
+      //        da,
+      //        this,
+      //        requiredQueries);
 
-            return false;
-        }
+      //    pipeline.Graph.Log.ExposeToComponent(this);
+      //    Message = pipeline.Graph.ComponentMessage();
+      //}
 
-        private void UpdateOutputsCallback(
-            GH_Document doc)
-        {
-            while (_queries.Count < Params.Output.Count)
-            {
-                Params.UnregisterOutputParameter(
-                    Params.Output[Params.Output.Count - 1]);
-            }
-
-            for (int i = 0; i < _queries.Count; i++)
-            {
-                var query = _queries[i];
-
-                if (i < Params.Output.Count)
-                {
-                    var existingParam = Params.Output[i];
-
-                    if (existingParam.Name != query.Name)
-                    {
-                        existingParam.Name = query.Name;
-                        existingParam.NickName = query.Name;
-                        existingParam.Description = "Portia Query Output";
-                    }
-                }
-                else
-                {
-                    query.RegisterOutput(
-                        Params,
-                        i);
-                }
-            }
-
-            Params.OnParametersChanged();
-            ExpireSolution(true);
-        }
-
-        public bool CanInsertParameter(
-            GH_ParameterSide side,
-            int index)
-        {
-            return side == GH_ParameterSide.Input &&
-                   index == Params.Input.Count;
-        }
-
-        public bool CanRemoveParameter(
-            GH_ParameterSide side,
-            int index)
-        {
-            return side == GH_ParameterSide.Input &&
-                   index == Params.Input.Count - 1 &&
-                   index > LastFixedInputIndex;
-        }
-
-        //public bool CanInsertParameter(
-        //    GH_ParameterSide side,
-        //    int index)
-        //{
-        //    return side == GH_ParameterSide.Input &&
-        //           LastFixedInputIndex < index;
-        //}
-
-        //public bool CanRemoveParameter(
-        //    GH_ParameterSide side,
-        //    int index)
-        //{
-        //    return side == GH_ParameterSide.Input &&
-        //           LastFixedInputIndex < index;
-        //}
-
-        public IGH_Param CreateParameter(
-            GH_ParameterSide side,
-            int index)
-        {
-            return new Param_String
-            {
-                Name = $"Task_{index}",
-                NickName = $"Task_{index}",
-                Description = "Additional Task",
-                Access = GH_ParamAccess.item
-            };
-        }
-
-        public bool DestroyParameter(
-            GH_ParameterSide side,
-            int index)
-        {
+      private bool OutputsMismatch(
+         List<IGraphQuery> required)
+      {
+         if (Params.Output.Count != required.Count)
+         {
             return true;
-        }
+         }
 
-        public void VariableParameterMaintenance()
-        {
-            for (int i = 0; i < Params.Input.Count; i++)
+         for (int i = 0; i < required.Count; i++)
+         {
+            if (Params.Output[i].Name != required[i].Name)
             {
-                var param = Params.Input[i];
-
-                if (param.SourceCount != 0)
-                {
-                    continue;
-                }
-
-                if (i == 0)
-                {
-                    param.Name = nameof(Docs.Origin);
-                    param.NickName = nameof(Docs.Origin);
-                    param.Description = Docs.Origin;
-                }
-                else
-                {
-                    param.Name = $"Task_{i}";
-                    param.NickName = $"Task_{i}";
-                    param.Description = "Connect a JSON Task here.";
-                }
+               return true;
             }
-        }
-    }
+         }
 
-    public class PortiaComponentAttributes : GH_ComponentAttributes
-    {
-        public PortiaComponentAttributes(
-            IGH_Component component)
-            : base(component)
-        {
-        }
+         return false;
+      }
 
-        protected override void Render(
-            GH_Canvas canvas,
-            Graphics graphics,
-            GH_CanvasChannel channel)
-        {
-            if (channel == GH_CanvasChannel.Objects)
+      private void UpdateOutputsCallback(
+         GH_Document doc)
+      {
+         while (_queries.Count < Params.Output.Count)
+         {
+            Params.UnregisterOutputParameter(
+               Params.Output[Params.Output.Count - 1]);
+         }
+
+         for (int i = 0; i < _queries.Count; i++)
+         {
+            IGraphQuery query = _queries[i];
+
+            if (i < Params.Output.Count)
             {
-                GH_PaletteStyle style = GH_Skin.palette_normal_standard;
+               IGH_Param existingParam = Params.Output[i];
 
-                GH_Skin.palette_normal_standard = new GH_PaletteStyle(
-                    Color.Black,
-                    Color.Black,
-                    Color.PapayaWhip);
+               if (existingParam.Name != query.Name)
+               {
+                  existingParam.Name = query.Name;
+                  existingParam.NickName = query.Name;
 
-                base.Render(
-                    canvas,
-                    graphics,
-                    channel);
-
-                GH_Skin.palette_normal_standard = style;
+                  existingParam.Description =
+                        "Portia Query Output";
+               }
             }
             else
             {
-                base.Render(
-                    canvas,
-                    graphics,
-                    channel);
+               query.RegisterOutput(Params,
+                  i);
             }
-        }
-    }
+         }
+
+         Params.OnParametersChanged();
+         ExpireSolution(true);
+      }
+
+      public bool CanInsertParameter(
+         GH_ParameterSide side,
+         int index)
+      {
+         return side == GH_ParameterSide.Input &&
+               index == Params.Input.Count;
+      }
+
+      public bool CanRemoveParameter(
+         GH_ParameterSide side,
+         int index)
+      {
+         return side == GH_ParameterSide.Input &&
+               index == Params.Input.Count - 1 &&
+               index > LastFixedInputIndex;
+      }
+
+      //public bool CanInsertParameter(
+      //    GH_ParameterSide side,
+      //    int index)
+      //{
+      //    return side == GH_ParameterSide.Input &&
+      //           LastFixedInputIndex < index;
+      //}
+
+      //public bool CanRemoveParameter(
+      //    GH_ParameterSide side,
+      //    int index)
+      //{
+      //    return side == GH_ParameterSide.Input &&
+      //           LastFixedInputIndex < index;
+      //}
+
+      public IGH_Param CreateParameter(
+         GH_ParameterSide side,
+         int index)
+      {
+         return new Param_String
+         {
+            Name = $"Task_{index}",
+            NickName = $"Task_{index}",
+            Description = "Additional Task",
+            Access = GH_ParamAccess.item
+         };
+      }
+
+      public bool DestroyParameter(
+         GH_ParameterSide side,
+         int index)
+      {
+         return true;
+      }
+
+      public void VariableParameterMaintenance()
+      {
+         for (int i = 0; i < Params.Input.Count; i++)
+         {
+            IGH_Param param = Params.Input[i];
+
+            if (param.SourceCount != 0)
+            {
+               continue;
+            }
+
+            if (i == 0)
+            {
+               param.Name = nameof(Docs.Origin);
+               param.NickName = nameof(Docs.Origin);
+               param.Description = Docs.Origin;
+            }
+            else
+            {
+               param.Name = $"Task_{i}";
+               param.NickName = $"Task_{i}";
+
+               param.Description =
+                     "Connect a JSON Task here.";
+            }
+         }
+      }
+   }
+
+   public class
+         PortiaComponentAttributes : GH_ComponentAttributes
+   {
+      public PortiaComponentAttributes(
+         IGH_Component component) : base(component)
+      { }
+
+      protected override void Render(
+         GH_Canvas canvas,
+         Graphics graphics,
+         GH_CanvasChannel channel)
+      {
+         if (channel == GH_CanvasChannel.Objects)
+         {
+            GH_PaletteStyle style =
+                  GH_Skin.palette_normal_standard;
+
+            GH_Skin.palette_normal_standard =
+                  new GH_PaletteStyle(Color.Black,
+                     Color.Black,
+                     Color.PapayaWhip);
+
+            base.Render(canvas,
+               graphics,
+               channel);
+
+            GH_Skin.palette_normal_standard = style;
+         }
+         else
+         {
+            base.Render(canvas,
+               graphics,
+               channel);
+         }
+      }
+   }
 }

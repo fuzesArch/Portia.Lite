@@ -64,7 +64,7 @@ namespace Portia.Lite.Components.DropDowns
                 (int)NumericCondition.DefRelation);
 
             integer.ValidateEnum<NumericRelation>();
-            var relation = (NumericRelation)integer;
+            NumericRelation relation = (NumericRelation)integer;
 
             if (!da.GetItem(
                     1,
@@ -109,7 +109,7 @@ namespace Portia.Lite.Components.DropDowns
                 (int)NumericCondition.DefRelation);
 
             integer.ValidateEnum<NumericRelation>();
-            var relation = (NumericRelation)integer;
+            NumericRelation relation = (NumericRelation)integer;
 
             if (!da.GetItem(
                     1,

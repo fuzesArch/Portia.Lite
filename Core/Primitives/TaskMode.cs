@@ -2,65 +2,47 @@ using Portia.Infrastructure.Primitives;
 
 namespace Portia.Lite.Core.Primitives
 {
-    public enum TaskMode
-    {
-        [Category("Nodes")]
-        SetNodeIndices,
+   public enum TaskMode
+   {
+      [Category("Node")] SetNodeTypes,
 
-        [Category("Edges")]
-        SetEdgeIndices,
+      [Category("Node")] SetNodeTypesInOrder,
 
-        [Category("Nodes")]
-        SetNodeTypesByIndex,
+      [Category("Node")] FilterNodes,
 
-        [Category("Edges")]
-        SetEdgeTypesByIndex,
+      [Category("Edge")] SetEdgeTypes,
 
-        [Category("Nodes")]
-        SetNodeTypes,
+      [Category("Edge")] SetEdgeTypesInOrder,
 
-        [Category("Edges")]
-        SetEdgeTypes,
+      [Category("Edge")] FilterEdges,
 
-        [Category("Nodes")]
-        SetNodeFeatures,
+      #if INTERNAL
+      [Category("Nodes")] SetNodeIndices,
 
-        [Category("Edges")]
-        SetEdgeFeatures,
+      [Category("Edges")] SetEdgeIndices,
 
-        [Category("Nodes")]
-        FilterNodes,
+      [Category("Nodes")] SetNodeFeatures,
 
-        [Category("Edges")]
-        FilterEdges,
+      [Category("Edges")] SetEdgeFeatures,
 
-        [Category("Nodes")]
-        VerifyNodes,
+      [Category("Nodes")] VerifyNodes,
 
-        [Category("Edges")]
-        VerifyEdges,
+      [Category("Edges")] VerifyEdges,
 
-        [Category("Nodes")]
-        RemoveNodes,
+      [Category("Nodes")] RemoveNodes,
 
-        [Category("Edges")]
-        RemoveEdges,
+      [Category("Edges")] RemoveEdges,
 
-        [Category("Blossom")]
-        Blossom,
+      [Category("Graph")] Solve,
 
-        #if INTERNAL
-        [Category("Graph")]
-        Solve,
+      [Category("Blossom")] Blossom,
 
-        [Category("Nodes")]
-        AddNodesToEdges,
+      [Category("Nodes")] AddNodesToEdges,
 
-        [Category("Edges")]
-        AddEdges,
-        #endif
+      [Category("Edges")] AddEdges,
 
-        [Category("AI")]
-        AiResponse,
-    }
+      [Category("AI")] AiResponse,
+
+      #endif
+   }
 }

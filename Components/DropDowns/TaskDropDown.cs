@@ -10,9 +10,12 @@ using Portia.Infrastructure.Tasks.AI;
 using Portia.Infrastructure.Tasks.Base;
 using Portia.Infrastructure.Tasks.RuleBased;
 using Portia.Infrastructure.Tasks.RuleBased.Filtering;
-using Portia.Infrastructure.Tasks.RuleBased.Setting.FeatureSetting;
-using Portia.Infrastructure.Tasks.RuleBased.Setting.IndexSetting;
-using Portia.Infrastructure.Tasks.RuleBased.Setting.TypeSetting;
+using Portia.Infrastructure.Tasks.RuleBased.Setting.
+      FeatureSetting;
+using Portia.Infrastructure.Tasks.RuleBased.Setting.
+      IndexSetting;
+using Portia.Infrastructure.Tasks.RuleBased.Setting.
+      TypeSetting;
 using Portia.Infrastructure.Tasks.RuleBased.Verification;
 using Portia.Infrastructure.Tasks.RuleBased.Addition;
 using Portia.Infrastructure.Tasks.RuleBased.Blossom;
@@ -31,526 +34,537 @@ using Portia.Infrastructure.Solvers.Base;
 
 namespace Portia.Lite.Components.DropDowns
 {
-    public class TaskDropDown : AbsDropDownComponent<TaskMode>
-    {
-        public TaskDropDown()
-            : base(
-                nameof(TaskDropDown)
-                    .Substring(
-                        0,
-                        4),
-                Docs.Task,
-                Naming.Tab,
-                Naming.Logic)
-        {
-        }
+   public class
+         TaskDropDown : AbsDropDownComponent<TaskMode>
+   {
+      public TaskDropDown() : base(nameof(TaskDropDown)
+              .Substring(0,
+                  4),
+         Docs.Task,
+         Naming.Tab,
+         Naming.Logic)
+      { }
 
-        public override GH_Exposure Exposure => GH_Exposure.tertiary;
+      public override GH_Exposure Exposure =>
+            GH_Exposure.tertiary;
 
-        public override Guid ComponentGuid =>
+      public override Guid ComponentGuid =>
             new("700c752f-a51e-4a2e-944a-a8941d1fc518");
 
-        protected override System.Drawing.Bitmap Icon =>
+      protected override System.Drawing.Bitmap Icon =>
             Properties.Resources.BaseLogo;
 
-        private AbsTask _task;
-        private List<IRule> _rules;
+      private AbsTask _task;
+      private List<IRule> _rules;
 
-        protected override void AddOutputFields()
-        {
-            OutString(
-                nameof(AbsTask).Substring(3),
-                Docs.Task);
-        }
+      protected override void AddOutputFields()
+      {
+         OutString(nameof(AbsTask)
+                 .Substring(3),
+            Docs.Task);
+      }
 
-        protected override void CommonOutputSetting(
-            IGH_DataAccess da)
-        {
-            _task.Guard();
-            Message = _task.ComponentMessage();
+      protected override void CommonOutputSetting(
+         IGH_DataAccess da)
+      {
+         _task.Guard();
+         Message = _task.ComponentMessage();
 
-            da.SetData(
-                0,
-                _task.ToJson());
-        }
+         da.SetData(0,
+            _task.ToJson());
+      }
 
-        protected void SetRules(
-            IGH_DataAccess da)
-        {
-            if (!da.GetItems(
-                    0,
-                    out List<string> jsons))
-            {
-                return;
-            }
+      protected void SetRules(
+         IGH_DataAccess da)
+      {
+         if (!da.GetItems(0,
+            out List<string> jsons))
+         {
+            return;
+         }
 
-            _rules = jsons.FromJson<IRule>().ToList();
-        }
+         _rules = jsons.FromJson<IRule>()
+                       .ToList();
+      }
 
-        protected void BySetIndices<T>(
-            IGH_DataAccess da)
+      protected void BySetIndices<T>(
+         IGH_DataAccess da)
             where T : AbsSetIndicesTask, new()
-        {
-            SetRules(da);
+      {
+         SetRules(da);
 
-            if (_rules == null) { return; }
+         if (_rules == null)
+         {
+            return;
+         }
 
-            if (!da.GetItems(
-                    1,
-                    out List<int> indices))
-            {
-                return;
-            }
+         if (!da.GetItems(1,
+            out List<int> indices))
+         {
+            return;
+         }
 
-            _task = new T { Rules = _rules, Indices = indices };
-        }
+         _task = new T
+               { Rules = _rules, Indices = indices };
+      }
 
 
-        protected void BySetTypes<T>(
-            IGH_DataAccess da)
-            where T : AbsSetTypesTask, new()
-        {
-            SetRules(da);
+      protected void BySetTypes<T>(
+         IGH_DataAccess da) where T : AbsSetTypesTask, new()
+      {
+         SetRules(da);
 
-            if (_rules == null) { return; }
+         if (_rules == null)
+         {
+            return;
+         }
 
-            if (!da.GetItems(
-                    1,
-                    out List<string> types))
-            {
-                return;
-            }
+         if (!da.GetItems(1,
+            out List<string> types))
+         {
+            return;
+         }
 
-            _task = new T { Rules = _rules, Types = types };
-        }
+         _task = new T { Rules = _rules, Types = types };
+      }
 
-        protected void BySetFeatures<T>(
-            IGH_DataAccess da)
+      protected void BySetFeatures<T>(
+         IGH_DataAccess da)
             where T : AbsSetFeaturesTask, new()
-        {
-            SetRules(da);
+      {
+         SetRules(da);
 
-            if (_rules == null) { return; }
+         if (_rules == null)
+         {
+            return;
+         }
 
-            if (!da.GetItems(
-                    1,
-                    out List<string> jsons))
-            {
-                return;
-            }
+         if (!da.GetItems(1,
+            out List<string> jsons))
+         {
+            return;
+         }
 
-            _task = new T
-            {
-                Rules = _rules,
-                Features = jsons.FromJson<IFeature>().ToList()
-            };
-        }
+         _task = new T
+         {
+            Rules = _rules,
+            Features = jsons.FromJson<IFeature>()
+                            .ToList()
+         };
+      }
 
-        protected void ByGetByRules<T>(
-            IGH_DataAccess da)
+      protected void ByGetByRules<T>(
+         IGH_DataAccess da)
             where T : AbsGetByRulesTask, new()
-        {
-            SetRules(da);
+      {
+         SetRules(da);
 
-            if (_rules == null) { return; }
+         if (_rules == null)
+         {
+            return;
+         }
 
-            _task = new T { Rules = _rules };
-        }
+         _task = new T { Rules = _rules };
+      }
 
-        protected void ByVerify<T>(
-            IGH_DataAccess da)
-            where T : AbsVerifyTask, new()
-        {
-            SetRules(da);
+      protected void ByVerify<T>(
+         IGH_DataAccess da) where T : AbsVerifyTask, new()
+      {
+         SetRules(da);
 
-            if (_rules == null) { return; }
+         if (_rules == null)
+         {
+            return;
+         }
 
-            if (!da.GetItems(
-                    1,
-                    out List<string> rulesToVerifyJsons))
+         if (!da.GetItems(1,
+            out List<string> rulesToVerifyJsons))
+         {
+            return;
+         }
+
+         _task = new T
+         {
+            Rules = _rules,
+            RulesToVerify = rulesToVerifyJsons
+                           .FromJson<IRule>()
+                           .ToList()
+         };
+      }
+
+      protected void ByAddNodesToEdges(
+         IGH_DataAccess da)
+      {
+         SetRules(da);
+
+         if (_rules == null)
+         {
+            return;
+         }
+
+         if (!da.GetItems(1,
+            out List<double> parameters))
+         {
+            return;
+         }
+
+         string nodeType = da.GetOptionalItem(2,
+            GraphIdentity.DefType);
+
+         _task = new AddNodesToEdges
+         {
+            Rules = _rules,
+            Parameters = parameters.OrderBy(p => p)
+                                   .ToList(),
+            NodeType = nodeType
+         };
+      }
+
+      protected void ByAddEdges(
+         IGH_DataAccess da)
+      {
+         if (!da.GetItem(0,
+            out string startRuleJson))
+         {
+            return;
+         }
+
+         if (!da.GetItem(1,
+            out string endRuleJson))
+         {
+            return;
+         }
+
+         string edgeType = da.GetOptionalItem(2,
+            GraphIdentity.DefType);
+
+         _task = new AddEdges
+         {
+            StartNodeRule =
+                  startRuleJson.FromJson<INodeEvaluator>(),
+            EndNodeRule =
+                  endRuleJson.FromJson<INodeEvaluator>(),
+            EdgeType = edgeType
+         };
+      }
+
+
+      #if INTERNAL
+      protected void BySolve(
+         IGH_DataAccess da)
+      {
+         if (!da.GetItems(0,
+            out List<string> solverJsons))
+         {
+            return;
+         }
+
+         _task = new Solve
+         {
+            Solvers = solverJsons.FromJson<ISolver>()
+                                 .ToList()
+         };
+      }
+      #endif
+
+      protected void BySetTypesInOrder<T>(
+         IGH_DataAccess da)
+            where T : AbsSetTypesInOrderTask, new()
+      {
+         if (!da.GetItems(0,
+            out List<string> types))
+         {
+            return;
+         }
+
+         _task = new T { Types = types };
+      }
+
+      protected void ByAiResponse(
+         IGH_DataAccess da)
+      {
+         if (!da.GetItem(0,
+            out string aiResponse))
+         {
+            return;
+         }
+
+         _task = new AiResponseTask
+               { AiResponse = aiResponse };
+      }
+
+      protected void ByBlossom(
+         IGH_DataAccess da)
+      {
+         SetRules(da);
+
+         if (_rules == null)
+         {
+            return;
+         }
+
+         if (!da.GetItem(1,
+            out double radius))
+         {
+            return;
+         }
+
+         string edgeType = da.GetOptionalItem(2,
+            GraphIdentity.DefType);
+
+         _task = new BlossomTask
+         {
+            Rules = _rules, Radius = radius,
+            EdgeType = edgeType
+         };
+      }
+
+
+      protected static ParameterConfig NodeRulesParam() =>
+            JsonsParam(nameof(Docs.NodeRules),
+               Docs.NodeRules);
+
+      protected static ParameterConfig EdgeRulesParam() =>
+            JsonsParam(nameof(Docs.EdgeRules),
+               Docs.EdgeRules);
+
+      protected static ParameterConfig IndicesParam() =>
+            new(() => new Param_Integer(),
+               nameof(AbsSetIndicesTask.Indices),
+               Docs.Indices.Add(Prefix.IntegerList),
+               GH_ParamAccess.list);
+
+      protected static ParameterConfig TypesParam() =>
+            new(() => new Param_String(),
+               nameof(AbsSetTypesTask.Types),
+               Docs.Types.Add(Prefix.StringList),
+               GH_ParamAccess.list);
+
+      protected static ParameterConfig ParametersParam() =>
+            new(() => new Param_Number(),
+               nameof(AddNodesToEdges.Parameters),
+               Docs.EdgeParameters.Add(Prefix.DoubleList),
+               GH_ParamAccess.list);
+
+      protected static ParameterConfig OptionalTypeParam(
+         string name) =>
+            new(() => new Param_String(),
+               name,
+               Docs.Type.Add(Prefix.String)
+                   .ByDefault(GraphIdentity.DefType),
+               GH_ParamAccess.item,
+               isOptional: true);
+
+      protected static ParameterConfig NodeRuleParam(
+         string name,
+         string description) =>
+            new(() => new Param_String(),
+               name,
+               description.Add(Prefix.Json),
+               GH_ParamAccess.item);
+
+      protected static ParameterConfig AiResponseParam() =>
+            new(() => new Param_String(),
+               nameof(AiResponseTask.AiResponse),
+               "AI response to translate into tasks.",
+               GH_ParamAccess.item);
+
+      protected override
+            Dictionary<TaskMode, ParameterSetup>
+            DefineSetup()
+      {
+         return new Dictionary<TaskMode, ParameterSetup>
+         {
             {
-                return;
-            }
-
-            _task = new T
+               TaskMode.SetNodeTypes, new ParameterSetup(
+                  new List<ParameterConfig>
+                  {
+                     NodeRulesParam(), TypesParam()
+                  },
+                  BySetTypes<SetNodeTypes>,
+                  Docs.SetNodeTypes)
+            },
             {
-                Rules = _rules,
-                RulesToVerify =
-                    rulesToVerifyJsons.FromJson<IRule>().ToList()
-            };
-        }
-
-        protected void ByAddNodesToEdges(
-            IGH_DataAccess da)
-        {
-            SetRules(da);
-
-            if (_rules == null) { return; }
-
-            if (!da.GetItems(
-                    1,
-                    out List<double> parameters))
+               TaskMode.SetEdgeTypes, new ParameterSetup(
+                  new List<ParameterConfig>
+                  {
+                     EdgeRulesParam(),
+                     TypesParam()
+                  },
+                  BySetTypes<SetEdgeTypes>,
+                  Docs.SetEdgeTypes)
+            },
             {
-                return;
-            }
-
-            string nodeType = da.GetOptionalItem(
-                2,
-                GraphIdentity.DefType);
-
-            _task = new AddNodesToEdges
+               TaskMode.SetNodeTypesInOrder,
+               new ParameterSetup(new List<ParameterConfig>
+                        { TypesParam() },
+                  BySetTypesInOrder<SetNodeTypesInOrder>,
+                  Docs.SetNodeTypesByIndex)
+            },
             {
-                Rules = _rules,
-                Parameters = parameters.OrderBy(p => p).ToList(),
-                NodeType = nodeType
-            };
-        }
-
-        protected void ByAddEdges(
-            IGH_DataAccess da)
-        {
-            if (!da.GetItem(
-                    0,
-                    out string startRuleJson))
+               TaskMode.SetEdgeTypesInOrder,
+               new ParameterSetup(new List<ParameterConfig>
+                        { TypesParam() },
+                  BySetTypesInOrder<SetEdgeTypesInOrder>,
+                  Docs.SetEdgeTypesByIndex)
+            },
             {
-                return;
-            }
-
-            if (!da.GetItem(
-                    1,
-                    out string endRuleJson))
+               TaskMode.FilterNodes, new ParameterSetup(
+                  new List<ParameterConfig>
+                        { NodeRulesParam(), },
+                  ByGetByRules<FilterNodes>,
+                  Docs.FilterNodes)
+            },
             {
-                return;
-            }
-
-            string edgeType = da.GetOptionalItem(
-                2,
-                GraphIdentity.DefType);
-
-            _task = new AddEdges
+               TaskMode.FilterEdges, new ParameterSetup(
+                  new List<ParameterConfig>
+                        { EdgeRulesParam(), },
+                  ByGetByRules<FilterEdges>,
+                  Docs.FilterEdges)
+            },
+            #if INTERNAL
             {
-                StartNodeRule = startRuleJson.FromJson<INodeEvaluator>(),
-                EndNodeRule = endRuleJson.FromJson<INodeEvaluator>(),
-                EdgeType = edgeType
-            };
-        }
-
-
-        #if INTERNAL
-        protected void BySolve(
-            IGH_DataAccess da)
-        {
-            if (!da.GetItems(
-                    0,
-                    out List<string> solverJsons))
+               TaskMode.SetNodeIndices, new ParameterSetup(
+                  new List<ParameterConfig>
+                  {
+                     NodeRulesParam(), IndicesParam()
+                  },
+                  BySetIndices<SetNodeIndices>,
+                  Docs.SetNodeIndices)
+            },
             {
-                return;
-            }
-
-            _task = new Solve
+               TaskMode.SetEdgeIndices, new ParameterSetup(
+                  new List<ParameterConfig>
+                  {
+                     EdgeRulesParam(), IndicesParam()
+                  },
+                  BySetIndices<SetEdgeIndices>,
+                  Docs.SetEdgeIndices)
+            },
             {
-                Solvers = solverJsons.FromJson<ISolver>().ToList()
-            };
-        }
-        #endif
-
-        protected void BySetTypesByIndex<T>(
-            IGH_DataAccess da)
-            where T : AbsSetTypesByIndexTask, new()
-        {
-            if (!da.GetItems(
-                    0,
-                    out List<string> types))
-            {
-                return;
-            }
-
-            _task = new T { Types = types };
-        }
-
-        protected void ByAiResponse(
-            IGH_DataAccess da)
-        {
-            if (!da.GetItem(
-                    0,
-                    out string aiResponse))
-            {
-                return;
-            }
-
-            _task = new AiResponseTask { AiResponse = aiResponse };
-        }
-
-        protected void ByBlossom(
-            IGH_DataAccess da)
-        {
-            SetRules(da);
-
-            if (_rules == null) { return; }
-
-            if (!da.GetItem(
-                    1,
-                    out double radius))
-            {
-                return;
-            }
-
-            string edgeType = da.GetOptionalItem(
-                2,
-                GraphIdentity.DefType);
-
-            _task = new BlossomTask
-            {
-                Rules = _rules, Radius = radius, EdgeType = edgeType
-            };
-        }
-
-
-        protected static ParameterConfig NodeRulesParam() =>
-            JsonsParam(
-                nameof(Docs.NodeRules),
-                Docs.NodeRules);
-
-        protected static ParameterConfig EdgeRulesParam() =>
-            JsonsParam(
-                nameof(Docs.EdgeRules),
-                Docs.EdgeRules);
-
-        protected static ParameterConfig IndicesParam() =>
-            new(
-                () => new Param_Integer(),
-                nameof(AbsSetIndicesTask.Indices),
-                Docs.Indices.Add(Prefix.IntegerList),
-                GH_ParamAccess.list);
-
-        protected static ParameterConfig TypesParam() =>
-            new(
-                () => new Param_String(),
-                nameof(AbsSetTypesTask.Types),
-                Docs.Types.Add(Prefix.StringList),
-                GH_ParamAccess.list);
-
-        protected static ParameterConfig ParametersParam() =>
-            new(
-                () => new Param_Number(),
-                nameof(AddNodesToEdges.Parameters),
-                Docs.EdgeParameters.Add(Prefix.DoubleList),
-                GH_ParamAccess.list);
-
-        protected static ParameterConfig OptionalTypeParam(
-            string name) =>
-            new(
-                () => new Param_String(),
-                name,
-                Docs.Type.Add(Prefix.String).ByDefault(GraphIdentity.DefType),
-                GH_ParamAccess.item,
-                isOptional: true);
-
-        protected static ParameterConfig NodeRuleParam(
-            string name,
-            string description) =>
-            new(
-                () => new Param_String(),
-                name,
-                description.Add(Prefix.Json),
-                GH_ParamAccess.item);
-
-        protected static ParameterConfig AiResponseParam() =>
-            new(
-                () => new Param_String(),
-                nameof(AiResponseTask.AiResponse),
-                "AI response to translate into tasks.",
-                GH_ParamAccess.item);
-
-        protected override Dictionary<TaskMode, ParameterSetup> DefineSetup()
-        {
-            return new Dictionary<TaskMode, ParameterSetup>
-            {
-                {
-                    TaskMode.SetNodeIndices, new ParameterSetup(
-                        new List<ParameterConfig>
-                        {
-                            NodeRulesParam(), IndicesParam()
-                        },
-                        BySetIndices<SetNodeIndices>,
-                        Docs.SetNodeIndices)
-                },
-                {
-                    TaskMode.SetNodeTypes, new ParameterSetup(
-                        new List<ParameterConfig>
-                        {
-                            NodeRulesParam(), TypesParam()
-                        },
-                        BySetTypes<SetNodeTypes>,
-                        Docs.SetNodeTypes)
-                },
-                {
-                    TaskMode.SetNodeFeatures, new ParameterSetup(
-                        new List<ParameterConfig>
-                        {
-                            NodeRulesParam(),
-                            JsonsParam(
-                                nameof(Docs.NodeFeatures),
-                                Docs.SetNodeFeatures)
-                        },
-                        BySetFeatures<SetNodeFeatures>,
+               TaskMode.SetNodeFeatures, new ParameterSetup(
+                  new List<ParameterConfig>
+                  {
+                     NodeRulesParam(),
+                     JsonsParam(nameof(Docs.NodeFeatures),
                         Docs.SetNodeFeatures)
-                },
-                {
-                    TaskMode.FilterNodes, new ParameterSetup(
-                        new List<ParameterConfig> { NodeRulesParam(), },
-                        ByGetByRules<FilterNodes>,
-                        Docs.FilterNodes)
-                },
-                {
-                    TaskMode.VerifyNodes, new ParameterSetup(
-                        new List<ParameterConfig>
-                        {
-                            NodeRulesParam(),
-                            JsonsParam(
-                                nameof(Docs.NodeRulesToVerify),
-                                Docs.NodeRulesToVerify),
-                        },
-                        ByVerify<VerifyNodes>,
-                        Docs.VerifyNodes)
-                },
-                {
-                    TaskMode.SetEdgeIndices, new ParameterSetup(
-                        new List<ParameterConfig>
-                        {
-                            EdgeRulesParam(), IndicesParam()
-                        },
-                        BySetIndices<SetEdgeIndices>,
-                        Docs.SetEdgeIndices)
-                },
-                {
-                    TaskMode.SetEdgeTypes, new ParameterSetup(
-                        new List<ParameterConfig>
-                        {
-                            EdgeRulesParam(),
-                            JsonsParam(
-                                nameof(Docs.SetEdgeTypes),
-                                Docs.SetEdgeTypes)
-                        },
-                        BySetTypes<SetEdgeTypes>,
-                        Docs.SetEdgeTypes)
-                },
-                {
-                    TaskMode.SetEdgeFeatures, new ParameterSetup(
-                        new List<ParameterConfig>
-                        {
-                            EdgeRulesParam(),
-                            JsonsParam(
-                                nameof(Docs.EdgeFeatures),
-                                Docs.SetEdgeFeatures)
-                        },
-                        BySetFeatures<SetEdgeFeatures>,
+                  },
+                  BySetFeatures<SetNodeFeatures>,
+                  Docs.SetNodeFeatures)
+            },
+            {
+               TaskMode.VerifyNodes, new ParameterSetup(
+                  new List<ParameterConfig>
+                  {
+                     NodeRulesParam(),
+                     JsonsParam(
+                        nameof(Docs.NodeRulesToVerify),
+                        Docs.NodeRulesToVerify),
+                  },
+                  ByVerify<VerifyNodes>,
+                  Docs.VerifyNodes)
+            },
+
+            {
+               TaskMode.SetEdgeFeatures, new ParameterSetup(
+                  new List<ParameterConfig>
+                  {
+                     EdgeRulesParam(),
+                     JsonsParam(nameof(Docs.EdgeFeatures),
                         Docs.SetEdgeFeatures)
-                },
-                {
-                    TaskMode.FilterEdges, new ParameterSetup(
-                        new List<ParameterConfig> { EdgeRulesParam(), },
-                        ByGetByRules<FilterEdges>,
-                        Docs.FilterEdges)
-                },
-                {
-                    TaskMode.VerifyEdges, new ParameterSetup(
-                        new List<ParameterConfig>
-                        {
-                            EdgeRulesParam(),
-                            JsonsParam(
-                                nameof(Docs.EdgeRulesToVerify),
-                                Docs.EdgeRulesToVerify)
-                        },
-                        ByVerify<VerifyEdges>,
-                        Docs.VerifyEdges)
-                },
-                {
-                    TaskMode.RemoveNodes, new ParameterSetup(
-                        new List<ParameterConfig> { NodeRulesParam(), },
-                        ByGetByRules<RemoveNodes>,
-                        Docs.RemoveNodes)
-                },
-                {
-                    TaskMode.RemoveEdges, new ParameterSetup(
-                        new List<ParameterConfig> { EdgeRulesParam(), },
-                        ByGetByRules<RemoveEdges>,
-                        Docs.RemoveEdges)
-                },
-                #if INTERNAL
-                {
-                    TaskMode.Solve, new ParameterSetup(
-                        new List<ParameterConfig>
-                        {
-                            JsonsParam(
-                                nameof(Docs.Solvers),
-                                Docs.Solvers),
-                        },
-                        BySolve,
-                        Docs.Solve)
-                },
-                #endif
-                {
-                    TaskMode.SetNodeTypesByIndex, new ParameterSetup(
-                        new List<ParameterConfig> { TypesParam() },
-                        BySetTypesByIndex<SetNodeTypesByIndex>,
-                        Docs.SetNodeTypesByIndex)
-                },
-                {
-                    TaskMode.SetEdgeTypesByIndex, new ParameterSetup(
-                        new List<ParameterConfig> { TypesParam() },
-                        BySetTypesByIndex<SetEdgeTypesByIndex>,
-                        Docs.SetEdgeTypesByIndex)
-                },
-                {
-                    TaskMode.AddNodesToEdges, new ParameterSetup(
-                        new List<ParameterConfig>
-                        {
-                            EdgeRulesParam(),
-                            ParametersParam(),
-                            OptionalTypeParam(
-                                nameof(AddNodesToEdges.NodeType)),
-                        },
-                        ByAddNodesToEdges,
-                        Docs.AddNodesToEdges)
-                },
-                {
-                    TaskMode.AddEdges, new ParameterSetup(
-                        new List<ParameterConfig>
-                        {
-                            NodeRuleParam(
-                                nameof(AddEdges.StartNodeRule),
-                                Docs.Rule),
-                            NodeRuleParam(
-                                nameof(AddEdges.EndNodeRule),
-                                Docs.Rule),
-                            OptionalTypeParam(nameof(AddEdges.EdgeType))
-                        },
-                        ByAddEdges,
-                        Docs.AddEdges)
-                },
-                {
-                    TaskMode.AiResponse, new ParameterSetup(
-                        new List<ParameterConfig> { AiResponseParam() },
-                        ByAiResponse,
-                        Docs.AiResponseTask)
-                },
-                {
-                    TaskMode.Blossom, new ParameterSetup(
-                        new List<ParameterConfig>
-                        {
-                            NodeRulesParam(),
-                            new(
-                                () => new Param_Number(),
-                                nameof(BlossomTask.Radius),
-                                Docs.Blossom.Add(Prefix.Double),
-                                GH_ParamAccess.item),
-                            OptionalTypeParam(nameof(BlossomTask.EdgeType))
-                        },
-                        ByBlossom,
-                        Docs.Blossom)
-                },
-            };
-        }
-    }
+                  },
+                  BySetFeatures<SetEdgeFeatures>,
+                  Docs.SetEdgeFeatures)
+            },
+
+            {
+               TaskMode.VerifyEdges, new ParameterSetup(
+                  new List<ParameterConfig>
+                  {
+                     EdgeRulesParam(),
+                     JsonsParam(
+                        nameof(Docs.EdgeRulesToVerify),
+                        Docs.EdgeRulesToVerify)
+                  },
+                  ByVerify<VerifyEdges>,
+                  Docs.VerifyEdges)
+            },
+            {
+               TaskMode.RemoveNodes, new ParameterSetup(
+                  new List<ParameterConfig>
+                        { NodeRulesParam(), },
+                  ByGetByRules<RemoveNodes>,
+                  Docs.RemoveNodes)
+            },
+            {
+               TaskMode.RemoveEdges, new ParameterSetup(
+                  new List<ParameterConfig>
+                        { EdgeRulesParam(), },
+                  ByGetByRules<RemoveEdges>,
+                  Docs.RemoveEdges)
+            },
+            {
+               TaskMode.Solve, new ParameterSetup(
+                  new List<ParameterConfig>
+                  {
+                     JsonsParam(nameof(Docs.Solvers),
+                        Docs.Solvers),
+                  },
+                  BySolve,
+                  Docs.Solve)
+            },
+            {
+               TaskMode.AddNodesToEdges, new ParameterSetup(
+                  new List<ParameterConfig>
+                  {
+                     EdgeRulesParam(),
+                     ParametersParam(),
+                     OptionalTypeParam(
+                        nameof(AddNodesToEdges.NodeType)),
+                  },
+                  ByAddNodesToEdges,
+                  Docs.AddNodesToEdges)
+            },
+            {
+               TaskMode.AddEdges, new ParameterSetup(
+                  new List<ParameterConfig>
+                  {
+                     NodeRuleParam(
+                        nameof(AddEdges.StartNodeRule),
+                        Docs.Rule),
+                     NodeRuleParam(
+                        nameof(AddEdges.EndNodeRule),
+                        Docs.Rule),
+                     OptionalTypeParam(
+                        nameof(AddEdges.EdgeType))
+                  },
+                  ByAddEdges,
+                  Docs.AddEdges)
+            },
+            {
+               TaskMode.AiResponse, new ParameterSetup(
+                  new List<ParameterConfig>
+                        { AiResponseParam() },
+                  ByAiResponse,
+                  Docs.AiResponseTask)
+            },
+            {
+               TaskMode.Blossom, new ParameterSetup(
+                  new List<ParameterConfig>
+                  {
+                     NodeRulesParam(),
+                     new(() => new Param_Number(),
+                        nameof(BlossomTask.Radius),
+                        Docs.Blossom.Add(Prefix.Double),
+                        GH_ParamAccess.item),
+                     OptionalTypeParam(
+                        nameof(BlossomTask.EdgeType))
+                  },
+                  ByBlossom,
+                  Docs.Blossom)
+            },
+            #endif
+         };
+      }
+   }
 }

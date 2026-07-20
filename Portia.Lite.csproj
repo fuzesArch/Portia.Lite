@@ -83,16 +83,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Components\DropDowns\AbsRuleDropDown.cs" />
+    <Compile Include="Components\DropDowns\EdgeRuleDropDown.cs" />
+    <Compile Include="Components\DropDowns\NodeRuleDropDown.cs" />
+    <Compile Include="Components\Main\AbsUnpackComponent.cs" />
     <Compile Include="Components\Main\AmalgamateComponent.cs" />
-    <Compile Include="Components\DropDowns\UnpackDropDown.cs" />
     <Compile Include="Components\DropDowns\FeatureNameDropDown.cs" />
     <Compile Include="Components\DropDowns\SolverDropDown.cs" />
     <Compile Include="Components\DropDowns\FeatureDropDown.cs" />
     <Compile Include="Components\Main\MutateSubGraphComponent.cs" />
     <Compile Include="Components\Main\MatchSubgraphComponent.cs" />
     <Compile Include="Components\Main\MutationSetComponent.cs" />
+    <Compile Include="Components\Main\UnpackEdgesComponent.cs" />
+    <Compile Include="Components\Main\UnpackGraphComponent.cs" />
+    <Compile Include="Components\Main\UnpackNodesComponent.cs" />
     <Compile Include="Components\Naming.cs" />
-    <Compile Include="Components\DropDowns\RuleDropDown.cs" />
     <Compile Include="Components\Main\PortiaComponent.cs" />
     <Compile Include="Components\DropDowns\TaskDropDown.cs" />
     <Compile Include="Components\DropDowns\ConditionDropDown.cs" />
@@ -101,12 +106,12 @@
     <Compile Include="Components\ValueLists\GateValueList.cs" />
     <Compile Include="Components\ValueLists\StringRelationValueList.cs" />
     <Compile Include="Core\Primitives\ConditionMode.cs" />
+    <Compile Include="Core\Primitives\EdgeRuleMode.cs" />
     <Compile Include="Core\Primitives\FeatureMode.cs" />
     <Compile Include="Core\Primitives\FeatureNameMode.cs" />
-    <Compile Include="Core\Primitives\RuleMode.cs" />
+    <Compile Include="Core\Primitives\NodeRuleMode.cs" />
     <Compile Include="Core\Primitives\SolverMode.cs" />
     <Compile Include="Core\Primitives\TaskMode.cs" />
-    <Compile Include="Core\Primitives\UnpackMode.cs" />
     <Compile Include="Components\TemporaryHelps\AiContextComponent.cs" />
     <Compile Include="InfrastructurePriority.cs" />
     <Compile Include="LiteAssemblyInfo.cs" />

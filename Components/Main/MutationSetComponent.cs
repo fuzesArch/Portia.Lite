@@ -131,11 +131,11 @@ namespace Portia.Lite.Components.Main
 
             for (int i = 0; i < targetGoos.Count; i++)
             {
-                var graph = targetGoos[i].Value.Clone();
-                var ports = targetPortTree
-                    .Branches[i]
-                    .Select(item => item.Value.As<GraphNode>())
-                    .ToList();
+                Graph graph = targetGoos[i].Value.Clone();
+                List<GraphNode> ports = targetPortTree
+                                       .Branches[i]
+                                       .Select(item => item.Value.As<GraphNode>())
+                                       .ToList();
 
                 mutationSet.Targets.Add(
                     new PortGraph(
