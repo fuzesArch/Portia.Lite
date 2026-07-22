@@ -66,15 +66,6 @@ namespace Portia.Lite.Components.DropDowns
                   Docs.NodeProximity)
             },
             {
-               NodeRuleMode.VectorSum,
-               NumericSetup<NodeVectorScalarSumRule>(
-                  Docs.NodeVectorScalarSum)
-            },
-            {
-               NodeRuleMode.IsLeafNode,
-               BooleanSetup<IsLeafNodeRule>(Docs.IsLeafNode)
-            },
-            {
                NodeRuleMode.AdjacentEdgeVectorSimilarity,
                VectorCollectionSetup<
                   NodeAdjacentEdgeVectorSimilarityRule>(Docs

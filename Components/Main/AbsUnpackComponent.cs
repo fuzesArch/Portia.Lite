@@ -41,7 +41,7 @@ namespace Portia.Lite.Components.Main
 
       protected override void AddInputFields()
       {
-         InGenerics("Graph",
+         InGenerics("Goo",
             $"A Graph (unpacks all {ItemLabel}) or the {ItemLabel} goos from a Filter.");
 
          SetInputParameterOptionality(0);

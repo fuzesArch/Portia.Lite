@@ -94,6 +94,7 @@
     <Compile Include="Components\Main\MutateSubGraphComponent.cs" />
     <Compile Include="Components\Main\MatchSubgraphComponent.cs" />
     <Compile Include="Components\Main\MutationSetComponent.cs" />
+    <Compile Include="Components\Main\NegateComponent.cs" />
     <Compile Include="Components\Main\UnpackEdgesComponent.cs" />
     <Compile Include="Components\Main\UnpackGraphComponent.cs" />
     <Compile Include="Components\Main\UnpackNodesComponent.cs" />

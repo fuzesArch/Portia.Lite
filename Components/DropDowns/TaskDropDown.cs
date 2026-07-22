@@ -267,9 +267,8 @@ namespace Portia.Lite.Components.DropDowns
       }
       #endif
 
-      protected void BySetTypesInOrder<T>(
+      protected void BySetEdgeTypesInOrder(
          IGH_DataAccess da)
-            where T : AbsSetTypesInOrderTask, new()
       {
          if (!da.GetItems(0,
             out List<string> types))
@@ -277,7 +276,7 @@ namespace Portia.Lite.Components.DropDowns
             return;
          }
 
-         _task = new T { Types = types };
+         _task = new SetEdgeTypesInOrder { Types = types };
       }
 
       protected void ByAiResponse(
@@ -395,17 +394,10 @@ namespace Portia.Lite.Components.DropDowns
                   Docs.SetEdgeTypes)
             },
             {
-               TaskMode.SetNodeTypesInOrder,
-               new ParameterSetup(new List<ParameterConfig>
-                        { TypesParam() },
-                  BySetTypesInOrder<SetNodeTypesInOrder>,
-                  Docs.SetNodeTypesByIndex)
-            },
-            {
                TaskMode.SetEdgeTypesInOrder,
                new ParameterSetup(new List<ParameterConfig>
                         { TypesParam() },
-                  BySetTypesInOrder<SetEdgeTypesInOrder>,
+                  BySetEdgeTypesInOrder,
                   Docs.SetEdgeTypesByIndex)
             },
             {

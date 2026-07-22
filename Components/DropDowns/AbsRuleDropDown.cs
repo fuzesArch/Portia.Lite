@@ -168,18 +168,10 @@ namespace Portia.Lite.Components.DropDowns
             where TRule : IRule, IBooleanLogic, new()
       {
          return new ParameterSetup(
-            new List<ParameterConfig>
-                  { NameParam(), BooleanParameter() },
+            new List<ParameterConfig> { NameParam() },
             da =>
             {
-               if (!da.GetItem(1,
-                  out bool condition))
-               {
-                  return;
-               }
-
-               TRule rule = new TRule { Name = _name };
-               rule.SetNegatableBaseCondition(condition);
+               TRule rule = new() { Name = _name };
 
                _rule = rule;
                _rule.Guard();

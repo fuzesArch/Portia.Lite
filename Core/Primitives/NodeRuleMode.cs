@@ -18,10 +18,6 @@ namespace Portia.Lite.Core.Primitives
 
       Proximity,
 
-      VectorSum,
-
-      IsLeafNode,
-
       AdjacentEdgeVectorSimilarity,
 
       InBrep,
