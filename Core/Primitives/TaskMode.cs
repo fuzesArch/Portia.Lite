@@ -4,17 +4,11 @@ namespace Portia.Lite.Core.Primitives
 {
    public enum TaskMode
    {
-      [Category("Node")] SetNodeTypes,
-
-      [Category("Node")] SetNodeTypesInOrder,
-
-      [Category("Node")] FilterNodes,
-
-      [Category("Edge")] SetEdgeTypes,
-
-      [Category("Edge")] SetEdgeTypesInOrder,
-
-      [Category("Edge")] FilterEdges,
+      SetNodeTypes,
+      SetEdgeTypes,
+      SetEdgeTypesInOrder,
+      FilterNodes,
+      FilterEdges,
 
       #if INTERNAL
       [Category("Nodes")] SetNodeIndices,
