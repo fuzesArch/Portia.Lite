@@ -34,7 +34,7 @@ namespace Portia.Lite.Core.Primitives
 
       IsInBrep,
 
-      Intersection,
+      HasIntersection,
 
       IsLeafEdge,
 

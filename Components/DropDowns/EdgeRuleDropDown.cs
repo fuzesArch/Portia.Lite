@@ -96,6 +96,10 @@ namespace Portia.Lite.Components.DropDowns
                   Docs.IsLinearRule)
             },
             {
+               EdgeRuleMode.IsLeafEdge,
+               BooleanSetup<IsLeafEdgeRule>(Docs.IsLeafEdge)
+            },
+            {
                EdgeRuleMode.VectorSimilarity,
                VectorSetup<EdgeVectorSimilarityRule>(
                   Docs.EdgeSimilarity)
@@ -106,14 +110,11 @@ namespace Portia.Lite.Components.DropDowns
                   Docs.EdgeInBoundary)
             },
             {
-               EdgeRuleMode.Intersection,
+               EdgeRuleMode.HasIntersection,
                IntersectionSetup<EdgeIntersectionRule>(
                   Docs.EdgeIntersection)
             },
-            {
-               EdgeRuleMode.IsLeafEdge,
-               BooleanSetup<IsLeafEdgeRule>(Docs.IsLeafEdge)
-            },
+
             #if INTERNAL
             {
                EdgeRuleMode.HasFeature,
