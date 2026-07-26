@@ -7,7 +7,6 @@ using Portia.Infrastructure.Rules.Composite;
 using Portia.Infrastructure.Rules.IntersectionBased;
 using Portia.Infrastructure.Rules.Numeric;
 using Portia.Infrastructure.Rules.StringBased;
-using Portia.Infrastructure.Rules.StringCollectionBased;
 using Portia.Infrastructure.Rules.VectorBased;
 using Portia.Lite.Core.Primitives;
 using System;
@@ -19,6 +18,7 @@ namespace Portia.Lite.Components.DropDowns
          EdgeRuleDropDown : AbsRuleDropDown<EdgeRuleMode>
    {
       public EdgeRuleDropDown() : base(
+
          nameof(EdgeRuleDropDown)
               .Substring(0,
                   8))
