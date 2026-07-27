@@ -11,6 +11,7 @@ using Portia.Infrastructure.Rules.VectorBased;
 using Portia.Lite.Core.Primitives;
 using System;
 using System.Collections.Generic;
+using Portia.Infrastructure.Rules.StringCollectionBased;
 
 namespace Portia.Lite.Components.DropDowns
 {
@@ -18,7 +19,6 @@ namespace Portia.Lite.Components.DropDowns
          EdgeRuleDropDown : AbsRuleDropDown<EdgeRuleMode>
    {
       public EdgeRuleDropDown() : base(
-
          nameof(EdgeRuleDropDown)
               .Substring(0,
                   8))
