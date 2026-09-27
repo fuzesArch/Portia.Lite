@@ -38,5 +38,13 @@ namespace Portia.Lite.Core.Primitives
       [Category("AI")] AiResponse,
 
       #endif
+
+      // fixed numbers: after the INTERNAL block their position differs between builds, and the
+      // saved mode is a number
+      [Category("Layers")] BuildGridFeatures = 100,
+
+      [Category("Layers")] BuildPattern = 101,
+
+      [Category("Layers")] BuildModels = 102,
    }
 }

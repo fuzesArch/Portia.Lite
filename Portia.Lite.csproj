@@ -102,6 +102,13 @@
     <Compile Include="Components\Main\GraphComponent.cs" />
     <Compile Include="Components\Main\SetGraph.cs" />
     <Compile Include="Components\DropDowns\TaskDropDown.cs" />
+    <Compile Include="Components\DropDowns\PromptDropDown.cs" />
+    <Compile Include="Components\Main\UnpackFeatures.cs" />
+    <Compile Include="Components\Main\CaptureGraph.cs" />
+    <Compile Include="Components\Main\GraphLibraryComponent.cs" />
+    <Compile Include="Components\Models\ModelAssetComponent.cs" />
+    <Compile Include="Components\Models\ModelLibraryComponent.cs" />
+    <Compile Include="Core\Primitives\PromptMode.cs" />
     <Compile Include="Components\DropDowns\ConditionDropDown.cs" />
     <Compile Include="Components\SolverRelated\ZoneDemandComponent.cs" />
     <Compile Include="Components\ValueLists\DoubleRelationValueList.cs" />

@@ -21,6 +21,8 @@ using Portia.Infrastructure.Tasks.RuleBased.Addition;
 using Portia.Infrastructure.Tasks.RuleBased.Blossom;
 using Portia.Infrastructure.Tasks.RuleBased.Removal;
 using Portia.Infrastructure.Tasks.TypeSettingByIndex;
+using Portia.Infrastructure.Primitives.Dtos;
+using Portia.Infrastructure.Tasks.FeatureSetting;
 using Portia.Infrastructure.Validators;
 using Portia.Lite.Core.Primitives;
 using System;
@@ -67,6 +69,9 @@ namespace Portia.Lite.Components.DropDowns
       protected override void CommonOutputSetting(
          IGH_DataAccess da)
       {
+         // an empty answer input leaves no task
+         if (_task == null) return;
+
          _task.Guard();
          Message = _task.ComponentMessage();
 
@@ -556,7 +561,76 @@ namespace Portia.Lite.Components.DropDowns
                   Docs.Blossom)
             },
             #endif
+            {
+               TaskMode.BuildGridFeatures,
+               new ParameterSetup(
+                  new List<ParameterConfig>(),
+                  ByGridFeatures,
+                  Docs.SetupGrid)
+            },
+            {
+               TaskMode.BuildPattern, new ParameterSetup(
+                  new List<ParameterConfig>
+                  {
+                     StringParam(nameof(PatternDto),
+                        Docs.PatternJson)
+                  },
+                  ByBuildPattern,
+                  Docs.BuildPattern)
+            },
+            {
+               TaskMode.BuildModels, new ParameterSetup(
+                  new List<ParameterConfig>
+                  {
+                     StringParam(nameof(ModelDto),
+                        Docs.ModelJson)
+                  },
+                  ByBuildModels,
+                  Docs.BuildModels)
+            },
          };
+      }
+
+      // ---------------------------------------------------------------- layers
+
+      private void ByGridFeatures(
+         IGH_DataAccess da) =>
+            _task = new BuildGridFeatures();
+
+      private void ByBuildPattern(
+         IGH_DataAccess da) =>
+            _task = ReadAnswer<PatternDto>(da) is { } answer
+                  ? new BuildPatternFeatures { Dto = answer }
+                  : null;
+
+      private void ByBuildModels(
+         IGH_DataAccess da) =>
+            _task = ReadAnswer<ModelDto>(da) is { } answer
+                  ? new BuildModelAssetFeatures { Dto = answer }
+                  : null;
+
+      // a model's JSON answer from the first input; null when empty or unreadable
+      private T ReadAnswer<T>(
+         IGH_DataAccess da) where T : class
+      {
+         if (!da.GetItem(0,
+               out string json) ||
+            string.IsNullOrWhiteSpace(json))
+         {
+            return null;
+         }
+
+         try
+         {
+            return json.FromAiJson<T>();
+         }
+         catch (Exception ex)
+         {
+            AddRuntimeMessage(GH_RuntimeMessageLevel.Error,
+               $"The answer could not be read: {ex.Message}");
+
+            return null;
+         }
       }
    }
 }

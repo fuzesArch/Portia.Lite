@@ -1,11 +1,12 @@
-﻿using Grasshopper.Kernel;
+﻿using Grasshopper;
+using Grasshopper.Kernel;
+using Grasshopper.Kernel.Data;
 using Grasshopper.Kernel.Types;
 using Portia.Infrastructure.Components;
 using Portia.Infrastructure.DocStrings;
 using Portia.Infrastructure.Goo;
 using Portia.Infrastructure.GraphItems;
 using Portia.Infrastructure.Graphs;
-using Portia.Infrastructure.Helps;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -54,7 +55,9 @@ namespace Portia.Lite.Components.Main
               .OutIntegers(nameof(Docs.Index) + "es",
                   Docs.Identity)
               .OutStrings(nameof(Docs.Type) + "s",
-                  Docs.Type);
+                  Docs.Type)
+              .OutStringTree(nameof(Docs.FeatureNames),
+                  Docs.FeatureNames);
 
          SimplifyOutputs();
       }
@@ -90,6 +93,29 @@ namespace Portia.Lite.Components.Main
 
          da.SetDataList(2,
             items.Select(i => i.GraphIdentity.Type));
+
+         da.SetDataTree(3,
+            FeatureNames(items));
+      }
+
+      // one branch per item, lined up with the lists above; empty where the item has no features
+      private static DataTree<string> FeatureNames(
+         List<TItem> items)
+      {
+         DataTree<string> tree = new();
+
+         for (int i = 0; i < items.Count; i++)
+         {
+            GH_Path path = new(i);
+            tree.EnsurePath(path);
+
+            tree.AddRange(items[i].FeatureSet?.GetAll()
+                    .Select(f => f.Name) ??
+                  Enumerable.Empty<string>(),
+               path);
+         }
+
+         return tree;
       }
 
       // GraphGoo → all its items of this kind; GraphItemGoo → itself, if it IS this kind
