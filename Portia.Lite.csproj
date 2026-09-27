@@ -99,7 +99,8 @@
     <Compile Include="Components\Main\UnpackGraphComponent.cs" />
     <Compile Include="Components\Main\UnpackNodesComponent.cs" />
     <Compile Include="Components\Naming.cs" />
-    <Compile Include="Components\Main\PortiaComponent.cs" />
+    <Compile Include="Components\Main\GraphComponent.cs" />
+    <Compile Include="Components\Main\SetGraph.cs" />
     <Compile Include="Components\DropDowns\TaskDropDown.cs" />
     <Compile Include="Components\DropDowns\ConditionDropDown.cs" />
     <Compile Include="Components\SolverRelated\ZoneDemandComponent.cs" />
