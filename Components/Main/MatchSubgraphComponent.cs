@@ -27,9 +27,6 @@ namespace Portia.Lite.Components.Main
          Naming.Graph)
       { }
 
-      public override GH_Exposure Exposure =>
-            GH_Exposure.tertiary;
-
       public override Guid ComponentGuid =>
             new("1dee4058-4ff8-4fb8-a9ac-a7264fadd024");
 

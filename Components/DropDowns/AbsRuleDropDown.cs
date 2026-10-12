@@ -32,13 +32,11 @@ namespace Portia.Lite.Components.DropDowns
          string name) : base(name,
          Docs.Rule,
          Naming.Tab,
-         Naming.Logic)
+         Naming.Logic,
+         addTabToName: true)
       { }
 
       protected override string OutputSuffix => "Rule";
-
-      public override GH_Exposure Exposure =>
-            GH_Exposure.secondary;
 
       protected override Bitmap Icon =>
             Properties.Resources.BaseLogo;

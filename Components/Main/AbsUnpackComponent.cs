@@ -29,9 +29,6 @@ namespace Portia.Lite.Components.Main
          Naming.Logic)
       { }
 
-      public override GH_Exposure Exposure =>
-            GH_Exposure.quinary;
-
       protected override Bitmap Icon =>
             Properties.Resources.BaseLogo;
 

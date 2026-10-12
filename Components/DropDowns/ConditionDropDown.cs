@@ -32,8 +32,6 @@ namespace Portia.Lite.Components.DropDowns
         public override Guid ComponentGuid =>
             new("b5e22506-0e6f-4987-9600-bd21e962ab52");
 
-        public override GH_Exposure Exposure => GH_Exposure.secondary;
-
         protected override System.Drawing.Bitmap Icon =>
             Properties.Resources.BaseLogo;
 

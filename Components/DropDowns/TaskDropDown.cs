@@ -44,11 +44,9 @@ namespace Portia.Lite.Components.DropDowns
                   4),
          Docs.Task,
          Naming.Tab,
-         Naming.Logic)
+         Naming.Logic,
+         addTabToName: true)
       { }
-
-      public override GH_Exposure Exposure =>
-            GH_Exposure.tertiary;
 
       public override Guid ComponentGuid =>
             new("700c752f-a51e-4a2e-944a-a8941d1fc518");
@@ -600,13 +598,15 @@ namespace Portia.Lite.Components.DropDowns
       private void ByBuildPattern(
          IGH_DataAccess da) =>
             _task = ReadAnswer<PatternDto>(da) is { } answer
-                  ? new BuildPatternFeatures { Dto = answer }
+                  ? new BuildPatternFeatures
+                        { Dto = answer }
                   : null;
 
       private void ByBuildModels(
          IGH_DataAccess da) =>
             _task = ReadAnswer<ModelDto>(da) is { } answer
-                  ? new BuildModelAssetFeatures { Dto = answer }
+                  ? new BuildModelAssetFeatures
+                        { Dto = answer }
                   : null;
 
       // a model's JSON answer from the first input; null when empty or unreadable
