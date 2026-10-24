@@ -217,7 +217,7 @@ namespace Portia.Lite.Components.DropDowns
          _task = new AddNodesToEdges
          {
             Rules = _rules,
-            Parameters = parameters.OrderBy(p => p)
+            Parameters = parameters.OrderBy(x => x)
                                    .ToList(),
             NodeType = nodeType
          };

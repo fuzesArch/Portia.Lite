@@ -43,10 +43,10 @@ namespace Portia.Lite.Components.Models
             goos);
 
          List<ModelAsset> models = goos
-                                  .Select(g =>
-                                         g?.ScriptVariable()
+                                  .Select(x =>
+                                         x?.ScriptVariable()
                                                as ModelAsset)
-                                  .Where(m => m != null)
+                                  .Where(x => x != null)
                                   .ToList();
 
          if (models.Count < goos.Count)
@@ -57,10 +57,10 @@ namespace Portia.Lite.Components.Models
          }
 
          List<string> duplicates = models.GroupBy(
-                  m => m.Name,
+                  x => x.Name,
                   StringComparer.OrdinalIgnoreCase)
-              .Where(g => g.Count() > 1)
-              .Select(g => g.Key)
+              .Where(x => x.Count() > 1)
+              .Select(x => x.Key)
               .ToList();
 
          if (duplicates.Any())

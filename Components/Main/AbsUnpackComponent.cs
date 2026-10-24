@@ -82,14 +82,14 @@ namespace Portia.Lite.Components.Main
          }
 
          da.SetDataList(0,
-            items.Select(i =>
-                  new GraphItemGoo(i).GetGeometries()));
+            items.Select(x =>
+                  new GraphItemGoo(x).GetGeometries()));
 
          da.SetDataList(1,
-            items.Select(i => i.GraphIdentity.Index));
+            items.Select(x => x.GraphIdentity.Index));
 
          da.SetDataList(2,
-            items.Select(i => i.GraphIdentity.Type));
+            items.Select(x => x.GraphIdentity.Type));
 
          da.SetDataTree(3,
             FeatureNames(items));
@@ -107,7 +107,7 @@ namespace Portia.Lite.Components.Main
             tree.EnsurePath(path);
 
             tree.AddRange(items[i].FeatureSet?.GetAll()
-                    .Select(f => f.Name) ??
+                    .Select(x => x.Name) ??
                   Enumerable.Empty<string>(),
                path);
          }

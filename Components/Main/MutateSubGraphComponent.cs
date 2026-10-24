@@ -76,7 +76,7 @@ namespace Portia.Lite.Components.Main
 
             MutateSubGraphs task = new MutateSubGraphs
             {
-                MutationSets = setGoos.Select(g => g.Value).ToList()
+                MutationSets = setGoos.Select(x => x.Value).ToList()
             };
 
             task.Guard();

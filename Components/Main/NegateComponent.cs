@@ -65,7 +65,7 @@ namespace Portia.Lite.Components.Main
          }
 
          da.SetDataList(0,
-            rules.Select(r => r.ToJson()));
+            rules.Select(x => x.ToJson()));
       }
    }
 }
